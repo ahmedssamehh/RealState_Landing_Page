@@ -1,8 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import BurgundyTransition from '@/components/BurgundyTransition';
-import CustomCursor from '@/components/CustomCursor';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -13,7 +11,7 @@ import LocationSection from '@/components/LocationSection';
 import Navbar from '@/components/Navbar';
 import ResidenceDetails from '@/components/ResidenceDetails';
 import ResidencesSection from '@/components/ResidencesSection';
-import SmoothScroll, { useSmoothScroll } from '@/components/SmoothScroll';
+import SmoothScroll from '@/components/SmoothScroll';
 import { LocaleProvider } from '@/lib/locale';
 import type { Apartment } from '@/data/apartments';
 
@@ -24,8 +22,9 @@ import type { Apartment } from '@/data/apartments';
  */
 function Page() {
   const [ready, setReady] = useState(false);
+  /** HeroScene reports its first painted frame; the loader waits for it. */
+  const [sceneReady, setSceneReady] = useState(false);
   const [detail, setDetail] = useState<Apartment | null>(null);
-  const { scrollTo } = useSmoothScroll();
 
   const openResidence = useCallback((residence: Apartment) => {
     setDetail(residence);
@@ -33,12 +32,9 @@ function Page() {
 
   const closeResidence = useCallback(() => setDetail(null), []);
 
-  const enquire = useCallback(() => scrollTo('#contact'), [scrollTo]);
-
   return (
     <>
-      <LoadingScreen onComplete={() => setReady(true)} />
-      <CustomCursor />
+      <LoadingScreen onComplete={() => setReady(true)} sceneReady={sceneReady} />
 
       {/*
         Everything except the popup lives in this shell. When a residence is
@@ -55,10 +51,9 @@ function Page() {
         <Navbar ready={ready} />
 
         <main id="main">
-          <Hero ready={ready} />
+          <Hero ready={ready} onSceneReady={() => setSceneReady(true)} />
           <IntroSection />
           <ResidencesSection onOpenResidence={openResidence} />
-          <BurgundyTransition />
           <LifestyleSection />
           <LocationSection />
           <FinalCTA />
@@ -67,7 +62,7 @@ function Page() {
         <Footer />
       </div>
 
-      <ResidenceDetails residence={detail} onClose={closeResidence} onEnquire={enquire} />
+      <ResidenceDetails residence={detail} onClose={closeResidence} />
     </>
   );
 }

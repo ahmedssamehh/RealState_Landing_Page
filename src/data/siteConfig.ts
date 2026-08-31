@@ -33,6 +33,8 @@ export const siteConfig = {
   /** DEMO — placeholder brand identity (temporary preview content). */
   brand: {
     name: 'YACHT LAUNDRY', // DEMO placeholder for the project wordmark
+    /** The wordmark is set on two lines in the logo. */
+    nameLines: ['YACHT', 'LAUNDRY'] as [string, string], // DEMO
     shortName: 'YL', // DEMO
     established: 'EST. MMXXV',
   },
@@ -76,6 +78,7 @@ export const siteConfig = {
   nav: [
     { key: 'residences', href: '#residences' },
     { key: 'location', href: '#location' },
+    { key: 'about', href: '#architecture' },
     { key: 'contact', href: '#contact' },
   ] as const,
 
@@ -111,7 +114,7 @@ const en = {
   meta: {
     title: 'YACHT LAUNDRY — Private Residences', // DEMO
     description:
-      'Four private residences available to rent — designed around light, space and modern living. A collection of exclusive homes at a single address.',
+      'Private residences available to rent — designed around light, space and modern living. A curated collection of exclusive homes at a single address.',
     ogLocale: 'en_GB',
   },
 
@@ -120,34 +123,35 @@ const en = {
   nav: {
     residences: 'RESIDENCES',
     location: 'LOCATION',
+    about: 'ABOUT',
     contact: 'CONTACT',
   },
 
   cta: {
-    primary: 'ENQUIRE',
-    hero: 'EXPLORE RESIDENCES',
+    hero: 'DISCOVER RESIDENCES',
     scroll: 'SCROLL TO DISCOVER',
-    final: 'ENQUIRE NOW',
     viewResidence: 'VIEW RESIDENCE',
     requestInformation: 'REQUEST INFORMATION',
   },
 
   hero: {
-    eyebrow: 'A COLLECTION OF FOUR',
-    headline: ['THE ART', 'OF LIVING.'],
-    subline: ['FOUR PRIVATE RESIDENCES', 'DESIGNED FOR MODERN LIVING.'],
+    eyebrow: 'PRIVATE RESIDENCES TO RENT',
+    headline: ['THE ART', 'OF LIVING'],
+    body: 'A curated collection of residences, each crafted with architectural excellence and timeless elegance.',
   },
 
   intro: {
     index: '01',
     label: 'THE PROJECT',
-    headline: ['FOUR PRIVATE.', 'ONE ADDRESS.'],
+    headline: ['A PLACE', 'TO BELONG.'],
     body:
-      'Four residences carved from a single architectural idea — that a home should be measured in light, in silence, and in the distance between you and everything you came here to leave behind.',
+      'Residences carved from a single architectural idea — that a home should be measured in light, in silence, and in the distance between you and everything you came here to leave behind.',
     note:
       'Conceived as a private address rather than a development. Poured concrete, travertine, oak and glass, held in proportion by a facade that turns with the sun.',
     stats: [
-      { value: '04', label: 'RESIDENCES' },
+      // AUTO_COUNT resolves to the number of residences in apartments.ts, so
+      // adding or removing one never leaves a stale figure on the page.
+      { value: 'AUTO_COUNT', label: 'RESIDENCES AVAILABLE' },
       { value: '185–320', label: 'SQUARE METRES' },
       { value: '2026', label: 'AVAILABLE FROM' },
     ],
@@ -156,15 +160,11 @@ const en = {
   residences: {
     index: '02',
     label: 'THE RESIDENCES',
-    headline: ['FOUR PRIVATE', 'RESIDENCES.'],
+    headline: ['THE', 'RESIDENCES.'],
     note:
       'Each residence occupies its own position in the building, with its own aspect, its own light and its own relationship to the ground. Select one to view the full specification.',
   },
 
-  transition: {
-    headline: ['FOUR HOMES.', 'ONE ADDRESS.'],
-    body: 'No two floors repeat. No two views are shared.',
-  },
 
   lifestyle: {
     index: '03',
@@ -211,6 +211,11 @@ const en = {
   /** Small interface labels used across the page. */
   ui: {
     loading: 'LOADING',
+    dragToRotate: 'DRAG TO ROTATE',
+    view360: '360° VIEW',
+    autoRotate: 'AUTO ROTATE',
+    playRotation: 'Start automatic rotation',
+    pauseRotation: 'Pause automatic rotation',
     close: 'CLOSE',
     menuOpen: 'Open menu',
     menuClose: 'Close menu',
@@ -222,6 +227,9 @@ const en = {
     bathrooms: 'BATHROOMS',
     parking: 'PARKING',
     residence: 'RESIDENCE',
+    photo: 'PHOTO',
+    telephone: 'TELEPHONE',
+    email: 'EMAIL',
     aspect: 'ASPECT',
     description: 'DESCRIPTION',
     features: 'FEATURES',
@@ -257,7 +265,7 @@ const el: Content = {
   meta: {
     title: 'YACHT LAUNDRY — Ιδιωτικές Κατοικίες', // DEMO
     description:
-      'Τέσσερις ιδιωτικές κατοικίες προς ενοικίαση — σχεδιασμένες γύρω από το φως, τον χώρο και τη σύγχρονη ζωή. Μια συλλογή αποκλειστικών κατοικιών σε μία διεύθυνση.',
+      'Ιδιωτικές κατοικίες προς ενοικίαση — σχεδιασμένες γύρω από το φως, τον χώρο και τη σύγχρονη ζωή. Μια επιλεγμένη συλλογή κατοικιών σε μία διεύθυνση.',
     ogLocale: 'el_GR',
   },
 
@@ -266,34 +274,33 @@ const el: Content = {
   nav: {
     residences: 'ΚΑΤΟΙΚΙΕΣ',
     location: 'ΤΟΠΟΘΕΣΙΑ',
+    about: 'ΤΟ ΕΡΓΟ',
     contact: 'ΕΠΙΚΟΙΝΩΝΙΑ',
   },
 
   cta: {
-    primary: 'ΕΝΔΙΑΦΕΡΟΜΑΙ',
-    hero: 'ΔΕΙΤΕ ΤΙΣ ΚΑΤΟΙΚΙΕΣ',
+    hero: 'ΑΝΑΚΑΛΥΨΤΕ ΤΙΣ ΚΑΤΟΙΚΙΕΣ',
     scroll: 'ΚΥΛΗΣΤΕ ΓΙΑ ΝΑ ΑΝΑΚΑΛΥΨΕΤΕ',
-    final: 'ΕΠΙΚΟΙΝΩΝΗΣΤΕ ΤΩΡΑ',
     viewResidence: 'ΔΕΙΤΕ ΤΗΝ ΚΑΤΟΙΚΙΑ',
     requestInformation: 'ΖΗΤΗΣΤΕ ΠΛΗΡΟΦΟΡΙΕΣ',
   },
 
   hero: {
-    eyebrow: 'ΜΙΑ ΣΥΛΛΟΓΗ ΤΕΣΣΑΡΩΝ',
-    headline: ['Η ΤΕΧΝΗ', 'ΤΟΥ ΖΗΝ.'],
-    subline: ['ΤΕΣΣΕΡΙΣ ΙΔΙΩΤΙΚΕΣ ΚΑΤΟΙΚΙΕΣ', 'ΣΧΕΔΙΑΣΜΕΝΕΣ ΓΙΑ ΤΗ ΣΥΓΧΡΟΝΗ ΖΩΗ.'],
+    eyebrow: 'ΙΔΙΩΤΙΚΕΣ ΚΑΤΟΙΚΙΕΣ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
+    headline: ['Η ΤΕΧΝΗ', 'ΤΟΥ ΖΗΝ'],
+    body: 'Μια επιλεγμένη συλλογή κατοικιών, φτιαγμένων με αρχιτεκτονική αρτιότητα και διαχρονική κομψότητα.',
   },
 
   intro: {
     index: '01',
     label: 'ΤΟ ΕΡΓΟ',
-    headline: ['ΤΕΣΣΕΡΙΣ ΚΑΤΟΙΚΙΕΣ.', 'ΜΙΑ ΔΙΕΥΘΥΝΣΗ.'],
+    headline: ['ΕΝΑΣ ΤΟΠΟΣ', 'ΔΙΚΟΣ ΣΑΣ.'],
     body:
-      'Τέσσερις κατοικίες λαξεμένες από μία και μόνη αρχιτεκτονική ιδέα — ότι ένα σπίτι μετριέται στο φως, στη σιωπή και στην απόσταση που σας χωρίζει από όσα αφήσατε πίσω.',
+      'Κατοικίες λαξεμένες από μία και μόνη αρχιτεκτονική ιδέα — ότι ένα σπίτι μετριέται στο φως, στη σιωπή και στην απόσταση που σας χωρίζει από όσα αφήσατε πίσω.',
     note:
       'Σχεδιασμένο ως μια ιδιωτική διεύθυνση και όχι ως ένα ακόμη συγκρότημα. Εμφανές σκυρόδεμα, τραβερτίνης, δρυς και γυαλί, σε αναλογίες που ορίζει μια πρόσοψη η οποία στρέφεται με τον ήλιο.',
     stats: [
-      { value: '04', label: 'ΚΑΤΟΙΚΙΕΣ' },
+      { value: 'AUTO_COUNT', label: 'ΔΙΑΘΕΣΙΜΕΣ ΚΑΤΟΙΚΙΕΣ' },
       { value: '185–320', label: 'ΤΕΤΡΑΓΩΝΙΚΑ ΜΕΤΡΑ' },
       { value: '2026', label: 'ΔΙΑΘΕΣΙΜΕΣ ΑΠΟ' },
     ],
@@ -302,15 +309,11 @@ const el: Content = {
   residences: {
     index: '02',
     label: 'ΟΙ ΚΑΤΟΙΚΙΕΣ',
-    headline: ['ΤΕΣΣΕΡΙΣ ΙΔΙΩΤΙΚΕΣ', 'ΚΑΤΟΙΚΙΕΣ.'],
+    headline: ['ΟΙ', 'ΚΑΤΟΙΚΙΕΣ.'],
     note:
       'Κάθε κατοικία καταλαμβάνει τη δική της θέση στο κτίριο, με τον δικό της προσανατολισμό, το δικό της φως και τη δική της σχέση με το έδαφος. Επιλέξτε μία για να δείτε τα πλήρη χαρακτηριστικά.',
   },
 
-  transition: {
-    headline: ['ΤΕΣΣΕΡΑ ΣΠΙΤΙΑ.', 'ΜΙΑ ΔΙΕΥΘΥΝΣΗ.'],
-    body: 'Κανένας όροφος δεν επαναλαμβάνεται. Καμία θέα δεν μοιράζεται.',
-  },
 
   lifestyle: {
     index: '03',
@@ -355,6 +358,11 @@ const el: Content = {
 
   ui: {
     loading: 'ΦΟΡΤΩΣΗ',
+    dragToRotate: 'ΣΥΡΕΤΕ ΓΙΑ ΠΕΡΙΣΤΡΟΦΗ',
+    view360: 'ΠΡΟΒΟΛΗ 360°',
+    autoRotate: 'ΑΥΤΟΜΑΤΗ ΠΕΡΙΣΤΡΟΦΗ',
+    playRotation: 'Έναρξη αυτόματης περιστροφής',
+    pauseRotation: 'Παύση αυτόματης περιστροφής',
     close: 'ΚΛΕΙΣΙΜΟ',
     menuOpen: 'Άνοιγμα μενού',
     menuClose: 'Κλείσιμο μενού',
@@ -366,6 +374,9 @@ const el: Content = {
     bathrooms: 'ΜΠΑΝΙΑ',
     parking: 'ΣΤΑΘΜΕΥΣΗ',
     residence: 'ΚΑΤΟΙΚΙΑ',
+    photo: 'ΦΩΤΟ',
+    telephone: 'ΤΗΛΕΦΩΝΟ',
+    email: 'EMAIL',
     aspect: 'ΠΡΟΣΑΝΑΤΟΛΙΣΜΟΣ',
     description: 'ΠΕΡΙΓΡΑΦΗ',
     features: 'ΠΑΡΟΧΕΣ',

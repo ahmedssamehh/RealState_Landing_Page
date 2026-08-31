@@ -32,8 +32,9 @@ export default function LifestyleSection() {
   return (
     <section
       ref={root}
+      id="architecture"
       aria-labelledby="lifestyle-heading"
-      className="relative w-full bg-champagne py-[clamp(5rem,14vh,10rem)]"
+      className="relative w-full bg-ivory py-[clamp(5rem,14vh,10rem)]"
     >
       {/* Full-bleed architectural plate */}
       <div ref={figure} className="relative h-[62svh] min-h-[380px] w-full overflow-hidden">

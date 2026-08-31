@@ -9,6 +9,9 @@ let registered = false;
 export function registerGsap() {
   if (typeof window === 'undefined' || registered) return gsap;
   gsap.registerPlugin(ScrollTrigger);
+  // Mobile browsers resize the viewport when the URL bar shows/hides; without
+  // this every one of those triggers a full ScrollTrigger recalculation.
+  ScrollTrigger.config({ ignoreMobileResize: true });
   registered = true;
   return gsap;
 }
@@ -112,7 +115,13 @@ export function parallax(target: HTMLElement, trigger: HTMLElement, amount = 12)
   );
 }
 
-/** Clip-path curtain reveal for large imagery. */
+/**
+ * Clip-path curtain reveal for large imagery.
+ *
+ * Deliberately no scale: these targets are full-bleed, and scaling one past
+ * 1 pushes it wider than the viewport, which creates horizontal page scroll
+ * for the duration of the reveal. The curtain alone reads better anyway.
+ */
 export function revealImage(target: HTMLElement, trigger?: HTMLElement) {
   if (prefersReducedMotion()) {
     gsap.set(target, { clipPath: 'inset(0% 0% 0% 0%)' });
@@ -120,10 +129,9 @@ export function revealImage(target: HTMLElement, trigger?: HTMLElement) {
   }
   gsap.fromTo(
     target,
-    { clipPath: 'inset(0% 0% 100% 0%)', scale: 1.06 },
+    { clipPath: 'inset(0% 0% 100% 0%)' },
     {
       clipPath: 'inset(0% 0% 0% 0%)',
-      scale: 1,
       duration: DURATION.cinematic,
       ease: EASE.expo,
       scrollTrigger: { trigger: trigger ?? target, start: 'top 85%' },

@@ -5,6 +5,12 @@ import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
+/**
+ * Closing section. A full-bleed burgundy panel — the largest statement of the
+ * accent colour on the site — carrying the headline and the only two contact
+ * channels there are. No button and no form: the phone number and the email
+ * address are themselves the actions.
+ */
 export default function FinalCTA() {
   const root = useRef<HTMLElement>(null);
   const { t } = useLocale();
@@ -29,64 +35,64 @@ export default function FinalCTA() {
       ref={root}
       id="contact"
       aria-labelledby="final-cta-heading"
-      className="grain relative w-full bg-ink py-[clamp(6rem,20vh,14rem)]"
+      className="grain relative w-full bg-burgundy py-[clamp(5rem,16vh,11rem)] text-ivory"
     >
       <div className="edge mx-auto max-w-edge">
-        <p data-cta-fade className="label mb-[clamp(2rem,6vh,4rem)] text-champagne/50 opacity-0">
+        <p data-cta-fade className="label mb-[clamp(2rem,6vh,4rem)] text-ivory/55 opacity-0">
           {note}
         </p>
 
         <h2 id="final-cta-heading" className="display text-ivory">
           {headline.map((line) => (
             <span key={line} className="reveal-line">
-              <span className="block text-[clamp(2.8rem,11vw,10rem)]">{line}</span>
+              <span className="block text-[clamp(2.6rem,10vw,9rem)]">{line}</span>
             </span>
           ))}
         </h2>
 
-        <div
-          data-cta-fade
-          className="mt-[clamp(3rem,9vh,6rem)] flex flex-col items-start gap-10 opacity-0 md:flex-row md:items-center md:justify-between"
-        >
-          <a
-            href={siteConfig.contact.phoneHref}
-            data-cursor="button"
-            className="group relative inline-flex items-center gap-6 overflow-hidden bg-burgundy px-10 py-6 transition-colors duration-300 hover:bg-burgundy-soft"
-          >
-            {/* Slow ivory wipe on hover */}
-            <span
-              aria-hidden
-              className="absolute inset-0 -translate-x-full bg-ivory/10 transition-transform duration-[450ms] ease-expo group-hover:translate-x-0"
-            />
-            <span className="label relative text-ivory">{t.cta.final}</span>
-            <span
-              aria-hidden
-              className="relative text-ivory transition-transform duration-300 ease-expo group-hover:translate-x-2"
-            >
-              &rarr;
-            </span>
-          </a>
-
+        {/* The two channels, given equal editorial weight. */}
+        <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 gap-px border-t border-ivory/20 sm:grid-cols-2">
           {/* DEMO contact details */}
-          <div className="flex flex-col gap-3 md:items-end">
-            <a
-              href={siteConfig.contact.phoneHref}
-              data-cursor="button"
-              className="font-serif text-[clamp(1.5rem,3vw,2.4rem)] font-light text-ivory transition-colors duration-200 hover:text-champagne"
-            >
-              {siteConfig.contact.phone}
-            </a>
-            <a
-              href={siteConfig.contact.websiteHref}
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="button"
-              className="label text-champagne/50 transition-colors duration-200 hover:text-ivory"
-            >
-              {siteConfig.contact.website}
-            </a>
+          <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:pr-10">
+            <dt className="label text-ivory/45">{t.ui.telephone}</dt>
+            <dd className="mt-4">
+              <a
+                href={siteConfig.contact.phoneHref}
+                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.6rem,4vw,3rem)] font-light leading-none text-ivory"
+              >
+                <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
+                  {siteConfig.contact.phone}
+                </span>
+                <span
+                  aria-hidden
+                  className="text-lg transition-transform duration-300 ease-expo group-hover:translate-x-1.5"
+                >
+                  &rarr;
+                </span>
+              </a>
+            </dd>
           </div>
-        </div>
+
+          <div data-cta-fade className="py-8 opacity-0 sm:border-l sm:border-ivory/20 sm:pl-10">
+            <dt className="label text-ivory/45">{t.ui.email}</dt>
+            <dd className="mt-4">
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.3rem,3vw,2.2rem)] font-light leading-none text-ivory"
+              >
+                <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
+                  {siteConfig.contact.email}
+                </span>
+                <span
+                  aria-hidden
+                  className="text-lg transition-transform duration-300 ease-expo group-hover:translate-x-1.5"
+                >
+                  &rarr;
+                </span>
+              </a>
+            </dd>
+          </div>
+        </dl>
       </div>
     </section>
   );

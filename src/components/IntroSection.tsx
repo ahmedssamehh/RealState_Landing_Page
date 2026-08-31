@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { siteConfig } from '@/data/siteConfig';
+import { apartments } from '@/data/apartments';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
@@ -69,7 +69,11 @@ export default function IntroSection() {
           {stats.map((s) => (
             <div key={s.label} data-intro-fade className="border-b border-ink/15 py-8 sm:border-b-0 sm:pr-8">
               <dt className="label mb-4 text-ink/45">{s.label}</dt>
-              <dd className="display text-[clamp(2.2rem,4.4vw,3.6rem)] text-ink">{s.value}</dd>
+              <dd className="display text-[clamp(2.2rem,4.4vw,3.6rem)] text-ink">
+                {s.value === 'AUTO_COUNT'
+                  ? String(apartments.length).padStart(2, '0')
+                  : s.value}
+              </dd>
             </div>
           ))}
         </dl>

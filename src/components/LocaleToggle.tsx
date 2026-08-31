@@ -21,7 +21,7 @@ export default function LocaleToggle({ variant = 'bar', tone = 'light', classNam
   const { locale, currency, setLocale, setCurrency, t } = useLocale();
 
   const active_ = tone === 'dark' ? 'text-ink' : 'text-ivory';
-  const idle = tone === 'dark' ? 'text-ink/40 hover:text-ink' : 'text-champagne/50 hover:text-champagne';
+  const idle = tone === 'dark' ? 'text-ink/40 hover:text-ink' : 'text-ivory/50 hover:text-ivory';
 
   const option = (active: boolean) =>
     `label px-1 py-0.5 transition-colors duration-200 ${active ? active_ : idle}`;
@@ -37,7 +37,7 @@ export default function LocaleToggle({ variant = 'bar', tone = 'light', classNam
         {LOCALES.map((l, i) => (
           <span key={l.code} className="flex items-center gap-1">
             {i > 0 && (
-              <span aria-hidden className={tone === 'dark' ? 'text-ink/25' : 'text-champagne/30'}>
+              <span aria-hidden className={tone === 'dark' ? 'text-ink/25' : 'text-ivory/30'}>
                 /
               </span>
             )}
@@ -46,7 +46,6 @@ export default function LocaleToggle({ variant = 'bar', tone = 'light', classNam
               onClick={() => setLocale(l.code)}
               aria-pressed={locale === l.code}
               lang={l.htmlLang}
-              data-cursor="button"
               className={option(locale === l.code)}
             >
               {l.label}
@@ -65,7 +64,7 @@ export default function LocaleToggle({ variant = 'bar', tone = 'light', classNam
         {CURRENCIES.map((c, i) => (
           <span key={c.code} className="flex items-center gap-1">
             {i > 0 && (
-              <span aria-hidden className={tone === 'dark' ? 'text-ink/25' : 'text-champagne/30'}>
+              <span aria-hidden className={tone === 'dark' ? 'text-ink/25' : 'text-ivory/30'}>
                 /
               </span>
             )}
@@ -74,7 +73,6 @@ export default function LocaleToggle({ variant = 'bar', tone = 'light', classNam
               onClick={() => setCurrency(c.code)}
               aria-pressed={currency === c.code}
               aria-label={c.label}
-              data-cursor="button"
               className={`${option(currency === c.code)} text-xs leading-none sm:text-sm`}
             >
               {c.symbol}

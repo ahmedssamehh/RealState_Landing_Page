@@ -6,7 +6,6 @@
   --ink: #000000;
   --burgundy: #630000;
   --ivory: #eeebdd;
-  --champagne: #d8b6a4;
   --edge: clamp(1.25rem, 5vw, 6rem);
 }
 
@@ -16,8 +15,10 @@
   }
 
   html {
-    /* Ivory is the dominant surface; black is reserved for the cinematic
-       moments (hero, closing call, footer) and for type. */
+    /* Ivory is the dominant surface; black is reserved for type and the
+       closing panel. `clip` stops any transient transform from scrolling the
+       page sideways without creating a new scroll container (Lenis-safe). */
+    overflow-x: clip;
     background-color: var(--ivory);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
@@ -26,6 +27,8 @@
 
   body {
     background-color: var(--ivory);
+    /* Nothing should ever scroll the page sideways. */
+    overflow-x: clip;
     font-family: var(--font-body), system-ui, sans-serif;
     overflow-x: hidden;
   }
@@ -48,7 +51,7 @@
   }
 
   :focus-visible {
-    outline: 1px solid var(--champagne);
+    outline: 1px solid var(--burgundy);
     outline-offset: 4px;
   }
 
@@ -60,7 +63,7 @@
   /* Scrollbar — restrained, matches the palette. */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--ivory); }
-  ::-webkit-scrollbar-thumb { background: var(--champagne); }
+  ::-webkit-scrollbar-thumb { background: var(--burgundy); }
   ::-webkit-scrollbar-thumb:hover { background: var(--burgundy); }
 }
 
@@ -110,14 +113,6 @@
     background-image: linear-gradient(to right, currentColor 1px, transparent 1px);
     background-size: 25% 100%;
     opacity: 0.08;
-  }
-}
-
-/* Custom cursor: hide the native one only where the custom one is active. */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
   }
 }
 

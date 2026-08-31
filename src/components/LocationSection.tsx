@@ -119,11 +119,11 @@ export default function LocationSection() {
                       <span className="relative inline-flex h-3 w-3 rounded-full bg-burgundy" />
                     </span>
                   </div>
-                  <p className="label absolute bottom-6 left-6 text-champagne/45">
+                  <p className="label absolute bottom-6 left-6 text-ivory/45">
                     {coordinates.lat.toFixed(4)}&deg; N &nbsp;/&nbsp; {coordinates.lng.toFixed(4)}
                     &deg; E
                   </p>
-                  <p className="label absolute right-6 top-6 text-champagne/30">
+                  <p className="label absolute right-6 top-6 text-ivory/30">
                     {t.ui.mapPlaceholder}
                   </p>
                 </>

@@ -12,7 +12,6 @@ const config: Config = {
           soft: '#7d1616',
         },
         ivory: '#EEEBDD',
-        champagne: '#D8B6A4',
       },
       fontFamily: {
         serif: [

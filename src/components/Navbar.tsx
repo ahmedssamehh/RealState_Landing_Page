@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { siteConfig } from '@/data/siteConfig';
+import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
 import LocaleToggle from './LocaleToggle';
 import { useSmoothScroll } from './SmoothScroll';
@@ -17,8 +18,9 @@ export default function Navbar({ ready }: { ready: boolean }) {
 
   /* Solidify the bar once the hero starts leaving. */
   useEffect(() => {
-    // Flip tone as the black hero leaves and the ivory page arrives.
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.85);
+    // The page is ivory from the hero down, so the bar only gains a surface
+    // and blur once content starts passing beneath it.
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -100,8 +102,8 @@ export default function Navbar({ ready }: { ready: boolean }) {
         ref={bar}
         className={`fixed inset-x-0 top-0 z-[60] opacity-0 transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-expo ${
           scrolled
-            ? 'border-b border-ink/10 bg-ivory/85 py-4 backdrop-blur-md'
-            : 'border-b border-transparent py-7'
+            ? 'border-b border-ink/10 bg-ivory/90 py-4 backdrop-blur-md'
+            : 'border-b border-transparent py-6'
         }`}
       >
         <nav
@@ -112,25 +114,21 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <a
             href="#hero"
             onClick={go('#hero')}
-            data-cursor="button"
-            className={`shrink-0 whitespace-nowrap font-sans text-[0.625rem] font-medium uppercase tracking-label transition-colors duration-200 sm:text-xs ${
-              scrolled ? 'text-ink' : 'text-ivory'
-            }`}
+            aria-label={siteConfig.brand.name}
+            className="shrink-0 text-ink"
           >
-            {siteConfig.brand.name}
+            <Logo size={30} className="hidden sm:inline-flex" />
+            <Logo size={28} iconOnly className="sm:hidden" />
           </a>
 
-          <div className="hidden items-center gap-10 md:flex">
-            <ul className="flex items-center gap-10">
+          <div className="hidden items-center gap-8 lg:flex xl:gap-10">
+            <ul className="flex items-center gap-7 xl:gap-10">
               {siteConfig.nav.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
                     onClick={go(item.href)}
-                    data-cursor="button"
-                    className={`label relative transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-burgundy after:transition-all after:duration-200 after:ease-expo hover:after:w-full ${
-                      scrolled ? 'text-ink/70 hover:text-ink' : 'text-champagne hover:text-ivory'
-                    }`}
+                    className="label relative text-ink/65 transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-burgundy after:transition-all after:duration-200 after:ease-expo hover:text-ink hover:after:w-full"
                   >
                     {t.nav[item.key]}
                   </a>
@@ -139,25 +137,12 @@ export default function Navbar({ ready }: { ready: boolean }) {
             </ul>
 
             {/* Language + currency */}
-            <LocaleToggle tone={scrolled ? 'dark' : 'light'} />
-
-            <a
-              href="#contact"
-              onClick={go('#contact')}
-              data-cursor="button"
-              className={`label px-6 py-3 transition-colors duration-200 ${
-                scrolled
-                  ? 'bg-burgundy text-ivory hover:bg-burgundy-soft'
-                  : 'border border-ivory/30 text-ivory hover:border-burgundy hover:bg-burgundy'
-              }`}
-            >
-              {t.cta.primary}
-            </a>
+            <LocaleToggle tone="dark" />
           </div>
 
           {/* Mobile: the switches stay reachable without opening the menu. */}
-          <div className="flex shrink-0 items-center gap-3 md:hidden">
-            <LocaleToggle tone={scrolled && !open ? 'dark' : 'light'} />
+          <div className="flex shrink-0 items-center gap-3 lg:hidden">
+            <LocaleToggle tone={open ? 'light' : 'dark'} />
 
             <button
               type="button"
@@ -169,12 +154,12 @@ export default function Navbar({ ready }: { ready: boolean }) {
             >
               <span
                 className={`block h-px transition-all duration-200 ease-expo ${
-                  scrolled && !open ? 'bg-ink' : 'bg-ivory'
+                  open ? 'bg-ivory' : 'bg-ink'
                 } ${open ? 'w-6 translate-y-[3.5px] rotate-45' : 'w-6'}`}
               />
               <span
                 className={`block h-px transition-all duration-200 ease-expo ${
-                  scrolled && !open ? 'bg-ink' : 'bg-ivory'
+                  open ? 'bg-ivory' : 'bg-ink'
                 } ${open ? 'w-6 -translate-y-[3.5px] -rotate-45' : 'w-4'}`}
               />
             </button>
@@ -186,7 +171,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
       <div
         id="mobile-menu"
         ref={menu}
-        className="grain fixed inset-0 z-[55] flex flex-col justify-between bg-ink px-[var(--edge)] pb-12 pt-32 md:hidden"
+        className="grain fixed inset-0 z-[55] flex flex-col justify-between bg-ink px-[var(--edge)] pb-12 pt-32 lg:hidden"
         style={{ clipPath: 'inset(0% 0% 100% 0%)', pointerEvents: 'none' }}
       >
         <ul className="flex flex-col gap-2">
@@ -209,25 +194,13 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <LocaleToggle variant="stacked" className="mb-8" />
 
           <div className="rule mb-6 text-ivory" />
-          <a
-            href="#contact"
-            onClick={go('#contact')}
-            className="label block bg-burgundy px-6 py-5 text-center text-ivory"
-          >
-            {t.cta.primary}
-          </a>
-          {/* DEMO contact details */}
-          <div className="mt-8 flex items-center justify-between">
-            <a href={siteConfig.contact.phoneHref} className="label text-champagne/70">
+          {/* DEMO contact details — phone and email are the only channels */}
+          <div className="flex flex-col gap-4">
+            <a href={siteConfig.contact.phoneHref} className="label text-ivory/70">
               {siteConfig.contact.phone}
             </a>
-            <a
-              href={siteConfig.contact.websiteHref}
-              className="label text-champagne/70"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {siteConfig.contact.website}
+            <a href={`mailto:${siteConfig.contact.email}`} className="label text-ivory/70">
+              {siteConfig.contact.email}
             </a>
           </div>
         </div>

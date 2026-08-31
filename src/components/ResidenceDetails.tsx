@@ -20,10 +20,9 @@ import { useSmoothScroll } from './SmoothScroll';
 type Props = {
   residence: Apartment | null;
   onClose: () => void;
-  onEnquire: () => void;
 };
 
-export default function ResidenceDetails({ residence, onClose, onEnquire }: Props) {
+export default function ResidenceDetails({ residence, onClose }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -239,7 +238,6 @@ export default function ResidenceDetails({ residence, onClose, onEnquire }: Prop
             onClick={() => goTo(active - 1)}
             disabled={active === 0}
             aria-label={t.ui.previousImage}
-            data-cursor="button"
             className="label absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-ivory/40 bg-ink/30 text-ivory backdrop-blur-sm transition-colors duration-200 hover:bg-burgundy disabled:opacity-0"
           >
             &larr;
@@ -249,7 +247,6 @@ export default function ResidenceDetails({ residence, onClose, onEnquire }: Prop
             onClick={() => goTo(active + 1)}
             disabled={active === count - 1}
             aria-label={t.ui.nextImage}
-            data-cursor="button"
             className="label absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-ivory/40 bg-ink/30 text-ivory backdrop-blur-sm transition-colors duration-200 hover:bg-burgundy disabled:opacity-0"
           >
             &rarr;
@@ -276,7 +273,6 @@ export default function ResidenceDetails({ residence, onClose, onEnquire }: Prop
             data-detail-close
             type="button"
             onClick={close}
-            data-cursor="button"
             className="absolute right-4 top-4 flex items-center gap-2 border border-ivory/40 bg-ink/30 px-4 py-2 text-ivory backdrop-blur-sm transition-colors duration-200 hover:bg-burgundy"
           >
             <span aria-hidden className="text-base leading-none">
@@ -357,7 +353,6 @@ export default function ResidenceDetails({ residence, onClose, onEnquire }: Prop
           <div className="mt-10 flex flex-col items-start gap-5 border-t border-ink/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <a
               href={siteConfig.contact.phoneHref}
-              data-cursor="button"
               className="group inline-flex items-center gap-4 bg-burgundy px-8 py-4 transition-colors duration-200 hover:bg-burgundy-soft"
             >
               <span className="label text-ivory">{t.cta.requestInformation}</span>
@@ -369,18 +364,21 @@ export default function ResidenceDetails({ residence, onClose, onEnquire }: Prop
               </span>
             </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                close();
-                window.setTimeout(onEnquire, 260);
-              }}
-              data-cursor="button"
-              className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
-            >
-              {/* DEMO contact details */}
-              {siteConfig.contact.phone}
-            </button>
+            {/* DEMO contact details — phone and email are the only channels */}
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+              <a
+                href={siteConfig.contact.phoneHref}
+                className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
+              >
+                {siteConfig.contact.phone}
+              </a>
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
+              >
+                {siteConfig.contact.email}
+              </a>
+            </div>
           </div>
         </div>
       </div>
