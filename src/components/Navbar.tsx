@@ -142,7 +142,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
 
           {/* Mobile: the switches stay reachable without opening the menu. */}
           <div className="flex shrink-0 items-center gap-3 lg:hidden">
-            <LocaleToggle tone={open ? 'light' : 'dark'} />
+            <LocaleToggle tone="dark" />
 
             <button
               type="button"
@@ -153,14 +153,14 @@ export default function Navbar({ ready }: { ready: boolean }) {
               className="relative flex h-10 w-8 flex-col items-end justify-center gap-[6px]"
             >
               <span
-                className={`block h-px transition-all duration-200 ease-expo ${
-                  open ? 'bg-ivory' : 'bg-ink'
-                } ${open ? 'w-6 translate-y-[3.5px] rotate-45' : 'w-6'}`}
+                className={`block h-px bg-ink transition-all duration-200 ease-expo ${
+                  open ? 'w-6 translate-y-[3.5px] rotate-45' : 'w-6'
+                }`}
               />
               <span
-                className={`block h-px transition-all duration-200 ease-expo ${
-                  open ? 'bg-ivory' : 'bg-ink'
-                } ${open ? 'w-6 -translate-y-[3.5px] -rotate-45' : 'w-4'}`}
+                className={`block h-px bg-ink transition-all duration-200 ease-expo ${
+                  open ? 'w-6 -translate-y-[3.5px] -rotate-45' : 'w-4'
+                }`}
               />
             </button>
           </div>
@@ -171,7 +171,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
       <div
         id="mobile-menu"
         ref={menu}
-        className="grain fixed inset-0 z-[55] flex flex-col justify-between bg-ink px-[var(--edge)] pb-12 pt-32 lg:hidden"
+        className="grain fixed inset-0 z-[55] flex flex-col justify-between bg-ivory px-[var(--edge)] pb-12 pt-32 lg:hidden"
         style={{ clipPath: 'inset(0% 0% 100% 0%)', pointerEvents: 'none' }}
       >
         <ul className="flex flex-col gap-2">
@@ -181,9 +181,9 @@ export default function Navbar({ ready }: { ready: boolean }) {
                 data-menu-item
                 href={item.href}
                 onClick={go(item.href)}
-                className="display flex items-baseline gap-5 py-3 text-[clamp(2.2rem,11vw,4.5rem)] text-ivory"
+                className="display flex items-baseline gap-5 py-3 text-[clamp(2.2rem,11vw,4.5rem)] text-ink"
               >
-                <span className="label text-burgundy/80">0{i + 1}</span>
+                <span className="label text-burgundy">0{i + 1}</span>
                 {t.nav[item.key]}
               </a>
             </li>
@@ -191,15 +191,15 @@ export default function Navbar({ ready }: { ready: boolean }) {
         </ul>
 
         <div data-menu-foot className="opacity-0">
-          <LocaleToggle variant="stacked" className="mb-8" />
+          <LocaleToggle variant="stacked" tone="dark" className="mb-8" />
 
-          <div className="rule mb-6 text-ivory" />
+          <div className="rule mb-6 text-ink/20" />
           {/* DEMO contact details — phone and email are the only channels */}
           <div className="flex flex-col gap-4">
-            <a href={siteConfig.contact.phoneHref} className="label text-ivory/70">
+            <a href={siteConfig.contact.phoneHref} className="label text-ink/70">
               {siteConfig.contact.phone}
             </a>
-            <a href={`mailto:${siteConfig.contact.email}`} className="label text-ivory/70">
+            <a href={`mailto:${siteConfig.contact.email}`} className="label text-ink/70">
               {siteConfig.contact.email}
             </a>
           </div>
