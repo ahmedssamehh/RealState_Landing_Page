@@ -1,12 +1,11 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import IntroSection from '@/components/IntroSection';
 import LifestyleSection from '@/components/LifestyleSection';
-import LoadingScreen from '@/components/LoadingScreen';
 import LocationSection from '@/components/LocationSection';
 import Navbar from '@/components/Navbar';
 import ResidenceDetails from '@/components/ResidenceDetails';
@@ -17,14 +16,17 @@ import type { Apartment } from '@/data/apartments';
 
 /**
  * One-page experience:
- * loading -> hero -> introduction -> four residences -> interlude ->
- * architecture -> location -> final call -> enquiry -> footer.
+ * hero -> introduction -> residences -> architecture -> location -> contact.
  */
 function Page() {
+  /* Entrance animations run as soon as the page mounts. */
   const [ready, setReady] = useState(false);
-  /** HeroScene reports its first painted frame; the loader waits for it. */
-  const [sceneReady, setSceneReady] = useState(false);
+
   const [detail, setDetail] = useState<Apartment | null>(null);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
 
   const openResidence = useCallback((residence: Apartment) => {
     setDetail(residence);
@@ -34,8 +36,6 @@ function Page() {
 
   return (
     <>
-      <LoadingScreen onComplete={() => setReady(true)} sceneReady={sceneReady} />
-
       {/*
         Everything except the popup lives in this shell. When a residence is
         open the shell is blurred and pushed back, so the popup reads as a
@@ -51,7 +51,7 @@ function Page() {
         <Navbar ready={ready} />
 
         <main id="main">
-          <Hero ready={ready} onSceneReady={() => setSceneReady(true)} />
+          <Hero ready={ready} />
           <IntroSection />
           <ResidencesSection onOpenResidence={openResidence} />
           <LifestyleSection />

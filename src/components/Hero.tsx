@@ -29,25 +29,17 @@ const HeroScene = dynamic(() => import('./HeroScene'), {
   loading: () => <div className="h-full w-full" aria-hidden />,
 });
 
-export default function Hero({
-  ready,
-  onSceneReady,
-}: {
-  ready: boolean;
-  onSceneReady?: () => void;
-}) {
+export default function Hero({ ready }: { ready: boolean }) {
   const root = useRef<HTMLElement>(null);
   const sceneBox = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const reduced = useReducedMotion();
   /** Drives HeroScene's render loop — see the `active` prop there. */
   const [sceneVisible, setSceneVisible] = useState(true);
-  /**
-   * The loading screen waits for the scene's first frame, so the render loop
-   * must be allowed to run at least once regardless of what the visibility
-   * check thinks. Without this a bad early reading could suppress the first
-   * frame, the ready signal would never fire, and the loader would sit there
-   * until its safety timeout.
+/**
+   * The render loop must be allowed to run at least once regardless of what
+   * the visibility check thinks, so a bad early reading can never leave the
+   * hero showing an empty canvas.
    */
   const [sceneRendered, setSceneRendered] = useState(false);
 
@@ -235,10 +227,7 @@ export default function Hero({
             controls={controls}
             lowPower={isMobile || reduced}
             active={!sceneRendered || sceneVisible}
-            onReady={() => {
-              setSceneRendered(true);
-              onSceneReady?.();
-            }}
+            onReady={() => setSceneRendered(true)}
           />
           <div
             aria-hidden

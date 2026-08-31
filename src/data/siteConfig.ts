@@ -210,7 +210,6 @@ const en = {
 
   /** Small interface labels used across the page. */
   ui: {
-    loading: 'LOADING',
     dragToRotate: 'DRAG TO ROTATE',
     view360: '360° VIEW',
     autoRotate: 'AUTO ROTATE',
@@ -357,7 +356,6 @@ const el: Content = {
 
 
   ui: {
-    loading: 'ΦΟΡΤΩΣΗ',
     dragToRotate: 'ΣΥΡΕΤΕ ΓΙΑ ΠΕΡΙΣΤΡΟΦΗ',
     view360: 'ΠΡΟΒΟΛΗ 360°',
     autoRotate: 'ΑΥΤΟΜΑΤΗ ΠΕΡΙΣΤΡΟΦΗ',
