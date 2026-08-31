@@ -287,7 +287,8 @@ function Uplight({ m, position }: { m: Mats; position: [number, number, number] 
 /* The villa                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function Villa({ lowPower }: { lowPower: boolean }) {
+/** Exported so the loading screen can show the very same building. */
+export function Villa({ lowPower }: { lowPower: boolean }) {
   const m = useVillaMaterials();
 
   /**

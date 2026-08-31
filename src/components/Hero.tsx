@@ -42,6 +42,14 @@ export default function Hero({
   const reduced = useReducedMotion();
   /** Drives HeroScene's render loop — see the `active` prop there. */
   const [sceneVisible, setSceneVisible] = useState(true);
+  /**
+   * The loading screen waits for the scene's first frame, so the render loop
+   * must be allowed to run at least once regardless of what the visibility
+   * check thinks. Without this a bad early reading could suppress the first
+   * frame, the ready signal would never fire, and the loader would sit there
+   * until its safety timeout.
+   */
+  const [sceneRendered, setSceneRendered] = useState(false);
 
   /** The only channel between the UI and the 3D scene. */
   const controls = useRef<HeroControls>({
@@ -52,16 +60,31 @@ export default function Hero({
     pointer: { x: 0, y: 0 },
   });
 
-  /* Stop drawing the villa once it leaves the screen. */
+  /*
+   * Stop drawing the villa once it leaves the screen.
+   *
+   * Deliberately a scroll/resize check rather than an IntersectionObserver:
+   * the observer only fires on change, so a single bad initial reading (taken
+   * while the loading screen still owns the viewport) latched the render loop
+   * off with nothing to switch it back on. This re-evaluates from the live
+   * geometry and can never get stuck.
+   */
   useEffect(() => {
-    const el = sceneBox.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(
-      ([entry]) => setSceneVisible(entry.isIntersecting),
-      { rootMargin: '120px' }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    const check = () => {
+      const el = sceneBox.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const margin = 200;
+      setSceneVisible(rect.bottom > -margin && rect.top < window.innerHeight + margin);
+    };
+
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
   }, []);
 
   /* Pointer parallax — a plain listener, no library, no re-render. */
@@ -211,8 +234,11 @@ export default function Hero({
           <HeroScene
             controls={controls}
             lowPower={isMobile || reduced}
-            active={sceneVisible}
-            onReady={onSceneReady}
+            active={!sceneRendered || sceneVisible}
+            onReady={() => {
+              setSceneRendered(true);
+              onSceneReady?.();
+            }}
           />
           <div
             aria-hidden
