@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { siteConfig } from '@/data/siteConfig';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
@@ -56,7 +57,24 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-[clamp(2.5rem,6vh,4rem)] flex flex-col gap-4 border-t border-ivory/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        {/* Collection switch — the way back to the chooser and across to sales. */}
+        <div className="mt-[clamp(2rem,5vh,3rem)] flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-ivory/10 pt-8">
+          <span className="label text-ivory">{t.chooser.rent.title}</span>
+          <Link
+            href={siteConfig.routes.sale}
+            className="label text-ivory/45 transition-colors duration-200 hover:text-ivory"
+          >
+            {t.chooser.sale.title}
+          </Link>
+          <Link
+            href={siteConfig.routes.chooser}
+            className="label text-ivory/45 transition-colors duration-200 hover:text-ivory"
+          >
+            {t.ui.allCollections}
+          </Link>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-4 border-t border-ivory/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="label text-ivory/25">
             &copy; {year} {siteConfig.brand.name}. {t.ui.rights}
           </p>

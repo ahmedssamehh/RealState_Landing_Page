@@ -77,7 +77,6 @@ export const siteConfig = {
   /** Section anchors. Labels live in `content[locale].nav`. */
   nav: [
     { key: 'residences', href: '#residences' },
-    { key: 'location', href: '#location' },
     { key: 'about', href: '#architecture' },
     { key: 'contact', href: '#contact' },
   ] as const,
@@ -97,6 +96,22 @@ export const siteConfig = {
     },
   },
 
+  /**
+   * Routes. The site opens on a chooser at `/`; each collection lives on its
+   * own route so either can grow independently.
+   */
+  routes: {
+    chooser: '/',
+    rent: '/rent',
+    sale: '/sale',
+  },
+
+  /**
+   * Flip to true once the sales listings exist — the chooser drops its
+   * "coming soon" badge and `/sale` becomes a real page rather than a notice.
+   */
+  saleReady: false,
+
   /** Default locale used for the first paint and for server-rendered metadata. */
   defaultLocale: 'en' as Locale,
 
@@ -112,57 +127,57 @@ export const siteConfig = {
 
 const en = {
   meta: {
-    title: 'YACHT LAUNDRY — Private Residences', // DEMO
+    title: 'Luxury Apartments for Rent in Athens | YACHT LAUNDRY', // DEMO brand
     description:
-      'Private residences available to rent — designed around light, space and modern living. A curated collection of exclusive homes at a single address.',
+      'Explore luxury short-stay apartments for rent in Athens, with verified details, complete photo tours and live Airbnb availability.',
     ogLocale: 'en_GB',
   },
 
-  brand: { tagline: 'PRIVATE RESIDENCES' },
+  brand: { tagline: 'ATHENS APARTMENTS TO RENT' },
 
   nav: {
-    residences: 'RESIDENCES',
+    residences: 'RENTALS',
     location: 'LOCATION',
     about: 'ABOUT',
     contact: 'CONTACT',
   },
 
   cta: {
-    hero: 'DISCOVER RESIDENCES',
-    scroll: 'SCROLL TO DISCOVER',
-    viewResidence: 'VIEW RESIDENCE',
+    hero: 'VIEW APARTMENTS TO RENT',
+    scroll: 'EXPLORE THE RENTALS',
+    viewResidence: 'VIEW RENTAL',
     requestInformation: 'REQUEST INFORMATION',
   },
 
   hero: {
-    eyebrow: 'PRIVATE RESIDENCES TO RENT',
-    headline: ['THE ART', 'OF LIVING'],
-    body: 'A curated collection of residences, each crafted with architectural excellence and timeless elegance.',
+    eyebrow: 'LUXURY APARTMENTS FOR SHORT-TERM RENT · ATHENS',
+    headline: ['YOUR ATHENS', 'STAY AWAITS.'],
+    body: 'Browse our apartments available for rent in Athens. Explore verified amenities and complete photo tours, then check live dates directly on Airbnb.',
   },
 
   intro: {
     index: '01',
-    label: 'THE PROJECT',
-    headline: ['A PLACE', 'TO BELONG.'],
+    label: 'THE COLLECTION',
+    headline: ['CURATED FOR', 'YOUR ATHENS STAY.'],
     body:
-      'Residences carved from a single architectural idea — that a home should be measured in light, in silence, and in the distance between you and everything you came here to leave behind.',
+      'A considered collection of private Athens stays, chosen for their character, comfort and connection to the city.',
     note:
-      'Conceived as a private address rather than a development. Poured concrete, travertine, oak and glass, held in proportion by a facade that turns with the sun.',
+      'Every address is presented with verified details, honest photography and direct access to live availability.',
     stats: [
       // AUTO_COUNT resolves to the number of residences in apartments.ts, so
       // adding or removing one never leaves a stale figure on the page.
-      { value: 'AUTO_COUNT', label: 'RESIDENCES AVAILABLE' },
-      { value: '185–320', label: 'SQUARE METRES' },
-      { value: '2026', label: 'AVAILABLE FROM' },
+      { value: 'AUTO_COUNT', label: 'PRIVATE STAYS' },
+      { value: 'ATHENS', label: 'CITY & COAST' },
+      { value: 'AIRBNB', label: 'LIVE AVAILABILITY' },
     ],
   },
 
   residences: {
     index: '02',
-    label: 'THE RESIDENCES',
-    headline: ['THE', 'RESIDENCES.'],
+    label: 'APARTMENTS TO RENT',
+    headline: ['ATHENS', 'RENTALS.'],
     note:
-      'Each residence occupies its own position in the building, with its own aspect, its own light and its own relationship to the ground. Select one to view the full specification.',
+      'Explore each stay through a concise overview, room-by-room photography and a complete amenity guide. Live dates open directly on Airbnb.',
   },
 
 
@@ -190,7 +205,7 @@ const en = {
     headline: ['THE RIGHT', 'ADDRESS.'],
     body:
       'A quiet street above the coast road, minutes from the marina and the sea, and far enough from the city to forget it is there.',
-    city: 'Athens Riviera',
+    city: 'Athens',
     country: 'Greece',
     addressLines: ['14 Apollonos Street', 'Vouliagmeni 166 71', 'Attica, Greece'],
     landmarks: [
@@ -202,9 +217,40 @@ const en = {
     ],
   },
 
+  /**
+   * The entry gate. Two routes into the site — rentals are live, sales are
+   * being prepared. Add the sale listings and flip `saleReady` in siteConfig.
+   */
+  chooser: {
+    eyebrow: 'YACHT LAUNDRY',
+    headline: ['HOW WOULD YOU', 'LIKE TO LIVE?'],
+    note: 'Choose a collection to begin.',
+    rent: {
+      index: '01',
+      title: 'FOR RENT',
+      description: 'Private residences available to lease, ready to move into.',
+      action: 'VIEW RENTALS',
+    },
+    sale: {
+      index: '02',
+      title: 'FOR SALE',
+      description: 'A collection of residences for purchase, arriving shortly.',
+      action: 'VIEW SALES',
+      badge: 'COMING SOON',
+    },
+  },
+
+  sale: {
+    eyebrow: 'FOR SALE',
+    headline: ['A COLLECTION', 'IN PREPARATION.'],
+    body:
+      'Our sales portfolio is being assembled with the same care as our rentals. Register your interest and you will be among the first to see it.',
+    back: 'VIEW RENTALS INSTEAD',
+  },
+
   finalCta: {
-    headline: ['YOUR NEXT', 'ADDRESS', 'AWAITS.'],
-    note: 'PRIVATE VIEWINGS AVAILABLE',
+    headline: ['BOOK YOUR', 'ATHENS', 'STAY.'],
+    note: 'APARTMENTS TO RENT · LIVE AVAILABILITY ON AIRBNB',
   },
 
 
@@ -240,6 +286,7 @@ const en = {
     address: 'ADDRESS',
     nearby: 'NEARBY',
     mapPlaceholder: 'MAP PLACEHOLDER',
+    allCollections: 'ALL COLLECTIONS',
     rights: 'ALL RIGHTS RESERVED.',
     previousImage: 'Previous image',
     nextImage: 'Next image',
@@ -262,55 +309,55 @@ export type Content = typeof en;
 
 const el: Content = {
   meta: {
-    title: 'YACHT LAUNDRY — Ιδιωτικές Κατοικίες', // DEMO
+    title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα | YACHT LAUNDRY', // DEMO brand
     description:
-      'Ιδιωτικές κατοικίες προς ενοικίαση — σχεδιασμένες γύρω από το φως, τον χώρο και τη σύγχρονη ζωή. Μια επιλεγμένη συλλογή κατοικιών σε μία διεύθυνση.',
+      'Ανακαλύψτε πολυτελή διαμερίσματα βραχυχρόνιας ενοικίασης στην Αθήνα, με επιβεβαιωμένες πληροφορίες, πλήρεις φωτογραφικές περιηγήσεις και ζωντανή διαθεσιμότητα στο Airbnb.',
     ogLocale: 'el_GR',
   },
 
-  brand: { tagline: 'ΙΔΙΩΤΙΚΕΣ ΚΑΤΟΙΚΙΕΣ' },
+  brand: { tagline: 'ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ ΣΤΗΝ ΑΘΗΝΑ' },
 
   nav: {
-    residences: 'ΚΑΤΟΙΚΙΕΣ',
+    residences: 'ΕΝΟΙΚΙΑΣΕΙΣ',
     location: 'ΤΟΠΟΘΕΣΙΑ',
     about: 'ΤΟ ΕΡΓΟ',
     contact: 'ΕΠΙΚΟΙΝΩΝΙΑ',
   },
 
   cta: {
-    hero: 'ΑΝΑΚΑΛΥΨΤΕ ΤΙΣ ΚΑΤΟΙΚΙΕΣ',
-    scroll: 'ΚΥΛΗΣΤΕ ΓΙΑ ΝΑ ΑΝΑΚΑΛΥΨΕΤΕ',
-    viewResidence: 'ΔΕΙΤΕ ΤΗΝ ΚΑΤΟΙΚΙΑ',
+    hero: 'ΔΕΙΤΕ ΤΑ ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
+    scroll: 'ΕΞΕΡΕΥΝΗΣΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
+    viewResidence: 'ΔΕΙΤΕ ΤΟ ΚΑΤΑΛΥΜΑ',
     requestInformation: 'ΖΗΤΗΣΤΕ ΠΛΗΡΟΦΟΡΙΕΣ',
   },
 
   hero: {
-    eyebrow: 'ΙΔΙΩΤΙΚΕΣ ΚΑΤΟΙΚΙΕΣ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
-    headline: ['Η ΤΕΧΝΗ', 'ΤΟΥ ΖΗΝ'],
-    body: 'Μια επιλεγμένη συλλογή κατοικιών, φτιαγμένων με αρχιτεκτονική αρτιότητα και διαχρονική κομψότητα.',
+    eyebrow: 'ΠΟΛΥΤΕΛΗ ΔΙΑΜΕΡΙΣΜΑΤΑ ΒΡΑΧΥΧΡΟΝΙΑΣ ΕΝΟΙΚΙΑΣΗΣ · ΑΘΗΝΑ',
+    headline: ['Η ΔΙΑΜΟΝΗ ΣΑΣ', 'ΣΤΗΝ ΑΘΗΝΑ.'],
+    body: 'Δείτε τα διαθέσιμα διαμερίσματά μας προς ενοικίαση στην Αθήνα. Εξερευνήστε επιβεβαιωμένες παροχές και πλήρεις φωτογραφικές περιηγήσεις και ελέγξτε ζωντανά τις ημερομηνίες στο Airbnb.',
   },
 
   intro: {
     index: '01',
-    label: 'ΤΟ ΕΡΓΟ',
-    headline: ['ΕΝΑΣ ΤΟΠΟΣ', 'ΔΙΚΟΣ ΣΑΣ.'],
+    label: 'Η ΣΥΛΛΟΓΗ',
+    headline: ['ΕΠΙΛΕΓΜΕΝΑ ΓΙΑ', 'ΤΗ ΔΙΑΜΟΝΗ ΣΑΣ.'],
     body:
-      'Κατοικίες λαξεμένες από μία και μόνη αρχιτεκτονική ιδέα — ότι ένα σπίτι μετριέται στο φως, στη σιωπή και στην απόσταση που σας χωρίζει από όσα αφήσατε πίσω.',
+      'Μια προσεγμένη συλλογή ιδιωτικών καταλυμάτων στην Αθήνα, επιλεγμένων για τον χαρακτήρα, την άνεση και τη σύνδεσή τους με την πόλη.',
     note:
-      'Σχεδιασμένο ως μια ιδιωτική διεύθυνση και όχι ως ένα ακόμη συγκρότημα. Εμφανές σκυρόδεμα, τραβερτίνης, δρυς και γυαλί, σε αναλογίες που ορίζει μια πρόσοψη η οποία στρέφεται με τον ήλιο.',
+      'Κάθε διεύθυνση παρουσιάζεται με επιβεβαιωμένες πληροφορίες, αυθεντικές φωτογραφίες και άμεση πρόσβαση στη ζωντανή διαθεσιμότητα.',
     stats: [
-      { value: 'AUTO_COUNT', label: 'ΔΙΑΘΕΣΙΜΕΣ ΚΑΤΟΙΚΙΕΣ' },
-      { value: '185–320', label: 'ΤΕΤΡΑΓΩΝΙΚΑ ΜΕΤΡΑ' },
-      { value: '2026', label: 'ΔΙΑΘΕΣΙΜΕΣ ΑΠΟ' },
+      { value: 'AUTO_COUNT', label: 'ΙΔΙΩΤΙΚΑ ΚΑΤΑΛΥΜΑΤΑ' },
+      { value: 'ΑΘΗΝΑ', label: 'ΠΟΛΗ & ΑΚΤΗ' },
+      { value: 'AIRBNB', label: 'ΖΩΝΤΑΝΗ ΔΙΑΘΕΣΙΜΟΤΗΤΑ' },
     ],
   },
 
   residences: {
     index: '02',
-    label: 'ΟΙ ΚΑΤΟΙΚΙΕΣ',
-    headline: ['ΟΙ', 'ΚΑΤΟΙΚΙΕΣ.'],
+    label: 'ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
+    headline: ['ΔΙΑΜΟΝΗ', 'ΣΤΗΝ ΑΘΗΝΑ.'],
     note:
-      'Κάθε κατοικία καταλαμβάνει τη δική της θέση στο κτίριο, με τον δικό της προσανατολισμό, το δικό της φως και τη δική της σχέση με το έδαφος. Επιλέξτε μία για να δείτε τα πλήρη χαρακτηριστικά.',
+      'Εξερευνήστε κάθε κατάλυμα μέσα από σύντομη παρουσίαση, φωτογραφίες ανά χώρο και πλήρη οδηγό παροχών. Οι διαθέσιμες ημερομηνίες ανοίγουν απευθείας στο Airbnb.',
   },
 
 
@@ -337,7 +384,7 @@ const el: Content = {
     headline: ['Η ΣΩΣΤΗ', 'ΔΙΕΥΘΥΝΣΗ.'],
     body:
       'Ένας ήσυχος δρόμος πάνω από την παραλιακή, λίγα λεπτά από τη μαρίνα και τη θάλασσα, και αρκετά μακριά από την πόλη ώστε να την ξεχνάτε.',
-    city: 'Αθηναϊκή Ριβιέρα',
+    city: 'Αθήνα',
     country: 'Ελλάδα',
     addressLines: ['Απόλλωνος 14', 'Βουλιαγμένη 166 71', 'Αττική, Ελλάδα'],
     landmarks: [
@@ -349,9 +396,36 @@ const el: Content = {
     ],
   },
 
+  chooser: {
+    eyebrow: 'YACHT LAUNDRY',
+    headline: ['ΠΩΣ ΘΑ ΘΕΛΑΤΕ', 'ΝΑ ΖΕΙΤΕ;'],
+    note: 'Επιλέξτε μια συλλογή για να ξεκινήσετε.',
+    rent: {
+      index: '01',
+      title: 'ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
+      description: 'Ιδιωτικές κατοικίες προς ενοικίαση, έτοιμες για κατοίκηση.',
+      action: 'ΔΕΙΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
+    },
+    sale: {
+      index: '02',
+      title: 'ΠΡΟΣ ΠΩΛΗΣΗ',
+      description: 'Μια συλλογή κατοικιών προς πώληση, σύντομα κοντά σας.',
+      action: 'ΔΕΙΤΕ ΤΙΣ ΠΩΛΗΣΕΙΣ',
+      badge: 'ΣΥΝΤΟΜΑ',
+    },
+  },
+
+  sale: {
+    eyebrow: 'ΠΡΟΣ ΠΩΛΗΣΗ',
+    headline: ['ΜΙΑ ΣΥΛΛΟΓΗ', 'ΥΠΟ ΠΡΟΕΤΟΙΜΑΣΙΑ.'],
+    body:
+      'Το χαρτοφυλάκιο πωλήσεων ετοιμάζεται με την ίδια φροντίδα όπως και οι ενοικιάσεις μας. Δηλώστε ενδιαφέρον και θα είστε από τους πρώτους που θα το δουν.',
+    back: 'ΔΕΙΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
+  },
+
   finalCta: {
-    headline: ['Η ΕΠΟΜΕΝΗ ΣΑΣ', 'ΔΙΕΥΘΥΝΣΗ', 'ΣΑΣ ΠΕΡΙΜΕΝΕΙ.'],
-    note: 'ΙΔΙΩΤΙΚΕΣ ΕΠΙΣΚΕΨΕΙΣ ΚΑΤΟΠΙΝ ΡΑΝΤΕΒΟΥ',
+    headline: ['ΚΛΕΙΣΤΕ ΤΗ', 'ΔΙΑΜΟΝΗ ΣΑΣ', 'ΣΤΗΝ ΑΘΗΝΑ.'],
+    note: 'ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ · ΖΩΝΤΑΝΗ ΔΙΑΘΕΣΙΜΟΤΗΤΑ ΣΤΟ AIRBNB',
   },
 
 
@@ -386,6 +460,7 @@ const el: Content = {
     address: 'ΔΙΕΥΘΥΝΣΗ',
     nearby: 'ΚΟΝΤΑ ΣΑΣ',
     mapPlaceholder: 'ΘΕΣΗ ΧΑΡΤΗ',
+    allCollections: 'ΟΛΕΣ ΟΙ ΣΥΛΛΟΓΕΣ',
     rights: 'ΜΕ ΕΠΙΦΥΛΑΞΗ ΠΑΝΤΟΣ ΔΙΚΑΙΩΜΑΤΟΣ.',
     previousImage: 'Προηγούμενη εικόνα',
     nextImage: 'Επόμενη εικόνα',

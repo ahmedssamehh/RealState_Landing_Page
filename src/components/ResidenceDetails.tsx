@@ -16,22 +16,26 @@ import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
 import { EASE, gsap, prefersReducedMotion, registerGsap } from '@/lib/animations';
 import { useSmoothScroll } from './SmoothScroll';
+import PhotoTour from './PhotoTour';
 
 type Props = {
   residence: Apartment | null;
+  initialView?: 'details' | 'photos';
   onClose: () => void;
 };
 
-export default function ResidenceDetails({ residence, onClose }: Props) {
+export default function ResidenceDetails({ residence, initialView = 'details', onClose }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [showPhotoTour, setShowPhotoTour] = useState(false);
   const { lock, unlock } = useSmoothScroll();
-  const { t, residence: copy, status, price } = useLocale();
+  const { locale, t, residence: copy, status, price } = useLocale();
 
   const open = Boolean(residence);
-  const count = residence?.images.length ?? 0;
+  const previewImages = residence?.images.slice(0, 4) ?? [];
+  const count = previewImages.length;
 
   /* ------------------------------------------------------------------ */
   /* Open                                                               */
@@ -43,7 +47,9 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
     if (!el) return;
 
     lock();
+    el.scrollTop = 0;
     setActive(0);
+    setShowPhotoTour(initialView === 'photos');
     const reduced = prefersReducedMotion();
 
     const ctx = gsap.context(() => {
@@ -59,13 +65,32 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
           { y: 0, scale: 1, opacity: 1, duration: 0.4 },
           '-=0.12'
         );
+
+      el.querySelectorAll<HTMLElement>('section').forEach((section) => {
+        gsap.fromTo(
+          section,
+          { y: 24, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.75,
+            ease: EASE.expo,
+            scrollTrigger: {
+              trigger: section,
+              scroller: el,
+              start: 'top 88%',
+              once: true,
+            },
+          }
+        );
+      });
     }, el);
 
     return () => {
       ctx.revert();
       unlock();
     };
-  }, [open, lock, unlock]);
+  }, [open, lock, unlock, initialView]);
 
   /**
    * Closing is synchronous on purpose. Gating the state change on a tween's
@@ -170,21 +195,38 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
 
   const text = copy(residence);
 
-  const spec = [
-    { k: t.ui.area, v: residence.area },
-    { k: t.ui.bedrooms, v: residence.bedrooms },
-    { k: t.ui.bathrooms, v: residence.bathrooms },
-    { k: t.ui.parking, v: residence.parking },
-    { k: t.ui.aspect, v: text.orientation },
-  ];
+  const labels = locale === 'el'
+    ? {
+        guests: 'ΕΠΙΣΚΕΠΤΕΣ', beds: 'ΚΡΕΒΑΤΙΑ', reviews: 'ΚΡΙΤΙΚΕΣ',
+        hostedBy: 'ΟΙΚΟΔΕΣΠΟΤΗΣ', registration: 'ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ',
+        amenities: 'ΠΑΡΟΧΕΣ', extraServices: 'ΠΡΟΣΘΕΤΕΣ ΥΠΗΡΕΣΙΕΣ',
+        importantNotes: 'ΣΗΜΑΝΤΙΚΕΣ ΣΗΜΕΙΩΣΕΙΣ',
+        checkAvailability: 'ΕΛΕΓΧΟΣ ΔΙΑΘΕΣΙΜΟΤΗΤΑΣ ΣΤΟ AIRBNB',
+      }
+    : {
+        guests: 'GUESTS', beds: 'BEDS', reviews: 'REVIEWS', hostedBy: 'HOSTED BY',
+        registration: 'REGISTRATION', amenities: 'AMENITIES',
+        extraServices: 'EXTRA SERVICES', importantNotes: 'IMPORTANT NOTES',
+        checkAvailability: 'CHECK AVAILABILITY ON AIRBNB',
+      };
+
+  const spec: Array<{ k: string; v: string | number }> = [];
+  if (residence.guests != null) spec.push({ k: labels.guests, v: residence.guests });
+  if (residence.bedrooms != null) spec.push({ k: t.ui.bedrooms, v: residence.bedrooms });
+  if (residence.beds != null) spec.push({ k: labels.beds, v: residence.beds });
+  if (residence.bathrooms != null) spec.push({ k: t.ui.bathrooms, v: residence.bathrooms });
+  if (residence.area) spec.push({ k: t.ui.area, v: residence.area });
 
   return (
     <div
       ref={root}
+      data-lenis-prevent
+      data-lenis-prevent-wheel
+      data-lenis-prevent-touch
       role="dialog"
       aria-modal="true"
       aria-label={`${text.name} ${t.ui.detailAria}`}
-      className="fixed inset-0 z-[80] flex items-center justify-center p-0 sm:p-6 md:p-10"
+      className="fixed inset-0 z-[80] h-svh touch-pan-y overflow-y-scroll overscroll-contain bg-ink/45 p-0 [scrollbar-color:#630000_transparent] [scrollbar-width:thin] sm:px-6 sm:py-8 md:px-10"
       style={{ visibility: 'hidden', opacity: 0 }}
     >
       {/* Click-away. The blur itself lives on the page shell behind. */}
@@ -193,23 +235,23 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
         aria-label={t.ui.close}
         tabIndex={-1}
         onClick={close}
-        className="absolute inset-0 h-full w-full cursor-default bg-ink/45"
+        className="fixed inset-0 h-full w-full cursor-default bg-ink/45"
       />
 
       <div
         ref={panel}
-        className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden bg-ivory shadow-[0_40px_120px_rgba(0,0,0,0.45)] sm:max-h-[90svh]"
+        className="relative z-[1] mx-auto min-h-full w-full max-w-7xl overflow-visible bg-ivory shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
       >
         {/* ------------------------------------------------ Gallery */}
-        <div className="relative shrink-0 bg-ink/10">
+        <div className="relative h-[48svh] min-h-[320px] bg-ink/10 sm:h-[58svh] sm:min-h-[460px] lg:h-[64svh]">
           <div
             ref={track}
-            className="flex w-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {residence.images.map((img, i) => (
+            {previewImages.map((img, i) => (
               <figure
                 key={img.src}
-                className="relative aspect-[16/10] w-full flex-none snap-center sm:aspect-[2/1]"
+                className="relative h-full w-full flex-none snap-center"
               >
                 <Image
                   src={img.src}
@@ -254,7 +296,7 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
 
           {/* Dots */}
           <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
-            {residence.images.map((img, i) => (
+            {previewImages.map((img, i) => (
               <button
                 key={img.src}
                 type="button"
@@ -273,94 +315,219 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
             data-detail-close
             type="button"
             onClick={close}
-            className="absolute right-4 top-4 flex items-center gap-2 border border-ivory/40 bg-ink/30 px-4 py-2 text-ivory backdrop-blur-sm transition-colors duration-200 hover:bg-burgundy"
+            className="fixed right-4 top-4 z-[5] flex min-h-11 items-center gap-2 border border-burgundy bg-burgundy px-4 py-2 text-ivory backdrop-blur-md transition-colors duration-200 hover:bg-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy sm:right-10 sm:top-10 md:right-14 md:top-14"
           >
             <span aria-hidden className="text-base leading-none">
               &times;
             </span>
             <span className="label">{t.ui.close}</span>
           </button>
+
+          {residence.photoSections && residence.photoSections.some((section) => section.images.length > 0) && (
+            <button
+              type="button"
+              onClick={() => setShowPhotoTour(true)}
+              className="label absolute bottom-4 right-4 border border-ivory/45 bg-ink/55 px-4 py-3 text-ivory backdrop-blur-sm transition-colors hover:bg-burgundy"
+            >
+              {locale === 'el' ? 'ΠΡΟΒΟΛΗ ΟΛΩΝ ΤΩΝ ΦΩΤΟΓΡΑΦΙΩΝ' : 'VIEW ALL PHOTOS'}
+            </button>
+          )}
+
+          <div className="pointer-events-none absolute bottom-0 left-1/2 z-[2] -translate-x-1/2 translate-y-1/2 bg-ivory px-5 py-3 text-center shadow-sm">
+            <span className="label whitespace-nowrap text-burgundy">
+              {locale === 'el' ? 'ΚΥΛΗΣΤΕ ΓΙΑ ΟΛΕΣ ΤΙΣ ΛΕΠΤΟΜΕΡΕΙΕΣ ↓' : 'SCROLL FOR ALL DETAILS ↓'}
+            </span>
+          </div>
         </div>
 
         {/* ------------------------------------------------ Detail */}
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-8 sm:px-10 sm:py-10">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
-            <div>
+        <div className="px-6 pb-16 pt-16 sm:px-10 sm:pb-20 sm:pt-20 lg:px-[clamp(3.5rem,7vw,7rem)]">
+          <div className="grid gap-8 border-b border-ink/15 pb-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div className="max-w-4xl">
               <p className="label mb-3 text-burgundy">
                 {t.ui.residence} {residence.number} &mdash; {text.subtitle}
               </p>
-              <h2 className="display text-[clamp(2rem,5vw,3.4rem)] text-ink">{text.name}</h2>
+              <h2 className="display text-[clamp(2.8rem,7vw,6.4rem)] leading-[0.9] text-ink">{text.name}</h2>
+              <p className="label mt-7 text-ink/45">ATHENS · PLAKA · {text.orientation}</p>
             </div>
-            <div className="text-left sm:text-right">
+            {residence.rent != null && <div className="text-left sm:text-right">
               <p className="font-serif text-[clamp(1.6rem,3vw,2.4rem)] font-light leading-none text-ink">
                 {price(residence.rent)}
               </p>
               <p className="label mt-2 text-ink/50">{t.ui.perMonth}</p>
-            </div>
+            </div>}
+            {residence.listingUrl && (
+              <a
+                href={residence.listingUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${labels.checkAvailability} — ${text.name}`}
+                className="group inline-flex min-h-14 items-stretch border-2 border-burgundy bg-burgundy text-left shadow-[0_10px_26px_rgba(99,0,0,0.18)] transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-[0_14px_34px_rgba(99,0,0,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy"
+              >
+                <span className="flex flex-col justify-center px-6 py-3">
+                  <span className="block text-[9px] tracking-[0.22em] text-ivory/70">
+                    {locale === 'el' ? 'ΖΩΝΤΑΝΕΣ ΗΜΕΡΟΜΗΝΙΕΣ' : 'LIVE DATES & BOOKING'}
+                  </span>
+                  <span className="label mt-1 block text-ivory">{labels.checkAvailability}</span>
+                </span>
+                <span aria-hidden className="flex min-w-14 items-center justify-center border-l border-ivory/30 text-xl text-ivory transition-colors group-hover:bg-burgundy">↗</span>
+              </a>
+            )}
           </div>
 
-          <dl className="mt-8 grid grid-cols-2 gap-y-6 border-y border-ink/15 py-7 md:grid-cols-5">
+          {spec.length > 0 && <dl className="grid grid-cols-2 border-b border-ink/15 md:grid-cols-4">
             {spec.map((row) => (
-              <div key={row.k}>
+              <div key={row.k} className="border-r border-ink/15 px-4 py-8 first:pl-0 last:border-r-0 md:px-8">
                 <dt className="label text-ink/45">{row.k}</dt>
-                <dd className="mt-2 font-serif text-xl font-light text-ink">{row.v}</dd>
+                <dd className="mt-3 font-serif text-3xl font-light text-ink">{row.v}</dd>
               </div>
             ))}
-          </dl>
+          </dl>}
 
-          <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
-            <div>
-              <p className="label mb-4 text-burgundy">{t.ui.description}</p>
-              <p className="font-serif text-[clamp(1.05rem,1.5vw,1.35rem)] font-light leading-[1.55] text-ink/85">
+          <div className="mt-16 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.65fr)] lg:gap-20">
+            <section>
+              <div className="mb-8 flex items-center gap-5">
+                <span className="label text-burgundy">01</span>
+                <div className="h-px flex-1 bg-ink/15" />
+                <p className="label text-burgundy">{t.ui.description}</p>
+              </div>
+              <p className="max-w-3xl font-serif text-[clamp(1.45rem,2.4vw,2.15rem)] font-light leading-[1.42] text-ink/85">
                 {text.description}
               </p>
 
-              <dl className="mt-8 grid grid-cols-2 gap-6">
+              <dl className="mt-12 grid grid-cols-1 gap-x-10 gap-y-8 border-t border-ink/15 pt-8 sm:grid-cols-2">
                 <div>
                   <dt className="label text-ink/45">{t.ui.availability}</dt>
                   <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
                     {text.availableFrom}
                   </dd>
                 </div>
-                <div>
+                {residence.rating != null && <div>
+                  <dt className="label text-ink/45">{labels.reviews}</dt>
+                  <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
+                    {residence.rating.toFixed(1)} / 5 · {residence.reviewCount} {labels.reviews.toLowerCase()}
+                  </dd>
+                </div>}
+                {residence.host && <div>
+                  <dt className="label text-ink/45">{labels.hostedBy}</dt>
+                  <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
+                    {residence.host}{residence.hostBadge ? ` · ${residence.hostBadge}` : ''}
+                  </dd>
+                </div>}
+                {residence.registrationNumber && <div>
+                  <dt className="label text-ink/45">{labels.registration}</dt>
+                  <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
+                    {residence.registrationNumber}
+                  </dd>
+                </div>}
+                {residence.minimumTermMonths != null && <div>
                   <dt className="label text-ink/45">{t.ui.minimumTerm}</dt>
                   <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
                     {residence.minimumTermMonths} {t.ui.months}
                   </dd>
-                </div>
+                </div>}
               </dl>
-            </div>
+            </section>
 
-            <div>
-              <p className="label mb-4 text-burgundy">{t.ui.features}</p>
+            <aside className="bg-burgundy p-7 text-ivory sm:p-9">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <p className="label text-ivory">{t.ui.features}</p>
+                <span className="label text-ivory/45">02</span>
+              </div>
               <ul>
                 {text.features.map((f) => (
                   <li
                     key={f}
-                    className="label flex items-center justify-between border-b border-ink/15 py-3 text-ink/75"
+                    className="label flex items-center justify-between border-b border-ivory/20 py-4 text-ivory/85"
                   >
                     {f}
-                    <span aria-hidden className="text-burgundy">
+                    <span aria-hidden className="text-ivory/45">
                       &mdash;
                     </span>
                   </li>
                 ))}
               </ul>
-            </div>
+              {!text.amenityGroups?.length && text.amenities && text.amenities.length > 0 && (
+                <>
+                  <p className="label mb-2 mt-8 text-ivory">{labels.amenities}</p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2">
+                    {text.amenities.map((item) => (
+                      <li key={item} className="label border-b border-ivory/20 py-3 text-ivory/70">{item}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {text.extraServices && text.extraServices.length > 0 && (
+                <>
+                  <p className="label mb-2 mt-8 text-ivory">{labels.extraServices}</p>
+                  <ul>
+                    {text.extraServices.map((item) => (
+                      <li key={item} className="label border-b border-ivory/20 py-3 text-ivory/70">{item}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </aside>
           </div>
+
+          {text.amenityGroups && text.amenityGroups.length > 0 && (
+            <section className="mt-20 border-t border-ink/15 pt-10">
+              <div className="mb-10 flex items-end justify-between gap-6">
+                <div>
+                  <p className="label text-burgundy">03 · {labels.amenities}</p>
+                  <h3 className="mt-4 font-serif text-[clamp(2.4rem,5vw,4.5rem)] font-light leading-none text-ink">
+                    {locale === 'el' ? 'Όλα όσα χρειάζεστε.' : 'Everything you need.'}
+                  </h3>
+                </div>
+                <p className="label hidden text-ink/35 sm:block">{text.amenityGroups.length} {locale === 'el' ? 'ΚΑΤΗΓΟΡΙΕΣ' : 'CATEGORIES'}</p>
+              </div>
+              <div className="grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
+                {text.amenityGroups.map((group) => (
+                  <div key={group.title} className="border-t border-burgundy/30 pt-5">
+                    <h4 className="font-serif text-2xl font-light text-ink">{group.title}</h4>
+                    <ul className="mt-3">
+                      {group.items.map((item) => (
+                        <li key={item} className="border-b border-ink/10 py-2 font-sans text-sm font-light leading-relaxed text-ink/65">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {text.importantNotes && text.importantNotes.length > 0 && (
+            <section className="mt-20 border-y border-burgundy/20 bg-burgundy/[0.045] px-6 py-9 sm:px-10">
+              <p className="label mb-6 text-burgundy">04 · {labels.importantNotes}</p>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {text.importantNotes.map((note) => (
+                  <li key={note} className="font-sans text-sm font-light leading-relaxed text-ink/65">
+                    <span aria-hidden className="mr-2 text-burgundy">—</span>{note}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {/* CTA — the enquiry form is gone, so this dials directly. */}
           <div className="mt-10 flex flex-col items-start gap-5 border-t border-ink/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <a
-              href={siteConfig.contact.phoneHref}
-              className="group inline-flex items-center gap-4 bg-burgundy px-8 py-4 transition-colors duration-200 hover:bg-burgundy-soft"
+              href={residence.listingUrl ?? siteConfig.contact.phoneHref}
+              target={residence.listingUrl ? '_blank' : undefined}
+              rel={residence.listingUrl ? 'noreferrer' : undefined}
+              aria-label={residence.listingUrl ? `${labels.checkAvailability} — ${text.name}` : undefined}
+              className="group inline-flex min-h-14 items-stretch border-2 border-burgundy bg-burgundy shadow-[0_10px_26px_rgba(99,0,0,0.18)] transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-[0_14px_34px_rgba(99,0,0,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy"
             >
-              <span className="label text-ivory">{t.cta.requestInformation}</span>
+              <span className="label flex items-center px-7 py-4 text-ivory">
+                {residence.listingUrl ? labels.checkAvailability : t.cta.requestInformation}
+              </span>
               <span
                 aria-hidden
-                className="text-ivory transition-transform duration-300 ease-expo group-hover:translate-x-1.5"
+                className="flex min-w-14 items-center justify-center border-l border-ivory/30 text-xl text-ivory transition-colors duration-200 group-hover:bg-burgundy"
               >
-                &rarr;
+                {residence.listingUrl ? '↗' : '→'}
               </span>
             </a>
 
@@ -382,6 +549,15 @@ export default function ResidenceDetails({ residence, onClose }: Props) {
           </div>
         </div>
       </div>
+      {residence.photoSections && (
+        <PhotoTour
+          open={showPhotoTour}
+          residenceName={text.name}
+          sections={residence.photoSections}
+          locale={locale}
+          onClose={() => setShowPhotoTour(false)}
+        />
+      )}
     </div>
   );
 }

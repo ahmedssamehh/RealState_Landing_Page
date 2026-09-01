@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, EB_Garamond, Inter } from 'next/font/google';
 import { content, siteConfig } from '@/data/siteConfig';
+import { LocaleProvider } from '@/lib/locale';
 import './globals.css';
 
 /**
@@ -75,7 +76,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang={siteConfig.defaultLocale}
       className={`${display.variable} ${displayGreek.variable} ${body.variable}`}
     >
-      <body className="bg-ink text-ivory antialiased">{children}</body>
+      {/* Ivory is the page surface; ink is the type. */}
+      <body className="bg-ivory text-ink antialiased">
+        {/* Language and currency are shared by every route. */}
+        <LocaleProvider>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }

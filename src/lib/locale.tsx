@@ -133,7 +133,12 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
       setCurrency,
       t,
       residence: (apartment) => apartment.i18n[locale],
-      status: (apartment) => t.status[apartment.status],
+      status: (apartment) =>
+        apartment.status === 'DETAILS_PENDING'
+          ? locale === 'el'
+            ? 'ΑΝΑΜΟΝΗ ΣΤΟΙΧΕΙΩΝ'
+            : 'DETAILS PENDING'
+          : t.status[apartment.status],
       price,
     };
   }, [locale, currency, setLocale, setCurrency]);

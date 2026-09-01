@@ -8,9 +8,10 @@ import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
 type Props = {
   onOpenResidence: (residence: Apartment) => void;
+  onOpenPhotos: (residence: Apartment) => void;
 };
 
-export default function ResidencesSection({ onOpenResidence }: Props) {
+export default function ResidencesSection({ onOpenResidence, onOpenPhotos }: Props) {
   const root = useRef<HTMLElement>(null);
   const { t } = useLocale();
 
@@ -71,6 +72,7 @@ export default function ResidencesSection({ onOpenResidence }: Props) {
               residence={residence}
               index={i}
               onOpen={onOpenResidence}
+              onOpenPhotos={onOpenPhotos}
             />
           ))}
         </div>
