@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
@@ -15,6 +16,10 @@ export default function Navbar({ ready }: { ready: boolean }) {
   const bar = useRef<HTMLElement>(null);
   const { lock, unlock, scrollTo } = useSmoothScroll();
   const { t } = useLocale();
+  /** The `residences` anchor is the sales listing itself on `/sale` — label it accordingly. */
+  const onSaleRoute = usePathname()?.startsWith(siteConfig.routes.sale);
+  const navLabel = (key: (typeof siteConfig.nav)[number]['key']) =>
+    key === 'residences' && onSaleRoute ? t.nav.property : t.nav[key];
 
   /* Solidify the bar once the hero starts leaving. */
   useEffect(() => {
@@ -110,15 +115,14 @@ export default function Navbar({ ready }: { ready: boolean }) {
           className="edge mx-auto flex max-w-edge items-center justify-between gap-6"
           aria-label="Primary"
         >
-          {/* DEMO wordmark */}
           <a
             href="#hero"
             onClick={go('#hero')}
             aria-label={siteConfig.brand.name}
             className="shrink-0 text-ink"
           >
-            <Logo size={30} className="hidden sm:inline-flex" />
-            <Logo size={28} iconOnly className="sm:hidden" />
+            <Logo mark="full" size={30} className="hidden sm:inline-flex" />
+            <Logo mark="icon" size={28} className="sm:hidden" />
           </a>
 
           <div className="hidden items-center gap-8 lg:flex xl:gap-10">
@@ -130,7 +134,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
                     onClick={go(item.href)}
                     className="label relative text-ink/65 transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-burgundy after:transition-all after:duration-200 after:ease-expo hover:text-ink hover:after:w-full"
                   >
-                    {t.nav[item.key]}
+                    {navLabel(item.key)}
                   </a>
                 </li>
               ))}
@@ -184,7 +188,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
                 className="display flex items-baseline gap-5 py-3 text-[clamp(2.2rem,11vw,4.5rem)] text-ink"
               >
                 <span className="label text-burgundy">0{i + 1}</span>
-                {t.nav[item.key]}
+                {navLabel(item.key)}
               </a>
             </li>
           ))}
@@ -194,7 +198,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <LocaleToggle variant="stacked" tone="dark" className="mb-8" />
 
           <div className="rule mb-6 text-ink/20" />
-          {/* DEMO contact details — phone and email are the only channels */}
+          {/* Phone and email are the only contact channels. */}
           <div className="flex flex-col gap-4">
             <a href={siteConfig.contact.phoneHref} className="label text-ink/70">
               {siteConfig.contact.phone}

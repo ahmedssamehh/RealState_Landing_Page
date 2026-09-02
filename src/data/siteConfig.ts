@@ -2,9 +2,9 @@
  * ---------------------------------------------------------------------------
  * SITE CONFIGURATION — SINGLE SOURCE OF TRUTH
  * ---------------------------------------------------------------------------
- * Everything marked `DEMO` is placeholder content supplied for the design
- * preview only. Replace the values here with the real project data; no UI
- * component needs to be touched.
+ * Language-independent settings and per-language copy for the site. To
+ * change any visible text, edit the values here — no UI component needs to
+ * be touched.
  *
  * Structure:
  *   siteConfig  — language-independent settings (brand, contact, geometry,
@@ -30,22 +30,22 @@ export const CURRENCIES: { code: CurrencyCode; label: string; symbol: string }[]
 ];
 
 export const siteConfig = {
-  /** DEMO — placeholder brand identity (temporary preview content). */
+  /** Brand identity — GS Luxury Residence. */
   brand: {
-    name: 'YACHT LAUNDRY', // DEMO placeholder for the project wordmark
+    name: 'GS LUXURY RESIDENCE',
     /** The wordmark is set on two lines in the logo. */
-    nameLines: ['YACHT', 'LAUNDRY'] as [string, string], // DEMO
-    shortName: 'YL', // DEMO
+    nameLines: ['GS', 'LUXURY RESIDENCE'] as [string, string],
+    shortName: 'GS',
     established: 'EST. MMXXV',
   },
 
-  /** DEMO — placeholder contact details (temporary preview content). */
+  /** Contact details. */
   contact: {
-    phone: '6945 593948', // DEMO
-    phoneHref: 'tel:+306945593948', // DEMO
-    email: 'private@yachtlaundry.gr', // DEMO
-    website: 'www.yachtlaundry.gr', // DEMO
-    websiteHref: 'https://www.yachtlaundry.gr', // DEMO
+    phone: '694 5938948',
+    phoneHref: 'tel:+306945938948',
+    email: 'info@gsluxuryresidence.com',
+    website: 'www.gsluxuryresidence.com',
+    websiteHref: 'https://www.gsluxuryresidence.com',
   },
 
   /**
@@ -67,17 +67,10 @@ export const siteConfig = {
     roundTo: 50,
   },
 
-  /** Language-independent geometry and map settings. */
-  location: {
-    coordinates: { lat: 37.8106, lng: 23.7794 },
-    /** Drop a real Google Maps embed URL here to replace the styled placeholder. */
-    mapEmbedUrl: '' as string,
-  },
-
   /** Section anchors. Labels live in `content[locale].nav`. */
   nav: [
     { key: 'residences', href: '#residences' },
-    { key: 'about', href: '#architecture' },
+    { key: 'about', href: '#location' },
     { key: 'contact', href: '#contact' },
   ] as const,
 
@@ -110,14 +103,14 @@ export const siteConfig = {
    * Flip to true once the sales listings exist — the chooser drops its
    * "coming soon" badge and `/sale` becomes a real page rather than a notice.
    */
-  saleReady: false,
+  saleReady: true,
 
   /** Default locale used for the first paint and for server-rendered metadata. */
   defaultLocale: 'en' as Locale,
 
   seo: {
-    url: 'https://www.yachtlaundry.gr', // DEMO
-    ogImage: '/og.jpg', // DEMO — add a 1200x630 image to /public
+    url: 'https://www.gsluxuryresidence.com',
+    ogImage: '/og.jpg',
   },
 } as const;
 
@@ -127,7 +120,7 @@ export const siteConfig = {
 
 const en = {
   meta: {
-    title: 'Luxury Apartments for Rent in Athens | YACHT LAUNDRY', // DEMO brand
+    title: 'Luxury Apartments for Rent in Athens | GS Luxury Residence',
     description:
       'Explore luxury short-stay apartments for rent in Athens, with verified details, complete photo tours and live Airbnb availability.',
     ogLocale: 'en_GB',
@@ -137,6 +130,8 @@ const en = {
 
   nav: {
     residences: 'RENTALS',
+    /** Same nav slot as `residences`, shown instead of it on `/sale`. */
+    property: 'PROPERTY',
     location: 'LOCATION',
     about: 'ABOUT',
     contact: 'CONTACT',
@@ -146,7 +141,7 @@ const en = {
     hero: 'VIEW APARTMENTS TO RENT',
     scroll: 'EXPLORE THE RENTALS',
     viewResidence: 'VIEW RENTAL',
-    requestInformation: 'REQUEST INFORMATION',
+    viewOnAirbnb: 'VIEW ON AIRBNB',
   },
 
   hero: {
@@ -181,40 +176,14 @@ const en = {
   },
 
 
-  lifestyle: {
-    index: '03',
-    label: 'THE ARCHITECTURE',
-    headline: ['DESIGNED', 'AROUND LIFE.'],
-    body:
-      'Light is treated as a material here. Rooms are oriented to receive it early and hold it late, while deep reveals and shaded terraces keep the interior cool and quiet through the Mediterranean afternoon.',
-    pillars: [
-      { title: 'LIGHT', text: 'Full-height glazing on two aspects, filtered by a bronze brise-soleil.' },
-      { title: 'SPACE', text: 'Three-metre ceilings and uninterrupted living volumes, free of structural walls.' },
-      { title: 'PRIVACY', text: 'One residence per level, reached by a private lift lobby.' },
-      { title: 'COMFORT', text: 'Zoned climate, acoustic separation and integrated home control throughout.' },
-    ],
-    /** DEMO imagery — replace with the project's own photography. */
-    image:
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=80',
-    imageAlt: 'Placeholder architectural photography — interior with full-height glazing',
-  },
-
   location: {
-    index: '04',
+    index: '03',
     label: 'THE LOCATION',
-    headline: ['THE RIGHT', 'ADDRESS.'],
+    headline: ['TWO ADDRESSES.', 'ONE CITY.'],
     body:
-      'A quiet street above the coast road, minutes from the marina and the sea, and far enough from the city to forget it is there.',
+      'Two neighbourhoods, two very different sides of Athens — steps from the Acropolis in Plaka, and a short walk from the sea in Voula.',
     city: 'Athens',
     country: 'Greece',
-    addressLines: ['14 Apollonos Street', 'Vouliagmeni 166 71', 'Attica, Greece'],
-    landmarks: [
-      { name: 'Astir Beach', distance: '4 MIN' },
-      { name: 'Vouliagmeni Marina', distance: '7 MIN' },
-      { name: 'Glyfada Golf Club', distance: '12 MIN' },
-      { name: 'Athens International', distance: '28 MIN' },
-      { name: 'Acropolis Museum', distance: '32 MIN' },
-    ],
   },
 
   /**
@@ -222,29 +191,76 @@ const en = {
    * being prepared. Add the sale listings and flip `saleReady` in siteConfig.
    */
   chooser: {
-    eyebrow: 'YACHT LAUNDRY',
     headline: ['HOW WOULD YOU', 'LIKE TO LIVE?'],
     note: 'Choose a collection to begin.',
     rent: {
       index: '01',
-      title: 'FOR RENT',
-      description: 'Private residences available to lease, ready to move into.',
+      title: 'RENT',
+      description: 'A curated collection of furnished Athens apartments, ready to book on Airbnb.',
       action: 'VIEW RENTALS',
     },
     sale: {
       index: '02',
-      title: 'FOR SALE',
-      description: 'A collection of residences for purchase, arriving shortly.',
+      title: 'BUY',
+      description: 'A curated collection of Athens and Piraeus residences for sale.',
       action: 'VIEW SALES',
       badge: 'COMING SOON',
     },
   },
 
+  /**
+   * The sales collection at `/sale`. Mirrors the rental page section for
+   * section, so the same components render both with different copy.
+   */
+  /**
+   * The sales collection at `/sale`. Currently one listing, so the copy
+   * speaks to that specific property rather than a growing "collection" —
+   * revisit the framing if a second listing is added.
+   */
   sale: {
-    eyebrow: 'FOR SALE',
-    headline: ['A COLLECTION', 'IN PREPARATION.'],
-    body:
-      'Our sales portfolio is being assembled with the same care as our rentals. Register your interest and you will be among the first to see it.',
+    /** Shown in the footer on `/sale`, in place of the rental tagline. */
+    tagline: 'RESIDENCES FOR SALE · ATHENS & PIRAEUS',
+    hero: {
+      eyebrow: 'RESIDENCE FOR SALE · KALLIPOLI, PIRAEUS',
+      headline: ['ROOM TO', 'CALL HOME.'],
+      body: 'A bright, corner and dual-aspect apartment in Kallipoli, Piraeus — three spacious bedrooms, wrap-around balconies and space to settle in. Explore the full specification, then arrange a viewing directly with us.',
+    },
+    cta: {
+      hero: 'VIEW THE APARTMENT',
+      scroll: 'EXPLORE THE DETAILS',
+    },
+    intro: {
+      index: '01',
+      label: 'THE PROPERTY',
+      headline: ['SPACE, LIGHT', 'AND POSITION.'],
+      body:
+        'A corner and dual-aspect apartment in one of the most attractive residential pockets of Piraeus — built for comfortable, everyday living.',
+      note:
+        'Every detail below is stated by the owner, from room-by-room photography to the exact specification — nothing inferred, nothing embellished.',
+      stats: [
+        { value: '100 M²', label: 'LIVING SPACE' },
+        { value: '3', label: 'BEDROOMS' },
+        { value: '1972', label: 'YEAR BUILT' },
+      ],
+    },
+    residences: {
+      index: '02',
+      label: 'THE APARTMENT',
+      headline: ['KALLIPOLI', 'PIRAEUS.'],
+      note:
+        'A concise overview, room-by-room photography and the complete specification. Viewings are arranged directly with us.',
+    },
+    location: {
+      index: '03',
+      label: 'THE LOCATION',
+      headline: ['A QUIET CORNER', 'OF PIRAEUS.'],
+      body:
+        'Kallipoli — a quiet, sought-after residential neighbourhood on Agias Paraskevis Street, moments from the heart of the port city.',
+    },
+    finalCta: {
+      headline: ['ARRANGE A', 'VIEWING.'],
+      note: 'RESIDENCE FOR SALE · SPEAK WITH US DIRECTLY',
+    },
     back: 'VIEW RENTALS INSTEAD',
   },
 
@@ -280,12 +296,15 @@ const en = {
     features: 'FEATURES',
     monthlyRent: 'MONTHLY RENT',
     perMonth: 'PER MONTH',
+    askingPrice: 'ASKING PRICE',
+    yearBuilt: 'YEAR BUILT',
+    commonExpenses: 'COMMON EXPENSES',
+    contactUs: 'CONTACT US',
+    viewingEnquiries: 'VIEWINGS & ENQUIRIES',
     availability: 'AVAILABILITY',
     minimumTerm: 'MINIMUM TERM',
     months: 'MONTHS',
-    address: 'ADDRESS',
     nearby: 'NEARBY',
-    mapPlaceholder: 'MAP PLACEHOLDER',
     allCollections: 'ALL COLLECTIONS',
     rights: 'ALL RIGHTS RESERVED.',
     previousImage: 'Previous image',
@@ -309,7 +328,7 @@ export type Content = typeof en;
 
 const el: Content = {
   meta: {
-    title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα | YACHT LAUNDRY', // DEMO brand
+    title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα | GS Luxury Residence',
     description:
       'Ανακαλύψτε πολυτελή διαμερίσματα βραχυχρόνιας ενοικίασης στην Αθήνα, με επιβεβαιωμένες πληροφορίες, πλήρεις φωτογραφικές περιηγήσεις και ζωντανή διαθεσιμότητα στο Airbnb.',
     ogLocale: 'el_GR',
@@ -319,8 +338,9 @@ const el: Content = {
 
   nav: {
     residences: 'ΕΝΟΙΚΙΑΣΕΙΣ',
+    property: 'ΑΚΙΝΗΤΟ',
     location: 'ΤΟΠΟΘΕΣΙΑ',
-    about: 'ΤΟ ΕΡΓΟ',
+    about: 'ΣΧΕΤΙΚΑ',
     contact: 'ΕΠΙΚΟΙΝΩΝΙΑ',
   },
 
@@ -328,7 +348,7 @@ const el: Content = {
     hero: 'ΔΕΙΤΕ ΤΑ ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
     scroll: 'ΕΞΕΡΕΥΝΗΣΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
     viewResidence: 'ΔΕΙΤΕ ΤΟ ΚΑΤΑΛΥΜΑ',
-    requestInformation: 'ΖΗΤΗΣΤΕ ΠΛΗΡΟΦΟΡΙΕΣ',
+    viewOnAirbnb: 'ΔΕΙΤΕ ΣΤΟ AIRBNB',
   },
 
   hero: {
@@ -361,65 +381,77 @@ const el: Content = {
   },
 
 
-  lifestyle: {
-    index: '03',
-    label: 'Η ΑΡΧΙΤΕΚΤΟΝΙΚΗ',
-    headline: ['ΣΧΕΔΙΑΣΜΕΝΕΣ', 'ΓΥΡΩ ΑΠΟ ΤΗ ΖΩΗ.'],
-    body:
-      'Εδώ το φως αντιμετωπίζεται ως υλικό. Οι χώροι είναι προσανατολισμένοι ώστε να το υποδέχονται νωρίς και να το κρατούν ως αργά, ενώ οι βαθιές εσοχές και οι σκιασμένες βεράντες διατηρούν το εσωτερικό δροσερό και ήσυχο όλο το μεσογειακό απόγευμα.',
-    pillars: [
-      { title: 'ΦΩΣ', text: 'Υαλοστάσια πλήρους ύψους σε δύο όψεις, φιλτραρισμένα από μπρούτζινο περσιδωτό σκίαστρο.' },
-      { title: 'ΧΩΡΟΣ', text: 'Ύψος τριών μέτρων και ενιαίοι χώροι διαβίωσης, χωρίς φέροντα τοιχώματα.' },
-      { title: 'ΙΔΙΩΤΙΚΟΤΗΤΑ', text: 'Μία κατοικία ανά επίπεδο, με πρόσβαση από ιδιωτικό προθάλαμο ανελκυστήρα.' },
-      { title: 'ΑΝΕΣΗ', text: 'Κλιματισμός κατά ζώνες, ηχητική απομόνωση και ενσωματωμένος έλεγχος σε όλη την κατοικία.' },
-    ],
-    image:
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=80',
-    imageAlt: 'Ενδεικτική αρχιτεκτονική φωτογραφία — εσωτερικό με υαλοστάσια πλήρους ύψους',
-  },
-
   location: {
-    index: '04',
+    index: '03',
     label: 'Η ΤΟΠΟΘΕΣΙΑ',
-    headline: ['Η ΣΩΣΤΗ', 'ΔΙΕΥΘΥΝΣΗ.'],
+    headline: ['ΔΥΟ ΔΙΕΥΘΥΝΣΕΙΣ.', 'ΜΙΑ ΠΟΛΗ.'],
     body:
-      'Ένας ήσυχος δρόμος πάνω από την παραλιακή, λίγα λεπτά από τη μαρίνα και τη θάλασσα, και αρκετά μακριά από την πόλη ώστε να την ξεχνάτε.',
+      'Δύο διαφορετικές γειτονιές της Αθήνας — λίγα βήματα από την Ακρόπολη στην Πλάκα, και κοντά στη θάλασσα στη Βούλα.',
     city: 'Αθήνα',
     country: 'Ελλάδα',
-    addressLines: ['Απόλλωνος 14', 'Βουλιαγμένη 166 71', 'Αττική, Ελλάδα'],
-    landmarks: [
-      { name: 'Παραλία Αστέρας', distance: '4 ΛΕΠΤΑ' },
-      { name: 'Μαρίνα Βουλιαγμένης', distance: '7 ΛΕΠΤΑ' },
-      { name: 'Γκολφ Γλυφάδας', distance: '12 ΛΕΠΤΑ' },
-      { name: 'Αεροδρόμιο Αθηνών', distance: '28 ΛΕΠΤΑ' },
-      { name: 'Μουσείο Ακρόπολης', distance: '32 ΛΕΠΤΑ' },
-    ],
   },
 
   chooser: {
-    eyebrow: 'YACHT LAUNDRY',
     headline: ['ΠΩΣ ΘΑ ΘΕΛΑΤΕ', 'ΝΑ ΖΕΙΤΕ;'],
     note: 'Επιλέξτε μια συλλογή για να ξεκινήσετε.',
     rent: {
       index: '01',
-      title: 'ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ',
-      description: 'Ιδιωτικές κατοικίες προς ενοικίαση, έτοιμες για κατοίκηση.',
+      title: 'ΕΝΟΙΚΙΑΣΗ',
+      description: 'Μια επιμελημένη συλλογή επιπλωμένων διαμερισμάτων στην Αθήνα, έτοιμη για κράτηση στο Airbnb.',
       action: 'ΔΕΙΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
     },
     sale: {
       index: '02',
-      title: 'ΠΡΟΣ ΠΩΛΗΣΗ',
-      description: 'Μια συλλογή κατοικιών προς πώληση, σύντομα κοντά σας.',
+      title: 'ΑΓΟΡΑ',
+      description: 'Μια επιμελημένη συλλογή ακινήτων προς πώληση στην Αθήνα και τον Πειραιά.',
       action: 'ΔΕΙΤΕ ΤΙΣ ΠΩΛΗΣΕΙΣ',
       badge: 'ΣΥΝΤΟΜΑ',
     },
   },
 
   sale: {
-    eyebrow: 'ΠΡΟΣ ΠΩΛΗΣΗ',
-    headline: ['ΜΙΑ ΣΥΛΛΟΓΗ', 'ΥΠΟ ΠΡΟΕΤΟΙΜΑΣΙΑ.'],
-    body:
-      'Το χαρτοφυλάκιο πωλήσεων ετοιμάζεται με την ίδια φροντίδα όπως και οι ενοικιάσεις μας. Δηλώστε ενδιαφέρον και θα είστε από τους πρώτους που θα το δουν.',
+    tagline: 'ΑΚΙΝΗΤΑ ΠΡΟΣ ΠΩΛΗΣΗ · ΑΘΗΝΑ & ΠΕΙΡΑΙΑΣ',
+    hero: {
+      eyebrow: 'ΑΚΙΝΗΤΟ ΠΡΟΣ ΠΩΛΗΣΗ · ΚΑΛΛΙΠΟΛΗ, ΠΕΙΡΑΙΑΣ',
+      headline: ['ΧΩΡΟΣ ΓΙΑ ΤΟ', 'ΣΠΙΤΙ ΣΑΣ.'],
+      body: 'Ένα φωτεινό, γωνιακό και διαμπερές διαμέρισμα στην Καλλίπολη Πειραιά — τρία ευρύχωρα υπνοδωμάτια, περιμετρικά μπαλκόνια και χώρος για να νιώσετε σπίτι σας. Δείτε την πλήρη περιγραφή και κλείστε ραντεβού απευθείας μαζί μας.',
+    },
+    cta: {
+      hero: 'ΔΕΙΤΕ ΤΟ ΔΙΑΜΕΡΙΣΜΑ',
+      scroll: 'ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΛΕΠΤΟΜΕΡΕΙΕΣ',
+    },
+    intro: {
+      index: '01',
+      label: 'ΤΟ ΑΚΙΝΗΤΟ',
+      headline: ['ΧΩΡΟΣ, ΦΩΣ', 'ΚΑΙ ΘΕΣΗ.'],
+      body:
+        'Ένα γωνιακό και διαμπερές διαμέρισμα σε μία από τις πιο όμορφες γειτονιές του Πειραιά — σχεδιασμένο για άνετη, καθημερινή διαβίωση.',
+      note:
+        'Κάθε λεπτομέρεια παρακάτω δηλώνεται από τον ιδιοκτήτη, από τις φωτογραφίες κάθε χώρου έως την ακριβή περιγραφή — τίποτα δεν είναι υποθετικό.',
+      stats: [
+        { value: '100 Τ.Μ.', label: 'ΕΠΙΦΑΝΕΙΑ' },
+        { value: '3', label: 'ΥΠΝΟΔΩΜΑΤΙΑ' },
+        { value: '1972', label: 'ΕΤΟΣ ΚΑΤΑΣΚΕΥΗΣ' },
+      ],
+    },
+    residences: {
+      index: '02',
+      label: 'ΤΟ ΔΙΑΜΕΡΙΣΜΑ',
+      headline: ['ΚΑΛΛΙΠΟΛΗ', 'ΠΕΙΡΑΙΑΣ.'],
+      note:
+        'Μια σύντομη παρουσίαση, φωτογραφίες ανά χώρο και η πλήρης περιγραφή του ακινήτου. Τα ραντεβού κλείνονται απευθείας μαζί μας.',
+    },
+    location: {
+      index: '03',
+      label: 'Η ΤΟΠΟΘΕΣΙΑ',
+      headline: ['ΜΙΑ ΗΣΥΧΗ ΓΩΝΙΑ', 'ΤΟΥ ΠΕΙΡΑΙΑ.'],
+      body:
+        'Καλλίπολη — μια ήσυχη και περιζήτητη γειτονιά στην οδό Αγίας Παρασκευής, λίγα λεπτά από την καρδιά της πόλης του λιμανιού.',
+    },
+    finalCta: {
+      headline: ['ΚΛΕΙΣΤΕ', 'ΡΑΝΤΕΒΟΥ.'],
+      note: 'ΑΚΙΝΗΤΟ ΠΡΟΣ ΠΩΛΗΣΗ · ΕΠΙΚΟΙΝΩΝΗΣΤΕ ΑΠΕΥΘΕΙΑΣ ΜΑΖΙ ΜΑΣ',
+    },
     back: 'ΔΕΙΤΕ ΤΙΣ ΕΝΟΙΚΙΑΣΕΙΣ',
   },
 
@@ -445,21 +477,24 @@ const el: Content = {
     bedrooms: 'ΥΠΝΟΔΩΜΑΤΙΑ',
     bathrooms: 'ΜΠΑΝΙΑ',
     parking: 'ΣΤΑΘΜΕΥΣΗ',
-    residence: 'ΚΑΤΟΙΚΙΑ',
+    residence: 'ΚΑΤΑΛΥΜΑ',
     photo: 'ΦΩΤΟ',
     telephone: 'ΤΗΛΕΦΩΝΟ',
     email: 'EMAIL',
     aspect: 'ΠΡΟΣΑΝΑΤΟΛΙΣΜΟΣ',
     description: 'ΠΕΡΙΓΡΑΦΗ',
-    features: 'ΠΑΡΟΧΕΣ',
+    features: 'ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ',
     monthlyRent: 'ΜΗΝΙΑΙΟ ΜΙΣΘΩΜΑ',
     perMonth: 'ΤΟΝ ΜΗΝΑ',
+    askingPrice: 'ΤΙΜΗ ΠΩΛΗΣΗΣ',
+    yearBuilt: 'ΕΤΟΣ ΚΑΤΑΣΚΕΥΗΣ',
+    commonExpenses: 'ΚΟΙΝΟΧΡΗΣΤΑ',
+    contactUs: 'ΕΠΙΚΟΙΝΩΝΗΣΤΕ ΜΑΖΙ ΜΑΣ',
+    viewingEnquiries: 'ΕΠΙΣΚΕΨΕΙΣ & ΠΛΗΡΟΦΟΡΙΕΣ',
     availability: 'ΔΙΑΘΕΣΙΜΟΤΗΤΑ',
     minimumTerm: 'ΕΛΑΧΙΣΤΗ ΔΙΑΡΚΕΙΑ',
     months: 'ΜΗΝΕΣ',
-    address: 'ΔΙΕΥΘΥΝΣΗ',
     nearby: 'ΚΟΝΤΑ ΣΑΣ',
-    mapPlaceholder: 'ΘΕΣΗ ΧΑΡΤΗ',
     allCollections: 'ΟΛΕΣ ΟΙ ΣΥΛΛΟΓΕΣ',
     rights: 'ΜΕ ΕΠΙΦΥΛΑΞΗ ΠΑΝΤΟΣ ΔΙΚΑΙΩΜΑΤΟΣ.',
     previousImage: 'Προηγούμενη εικόνα',

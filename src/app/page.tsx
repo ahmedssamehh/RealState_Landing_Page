@@ -174,8 +174,8 @@ export default function ChooserPage() {
       {/* ------------------------------------------------------------ Head */}
       <header className="edge mx-auto flex w-full max-w-edge items-center justify-between gap-6 py-6 sm:py-8">
         <span data-choose-fade className="text-ink opacity-0">
-          <Logo size={30} className="hidden sm:inline-flex" />
-          <Logo size={28} iconOnly className="sm:hidden" />
+          <Logo mark="full" size={30} className="hidden sm:inline-flex" />
+          <Logo mark="icon" size={28} className="sm:hidden" />
         </span>
 
         <span data-choose-fade className="opacity-0">
@@ -185,9 +185,9 @@ export default function ChooserPage() {
 
       {/* --------------------------------------------------------- Chooser */}
       <div className="edge mx-auto flex w-full max-w-edge flex-1 flex-col items-center justify-center py-[clamp(2rem,6vh,4rem)] text-center">
-        <p data-choose-fade className="label mb-6 text-burgundy opacity-0">
-          {chooser.eyebrow}
-        </p>
+        <span data-choose-fade className="mb-6 inline-flex justify-center opacity-0">
+          <Logo mark="emblem" size={52} />
+        </span>
 
         <h1 className="display text-ink">
           {chooser.headline.map((line) => (
@@ -255,7 +255,7 @@ export default function ChooserPage() {
         </div>
       </div>
 
-      {/* DEMO contact details — phone and email are the only channels */}
+      {/* Phone and email are the only contact channels. */}
       <footer className="edge mx-auto flex w-full max-w-edge flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-ink/10 py-6">
         <a
           data-choose-fade

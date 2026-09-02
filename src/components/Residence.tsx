@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Apartment } from '@/data/apartments';
 import { useLocale } from '@/lib/locale';
+import { useSmoothScroll } from './SmoothScroll';
 import { gsap, registerGsap, revealFade, revealImage } from '@/lib/animations';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 export default function Residence({ residence, index, onOpen, onOpenPhotos }: Props) {
   const root = useRef<HTMLElement>(null);
   const { locale, t, residence: copy, status, price } = useLocale();
+  const { scrollTo } = useSmoothScroll();
   const [photo, setPhoto] = useState(0);
   /**
    * Only photographs the visitor has actually reached are mounted. The first
@@ -112,7 +114,7 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
                         alt={img.alt}
                         fill
                         sizes="(max-width: 1024px) 100vw, 58vw"
-                        className={`object-cover transition-opacity duration-300 ${
+                        className={`object-contain transition-opacity duration-300 ${
                           i === photo ? 'opacity-100' : 'opacity-0'
                         }`}
                         priority={index === 0 && i === 0}
@@ -228,6 +230,10 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
               <dt className="label text-ink/45">{labels.guests}</dt>
               <dd className="mt-2 font-serif text-2xl font-light text-ink">{residence.guests}</dd>
             </div>}
+            {residence.area && <div>
+              <dt className="label text-ink/45">{t.ui.area}</dt>
+              <dd className="mt-2 font-serif text-2xl font-light text-ink">{residence.area}</dd>
+            </div>}
             <div>
               <dt className="label text-ink/45">{t.ui.level}</dt>
               <dd className="mt-2 font-serif text-2xl font-light text-ink">{text.level}</dd>
@@ -246,12 +252,19 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
             </div>}
           </dl>
 
-          {/* Rent leads the card — this is a letting, not a sale. */}
+          {/* Price leads the card — a monthly rent for a letting, the asking
+              price for a sale. A residence carries one or the other. */}
           {residence.rent != null && <div data-res-fade className="mt-8 flex items-baseline gap-3 opacity-0">
             <span className="font-serif text-[clamp(1.8rem,3vw,2.6rem)] font-light text-ink">
               {price(residence.rent)}
             </span>
             <span className="label text-ink/50">{t.ui.perMonth}</span>
+          </div>}
+          {residence.salePrice != null && <div data-res-fade className="mt-8 flex items-baseline gap-3 opacity-0">
+            <span className="font-serif text-[clamp(1.8rem,3vw,2.6rem)] font-light text-ink">
+              {price(residence.salePrice)}
+            </span>
+            <span className="label text-ink/50">{t.ui.askingPrice}</span>
           </div>}
           <div data-res-fade className="mt-6 border-t border-ink/15 pt-5 opacity-0">
             <p className="label text-burgundy">{labels.availability}</p>
@@ -269,13 +282,33 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
                 >
                   <span className="flex flex-1 flex-col justify-center px-5 py-3">
                     <span className="block text-[9px] tracking-[0.24em] text-ivory/65">
-                      {locale === 'el' ? 'ΖΩΝΤΑΝΕΣ ΗΜΕΡΟΜΗΝΙΕΣ' : 'LIVE DATES & BOOKING'}
+                      {locale === 'el' ? 'ΖΩΝΤΑΝΕΣ ΗΜΕΡΟΜΗΝΙΕΣ & ΚΡΑΤΗΣΗ' : 'LIVE DATES & BOOKING'}
                     </span>
                     <span className="label mt-1 block text-ivory">
                       {locale === 'el' ? 'ΕΛΕΓΧΟΣ ΔΙΑΘΕΣΙΜΟΤΗΤΑΣ ΣΤΟ AIRBNB' : 'CHECK AVAILABILITY ON AIRBNB'}
                     </span>
                   </span>
                   <span aria-hidden className="flex min-w-14 items-center justify-center border-l border-ivory/25 text-xl text-ivory transition-colors duration-200 group-hover:bg-burgundy">↗</span>
+                </a>
+              )}
+              {/* A sale has no live booking link — this scrolls to the contact section instead. */}
+              {!residence.listingUrl && residence.salePrice != null && (
+                <a
+                  href="#contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo('#contact');
+                  }}
+                  aria-label={`${t.ui.contactUs} — ${text.name}`}
+                  className="group inline-flex min-h-16 w-full items-stretch border-2 border-burgundy bg-burgundy shadow-[0_10px_26px_rgba(99,0,0,0.16)] transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-[0_14px_34px_rgba(99,0,0,0.24)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy"
+                >
+                  <span className="flex flex-1 flex-col justify-center px-5 py-3">
+                    <span className="block text-[9px] tracking-[0.24em] text-ivory/65">
+                      {t.ui.viewingEnquiries}
+                    </span>
+                    <span className="label mt-1 block text-ivory">{t.ui.contactUs}</span>
+                  </span>
+                  <span aria-hidden className="flex min-w-14 items-center justify-center border-l border-ivory/25 text-xl text-ivory transition-colors duration-200 group-hover:bg-burgundy">→</span>
                 </a>
               )}
               <button

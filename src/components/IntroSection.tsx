@@ -1,11 +1,27 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { apartments } from '@/data/apartments';
+import { apartments, type Apartment } from '@/data/apartments';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
-export default function IntroSection() {
+export type IntroCopy = {
+  index: string;
+  label: string;
+  headline: string[];
+  body: string;
+  note: string;
+  stats: ReadonlyArray<{ value: string; label: string }>;
+};
+
+type Props = {
+  /** The collection the AUTO_COUNT stat counts. Defaults to the rentals. */
+  items?: Apartment[];
+  /** Section copy override — used by the sales collection. */
+  copy?: IntroCopy;
+};
+
+export default function IntroSection({ items = apartments, copy }: Props) {
   const root = useRef<HTMLElement>(null);
   const { t } = useLocale();
 
@@ -22,7 +38,7 @@ export default function IntroSection() {
     return () => ctx.revert();
   }, []);
 
-  const { index, label, headline, body, note, stats } = t.intro;
+  const { index, label, headline, body, note, stats } = copy ?? t.intro;
 
   return (
     <section
@@ -71,7 +87,7 @@ export default function IntroSection() {
               <dt className="label mb-4 text-ink/45">{s.label}</dt>
               <dd className="display text-[clamp(2.2rem,4.4vw,3.6rem)] text-ink">
                 {s.value === 'AUTO_COUNT'
-                  ? String(apartments.length).padStart(2, '0')
+                  ? String(items.length).padStart(2, '0')
                   : s.value}
               </dd>
             </div>

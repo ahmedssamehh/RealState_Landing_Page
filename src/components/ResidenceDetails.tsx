@@ -30,7 +30,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [showPhotoTour, setShowPhotoTour] = useState(false);
-  const { lock, unlock } = useSmoothScroll();
+  const { lock, unlock, scrollTo } = useSmoothScroll();
   const { locale, t, residence: copy, status, price } = useLocale();
 
   const open = Boolean(residence);
@@ -258,7 +258,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
                   alt={img.alt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 64rem"
-                  className="select-none object-cover"
+                  className="select-none object-contain"
                   draggable={false}
                   priority={i === 0}
                 />
@@ -344,17 +344,29 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
         <div className="px-6 pb-16 pt-16 sm:px-10 sm:pb-20 sm:pt-20 lg:px-[clamp(3.5rem,7vw,7rem)]">
           <div className="grid gap-8 border-b border-ink/15 pb-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div className="max-w-4xl">
+              {/* "RESIDENCE" reads as short-stay lodging (matches ΚΑΤΑΛΥΜΑ in Greek) —
+                  wrong register for a sale, so this swaps to "PROPERTY" there. */}
               <p className="label mb-3 text-burgundy">
-                {t.ui.residence} {residence.number} &mdash; {text.subtitle}
+                {residence.salePrice != null ? t.nav.property : t.ui.residence} {residence.number} &mdash; {text.subtitle}
               </p>
               <h2 className="display text-[clamp(2.8rem,7vw,6.4rem)] leading-[0.9] text-ink">{text.name}</h2>
-              <p className="label mt-7 text-ink/45">ATHENS · PLAKA · {text.orientation}</p>
+              {/* Driven by the listing, never hardcoded — this popup renders
+                  every residence in both collections. */}
+              <p className="label mt-7 text-ink/45">
+                {text.neighbourhood} &middot; {text.orientation}
+              </p>
             </div>
             {residence.rent != null && <div className="text-left sm:text-right">
               <p className="font-serif text-[clamp(1.6rem,3vw,2.4rem)] font-light leading-none text-ink">
                 {price(residence.rent)}
               </p>
               <p className="label mt-2 text-ink/50">{t.ui.perMonth}</p>
+            </div>}
+            {residence.salePrice != null && <div className="text-left sm:text-right">
+              <p className="font-serif text-[clamp(1.6rem,3vw,2.4rem)] font-light leading-none text-ink">
+                {price(residence.salePrice)}
+              </p>
+              <p className="label mt-2 text-ink/50">{t.ui.askingPrice}</p>
             </div>}
             {residence.listingUrl && (
               <a
@@ -366,7 +378,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               >
                 <span className="flex flex-col justify-center px-6 py-3">
                   <span className="block text-[9px] tracking-[0.22em] text-ivory/70">
-                    {locale === 'el' ? 'ΖΩΝΤΑΝΕΣ ΗΜΕΡΟΜΗΝΙΕΣ' : 'LIVE DATES & BOOKING'}
+                    {locale === 'el' ? 'ΖΩΝΤΑΝΕΣ ΗΜΕΡΟΜΗΝΙΕΣ & ΚΡΑΤΗΣΗ' : 'LIVE DATES & BOOKING'}
                   </span>
                   <span className="label mt-1 block text-ivory">{labels.checkAvailability}</span>
                 </span>
@@ -424,6 +436,18 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
                   <dt className="label text-ink/45">{t.ui.minimumTerm}</dt>
                   <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
                     {residence.minimumTermMonths} {t.ui.months}
+                  </dd>
+                </div>}
+                {residence.yearBuilt != null && <div>
+                  <dt className="label text-ink/45">{t.ui.yearBuilt}</dt>
+                  <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
+                    {residence.yearBuilt}
+                  </dd>
+                </div>}
+                {text.commonExpenses && <div>
+                  <dt className="label text-ink/45">{t.ui.commonExpenses}</dt>
+                  <dd className="mt-2 font-sans text-sm font-light tracking-wide text-ink/80">
+                    {text.commonExpenses}
                   </dd>
                 </div>}
               </dl>
@@ -511,17 +535,30 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
             </section>
           )}
 
-          {/* CTA — the enquiry form is gone, so this dials directly. */}
+          {/*
+            CTA — a listing links out to Airbnb; without one (a sale, or a
+            rental with no live listing yet) this closes the popup and
+            scrolls the page to the contact section instead of dialling.
+          */}
           <div className="mt-10 flex flex-col items-start gap-5 border-t border-ink/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
             <a
-              href={residence.listingUrl ?? siteConfig.contact.phoneHref}
+              href={residence.listingUrl ?? '#contact'}
               target={residence.listingUrl ? '_blank' : undefined}
               rel={residence.listingUrl ? 'noreferrer' : undefined}
-              aria-label={residence.listingUrl ? `${labels.checkAvailability} — ${text.name}` : undefined}
+              onClick={
+                residence.listingUrl
+                  ? undefined
+                  : (e) => {
+                      e.preventDefault();
+                      close();
+                      scrollTo('#contact');
+                    }
+              }
+              aria-label={residence.listingUrl ? `${labels.checkAvailability} — ${text.name}` : t.ui.contactUs}
               className="group inline-flex min-h-14 items-stretch border-2 border-burgundy bg-burgundy shadow-[0_10px_26px_rgba(99,0,0,0.18)] transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-ink hover:shadow-[0_14px_34px_rgba(99,0,0,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy"
             >
               <span className="label flex items-center px-7 py-4 text-ivory">
-                {residence.listingUrl ? labels.checkAvailability : t.cta.requestInformation}
+                {residence.listingUrl ? labels.checkAvailability : t.ui.contactUs}
               </span>
               <span
                 aria-hidden
@@ -531,7 +568,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               </span>
             </a>
 
-            {/* DEMO contact details — phone and email are the only channels */}
+            {/* Phone and email are the only contact channels. */}
             <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
               <a
                 href={siteConfig.contact.phoneHref}

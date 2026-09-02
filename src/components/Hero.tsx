@@ -11,7 +11,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
-import HeroCta, { HeroLead } from './HeroContent';
+import HeroCta, { HeroLead, type HeroCopy, type HeroCtaCopy } from './HeroContent';
 import RotationControls from './RotationControls';
 import type { HeroControls } from './HeroScene';
 import { useIsMobile, useReducedMotion } from '@/lib/useMediaQuery';
@@ -29,7 +29,16 @@ const HeroScene = dynamic(() => import('./HeroScene'), {
   loading: () => <div className="h-full w-full" aria-hidden />,
 });
 
-export default function Hero({ ready }: { ready: boolean }) {
+export default function Hero({
+  ready,
+  copy,
+  cta,
+}: {
+  ready: boolean;
+  /** Overrides the hero words — used by the sales collection. */
+  copy?: HeroCopy;
+  cta?: HeroCtaCopy;
+}) {
   const root = useRef<HTMLElement>(null);
   const sceneBox = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
@@ -209,11 +218,20 @@ export default function Hero({ ready }: { ready: boolean }) {
       <div className="relative flex flex-1 flex-col justify-center lg:block">
         <div
           data-hero-editorial
-          className="edge pointer-events-none relative z-10 order-1 mx-auto w-full max-w-edge pt-[7.5rem] sm:pt-32 lg:absolute lg:inset-x-0 lg:bottom-0 lg:top-[6.5rem] lg:mx-auto lg:flex lg:flex-col lg:justify-center lg:pb-16 lg:pt-0"
+          className="edge pointer-events-none relative z-10 order-1 mx-auto w-full max-w-edge pt-[7.5rem] sm:pt-32 lg:absolute lg:inset-x-0 lg:bottom-0 lg:top-[6.5rem] lg:mx-auto lg:flex lg:flex-col lg:pb-16 lg:pt-0"
         >
-          <HeroLead />
-          <div className="hidden lg:block">
-            <HeroCta />
+          {/*
+            `lg:my-auto` (flexbox auto-margin centering), not `justify-center`
+            on the parent: auto margins collapse to 0 instead of overflowing
+            when the content is taller than the box, so tall headline copy on
+            shorter viewports settles at the top-[6.5rem] clearance below the
+            navbar rather than centering itself up into it.
+          */}
+          <div className="lg:my-auto">
+            <HeroLead copy={copy} />
+            <div className="hidden lg:block">
+              <HeroCta cta={cta} />
+            </div>
           </div>
         </div>
 
@@ -240,7 +258,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           data-hero-editorial
           className="edge relative z-10 order-3 mx-auto w-full max-w-edge lg:hidden"
         >
-          <HeroCta />
+          <HeroCta cta={cta} />
         </div>
       </div>
       {/* ---------------------------------------------------------------- */}

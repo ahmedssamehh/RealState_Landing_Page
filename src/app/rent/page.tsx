@@ -5,7 +5,7 @@ import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import IntroSection from '@/components/IntroSection';
-import LifestyleSection from '@/components/LifestyleSection';
+import LocationSection from '@/components/LocationSection';
 import Navbar from '@/components/Navbar';
 import ResidenceDetails from '@/components/ResidenceDetails';
 import ResidencesSection from '@/components/ResidencesSection';
@@ -14,7 +14,7 @@ import type { Apartment } from '@/data/apartments';
 
 /**
  * The rental collection. One-page experience:
- * hero -> introduction -> residences -> architecture -> location -> contact.
+ * hero -> introduction -> residences -> location -> contact.
  *
  * Reached from the chooser at `/`. Locale and currency come from the provider
  * in the root layout, so a choice made on the chooser carries through.
@@ -62,7 +62,7 @@ function Page() {
           <Hero ready={ready} />
           <IntroSection />
           <ResidencesSection onOpenResidence={openResidence} onOpenPhotos={openPhotos} />
-          <LifestyleSection />
+          <LocationSection />
           <FinalCTA />
         </main>
 

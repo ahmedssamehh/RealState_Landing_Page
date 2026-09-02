@@ -11,7 +11,9 @@ import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
  * channels there are. No button and no form: the phone number and the email
  * address are themselves the actions.
  */
-export default function FinalCTA() {
+export type FinalCtaCopy = { headline: string[]; note: string };
+
+export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
   const root = useRef<HTMLElement>(null);
   const { t } = useLocale();
 
@@ -28,7 +30,7 @@ export default function FinalCTA() {
     return () => ctx.revert();
   }, []);
 
-  const { headline, note } = t.finalCta;
+  const { headline, note } = copy ?? t.finalCta;
 
   return (
     <section
@@ -52,7 +54,7 @@ export default function FinalCTA() {
 
         {/* The two channels, given equal editorial weight. */}
         <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 gap-px border-t border-ivory/20 sm:grid-cols-2">
-          {/* DEMO contact details */}
+          {/* Phone and email are the only contact channels. */}
           <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:pr-10">
             <dt className="label text-ivory/45">{t.ui.telephone}</dt>
             <dd className="mt-4">

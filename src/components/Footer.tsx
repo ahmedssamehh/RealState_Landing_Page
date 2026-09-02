@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
@@ -10,15 +11,17 @@ export default function Footer() {
   const { scrollTo } = useSmoothScroll();
   const { t } = useLocale();
   const year = new Date().getFullYear();
+  /** "Athens apartments to rent" is wrong on the sale page — swap it there. */
+  const onSaleRoute = usePathname()?.startsWith(siteConfig.routes.sale);
+  const tagline = onSaleRoute ? t.sale.tagline : t.brand.tagline;
 
   return (
     <footer className="w-full border-t border-ivory/10 bg-ink py-[clamp(3rem,8vh,5rem)]">
       <div className="edge mx-auto max-w-edge">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          {/* DEMO wordmark */}
-          <div className="text-ivory">
-            <Logo size={32} />
-            <p className="label mt-4 text-ivory/35">{t.brand.tagline}</p>
+          <div>
+            <Logo mark="stacked" size={72} />
+            <p className="label mt-4 text-ivory/35">{tagline}</p>
           </div>
 
           <nav aria-label="Footer">
@@ -40,7 +43,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* DEMO contact details — placeholders only */}
+          {/* Phone and email are the only contact channels. */}
           <div className="flex flex-col gap-3 md:items-end">
             <a
               href={siteConfig.contact.phoneHref}
@@ -57,14 +60,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Collection switch — the way back to the chooser and across to sales. */}
+        {/*
+          Collection switch — the current collection as plain text, a link
+          across to the other one, and the way back to the chooser. Which
+          collection is "current" depends on the route, not just the rentals.
+        */}
         <div className="mt-[clamp(2rem,5vh,3rem)] flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-ivory/10 pt-8">
-          <span className="label text-ivory">{t.chooser.rent.title}</span>
+          <span className="label text-ivory">
+            {onSaleRoute ? t.chooser.sale.title : t.chooser.rent.title}
+          </span>
           <Link
-            href={siteConfig.routes.sale}
+            href={onSaleRoute ? siteConfig.routes.rent : siteConfig.routes.sale}
             className="label text-ivory/45 transition-colors duration-200 hover:text-ivory"
           >
-            {t.chooser.sale.title}
+            {onSaleRoute ? t.chooser.rent.title : t.chooser.sale.title}
           </Link>
           <Link
             href={siteConfig.routes.chooser}

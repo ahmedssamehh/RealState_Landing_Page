@@ -6,12 +6,28 @@ import { apartments, type Apartment } from '@/data/apartments';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
+export type ResidencesCopy = {
+  index: string;
+  label: string;
+  headline: string[];
+  note: string;
+};
+
 type Props = {
   onOpenResidence: (residence: Apartment) => void;
   onOpenPhotos: (residence: Apartment) => void;
+  /** The collection to list. Defaults to the rentals. */
+  items?: Apartment[];
+  /** Section copy override — used by the sales collection. */
+  copy?: ResidencesCopy;
 };
 
-export default function ResidencesSection({ onOpenResidence, onOpenPhotos }: Props) {
+export default function ResidencesSection({
+  onOpenResidence,
+  onOpenPhotos,
+  items = apartments,
+  copy,
+}: Props) {
   const root = useRef<HTMLElement>(null);
   const { t } = useLocale();
 
@@ -28,7 +44,7 @@ export default function ResidencesSection({ onOpenResidence, onOpenPhotos }: Pro
     return () => ctx.revert();
   }, []);
 
-  const { index, label, headline, note } = t.residences;
+  const { index, label, headline, note } = copy ?? t.residences;
 
   return (
     <section
@@ -66,7 +82,7 @@ export default function ResidencesSection({ onOpenResidence, onOpenPhotos }: Pro
 
         {/* Chapters */}
         <div>
-          {apartments.map((residence, i) => (
+          {items.map((residence, i) => (
             <Residence
               key={residence.id}
               residence={residence}

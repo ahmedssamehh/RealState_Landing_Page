@@ -1,14 +1,23 @@
 'use client';
 
-/** Editorial column of the hero: eyebrow, headline, body, CTA. */
+/**
+ * Editorial column of the hero: eyebrow, headline, body, CTA.
+ *
+ * Both halves take optional copy overrides so the sales collection can reuse
+ * the identical hero with its own words; left unset they fall back to the
+ * rental copy in `content[locale]`.
+ */
 
 import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
 import { useSmoothScroll } from './SmoothScroll';
 
-export function HeroLead() {
+export type HeroCopy = { eyebrow: string; headline: string[]; body: string };
+export type HeroCtaCopy = { hero: string; scroll: string };
+
+export function HeroLead({ copy }: { copy?: HeroCopy }) {
   const { t } = useLocale();
-  const { eyebrow, headline, body } = t.hero;
+  const { eyebrow, headline, body } = copy ?? t.hero;
 
   return (
     <div className="max-w-xl">
@@ -38,9 +47,10 @@ export function HeroLead() {
 }
 
 /** CTA + scroll cue. Separate so mobile can place the 3D above it. */
-export default function HeroCta() {
+export default function HeroCta({ cta }: { cta?: HeroCtaCopy }) {
   const { t } = useLocale();
   const { scrollTo } = useSmoothScroll();
+  const c = cta ?? t.cta;
 
   return (
     <div className="max-w-xl">
@@ -53,7 +63,7 @@ export default function HeroCta() {
         }}
         className="group pointer-events-auto mt-10 inline-flex items-center gap-6 bg-burgundy px-9 py-5 opacity-0 transition-colors duration-200 hover:bg-burgundy-soft"
       >
-        <span className="label text-ivory">{t.cta.hero}</span>
+        <span className="label text-ivory">{c.hero}</span>
         <span
           aria-hidden
           className="text-ivory transition-transform duration-300 ease-expo group-hover:translate-x-1.5"
@@ -70,10 +80,10 @@ export default function HeroCta() {
             scrollTo('#intro');
           }}
           className="group pointer-events-auto inline-flex items-center gap-3"
-          aria-label={t.cta.scroll}
+          aria-label={c.scroll}
         >
           <span className="label text-ink/50 transition-colors duration-200 group-hover:text-ink">
-            {t.cta.scroll}
+            {c.scroll}
           </span>
           <span
             aria-hidden
@@ -84,7 +94,7 @@ export default function HeroCta() {
         </a>
       </div>
 
-      {/* DEMO location line, matching the rest of the site */}
+      {/* Matches the location line style used elsewhere on the site. */}
       <p data-hero-fade className="label mt-10 text-ink/35 opacity-0 lg:hidden">
         {t.location.city}, {t.location.country} &mdash; {siteConfig.brand.established}
       </p>

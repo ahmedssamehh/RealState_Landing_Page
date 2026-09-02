@@ -2,8 +2,7 @@
  * ---------------------------------------------------------------------------
  * RENTAL DATA - owner supplied listings.
  * ---------------------------------------------------------------------------
- * All values below are DEMO placeholders. Replace copy, figures and image
- * URLs with the real project data; the UI reads everything from here.
+ * The UI reads everything from here.
  *
  * Structure:
  *   - Structural facts (number, area, bedrooms, images, price) are stored once
@@ -15,9 +14,7 @@
  *     adding a key here and in `content` (siteConfig.ts).
  *
  * Image URLs may be remote (whitelist the host in next.config.mjs) or local
- * files placed in /public. The photography below is generic placeholder
- * imagery — replace both `src` and `alt` with the project's own shots and
- * accurate descriptions.
+ * files placed in /public.
  * ---------------------------------------------------------------------------
  */
 
@@ -49,12 +46,18 @@ export interface ApartmentCopy {
   subtitle: string;
   level: string;
   orientation: string;
+  /** Neighbourhood as Airbnb states it — no invented street address. */
+  neighbourhood: string;
+  /** Host-stated proximity facts only, verbatim from the listing. */
+  proximity: string[];
   description: string;
   features: string[];
   amenities?: string[];
   amenityGroups?: Array<{ title: string; items: string[] }>;
   extraServices?: string[];
   importantNotes?: string[];
+  /** Monthly building charge, sale listings only (already localised). */
+  commonExpenses?: string;
   /** When the residence becomes available to occupy. */
   availableFrom: string;
 }
@@ -72,6 +75,10 @@ export interface Apartment {
   rent?: number;
   /** Shortest lease the landlord will sign, in months. */
   minimumTermMonths?: number;
+  /** Asking price in the base currency — sale listings only. */
+  salePrice?: number;
+  /** Year of construction — sale listings only. */
+  yearBuilt?: number;
   status: ResidenceStatus;
   listingUrl?: string;
   registrationNumber?: string;
@@ -85,274 +92,6 @@ export interface Apartment {
   i18n: Record<Locale, ApartmentCopy>;
 }
 
-const legacyDemoApartments: Apartment[] = [
-  {
-    id: 'residence-01',
-    number: '01',
-    area: '185 m²',
-    bedrooms: 3,
-    bathrooms: 3,
-    parking: 2,
-    rent: 4_500, // DEMO — per month
-    minimumTermMonths: 12,
-    status: 'AVAILABLE',
-    images: [
-      {
-        src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence One, view 01',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence One, view 02',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence One, view 03',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence One, view 04',
-      },
-    ],
-    i18n: {
-      en: {
-        name: 'Residence One',
-        subtitle: 'The Garden Residence',
-        level: 'GROUND LEVEL',
-        orientation: 'SOUTH / WEST',
-        description:
-          'The ground residence opens directly onto a walled garden, where the interior floor plane continues outward in the same stone. Living, dining and kitchen read as one long volume, held between a planted courtyard on one side and the olive terrace on the other.',
-        features: [
-          'PRIVATE WALLED GARDEN',
-          'OUTDOOR KITCHEN & DINING',
-          'TRAVERTINE FLOORS THROUGHOUT',
-          'INTEGRATED SMART HOME',
-          'DIRECT PARKING ACCESS',
-          'GUEST SUITE WITH ENSUITE',
-        ],
-        availableFrom: 'AVAILABLE NOW',
-      },
-      el: {
-        name: 'Κατοικία Ένα',
-        subtitle: 'Η Κατοικία του Κήπου',
-        level: 'ΙΣΟΓΕΙΟ',
-        orientation: 'ΝΟΤΙΑ / ΔΥΤΙΚΑ',
-        description:
-          'Η ισόγεια κατοικία ανοίγει απευθείας σε περιτοιχισμένο κήπο, όπου το δάπεδο του εσωτερικού συνεχίζεται προς τα έξω στην ίδια πέτρα. Καθιστικό, τραπεζαρία και κουζίνα διαβάζονται ως ένας ενιαίος επιμήκης χώρος, ανάμεσα σε ένα φυτεμένο αίθριο από τη μία πλευρά και τη βεράντα των ελαιόδεντρων από την άλλη.',
-        features: [
-          'ΙΔΙΩΤΙΚΟΣ ΠΕΡΙΤΟΙΧΙΣΜΕΝΟΣ ΚΗΠΟΣ',
-          'ΥΠΑΙΘΡΙΑ ΚΟΥΖΙΝΑ & ΤΡΑΠΕΖΑΡΙΑ',
-          'ΔΑΠΕΔΑ ΤΡΑΒΕΡΤΙΝΗ ΠΑΝΤΟΥ',
-          'ΕΝΣΩΜΑΤΩΜΕΝΟΣ ΕΞΥΠΝΟΣ ΕΛΕΓΧΟΣ',
-          'ΑΜΕΣΗ ΠΡΟΣΒΑΣΗ ΣΤΗ ΣΤΑΘΜΕΥΣΗ',
-          'ΞΕΝΩΝΑΣ ΜΕ ΙΔΙΟ ΜΠΑΝΙΟ',
-        ],
-        availableFrom: 'ΔΙΑΘΕΣΙΜΗ ΑΜΕΣΑ',
-      },
-    },
-  },
-  {
-    id: 'residence-02',
-    number: '02',
-    area: '210 m²',
-    bedrooms: 3,
-    bathrooms: 3,
-    parking: 2,
-    rent: 5_800, // DEMO — per month
-    minimumTermMonths: 12,
-    status: 'AVAILABLE',
-    images: [
-      {
-        src: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Two, view 01',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Two, view 02',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Two, view 03',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Two, view 04',
-      },
-    ],
-    i18n: {
-      en: {
-        name: 'Residence Two',
-        subtitle: 'The Courtyard Residence',
-        level: 'FIRST LEVEL',
-        orientation: 'SOUTH / EAST',
-        description:
-          'Arranged around an internal courtyard that draws morning light deep into the plan. Bedrooms sit apart from the living volume, separated by a library corridor lined in oak, so the residence can be quiet in one half while it is occupied in the other.',
-        features: [
-          'INTERNAL PLANTED COURTYARD',
-          'PRIVATE LIFT LOBBY',
-          'OAK LIBRARY CORRIDOR',
-          'PANORAMIC WINDOWS',
-          'ZONED CLIMATE CONTROL',
-          'DRESSING ROOM TO PRINCIPAL SUITE',
-        ],
-        availableFrom: 'AVAILABLE FROM OCTOBER 2026',
-      },
-      el: {
-        name: 'Κατοικία Δύο',
-        subtitle: 'Η Κατοικία με το Αίθριο',
-        level: 'ΠΡΩΤΟΣ ΟΡΟΦΟΣ',
-        orientation: 'ΝΟΤΙΑ / ΑΝΑΤΟΛΙΚΑ',
-        description:
-          'Οργανωμένη γύρω από ένα εσωτερικό αίθριο που οδηγεί το πρωινό φως βαθιά μέσα στην κάτοψη. Τα υπνοδωμάτια βρίσκονται χωριστά από τον χώρο διαβίωσης, με έναν διάδρομο-βιβλιοθήκη από δρυ να τα διαχωρίζει, ώστε η κατοικία να παραμένει ήσυχη στο ένα μισό ενώ το άλλο χρησιμοποιείται.',
-        features: [
-          'ΕΣΩΤΕΡΙΚΟ ΦΥΤΕΜΕΝΟ ΑΙΘΡΙΟ',
-          'ΙΔΙΩΤΙΚΟΣ ΠΡΟΘΑΛΑΜΟΣ ΑΝΕΛΚΥΣΤΗΡΑ',
-          'ΔΙΑΔΡΟΜΟΣ-ΒΙΒΛΙΟΘΗΚΗ ΑΠΟ ΔΡΥ',
-          'ΠΑΝΟΡΑΜΙΚΑ ΠΑΡΑΘΥΡΑ',
-          'ΚΛΙΜΑΤΙΣΜΟΣ ΚΑΤΑ ΖΩΝΕΣ',
-          'ΝΤΡΕΣΙΝΓΚ ΡΟΥΜ ΣΤΗΝ ΚΥΡΙΑ ΣΟΥΙΤΑ',
-        ],
-        availableFrom: 'ΔΙΑΘΕΣΙΜΗ ΑΠΟ ΟΚΤΩΒΡΙΟ 2026',
-      },
-    },
-  },
-  {
-    id: 'residence-03',
-    number: '03',
-    area: '265 m²',
-    bedrooms: 4,
-    bathrooms: 4,
-    parking: 2,
-    rent: 7_500, // DEMO — per month
-    minimumTermMonths: 12,
-    status: 'LET',
-    images: [
-      {
-        src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Three, view 01',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600607687644-c7171b42498b?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Three, view 02',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Three, view 03',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Three, view 04',
-      },
-    ],
-    i18n: {
-      en: {
-        name: 'Residence Three',
-        subtitle: 'The Terrace Residence',
-        level: 'SECOND LEVEL',
-        orientation: 'WEST / SEA',
-        description:
-          'A single floor given entirely to one home, with a forty-metre terrace running the length of the western facade. The living volume steps down toward the view, so the horizon sits level with the eye from the moment you enter.',
-        features: [
-          '40M PANORAMIC TERRACE',
-          'SEA AND SUNSET ASPECT',
-          'FULL-FLOOR PRIVACY',
-          'PREMIUM ITALIAN FINISHES',
-          'OUTDOOR FIREPLACE',
-          'STAFF ENTRANCE & UTILITY',
-        ],
-        availableFrom: 'LET UNTIL MARCH 2027',
-      },
-      el: {
-        name: 'Κατοικία Τρία',
-        subtitle: 'Η Κατοικία με τη Βεράντα',
-        level: 'ΔΕΥΤΕΡΟΣ ΟΡΟΦΟΣ',
-        orientation: 'ΔΥΤΙΚΑ / ΘΑΛΑΣΣΑ',
-        description:
-          'Ένας ολόκληρος όροφος αφιερωμένος σε μία μόνο κατοικία, με βεράντα σαράντα μέτρων σε όλο το μήκος της δυτικής όψης. Ο χώρος διαβίωσης κατεβαίνει σταδιακά προς τη θέα, ώστε ο ορίζοντας να βρίσκεται στο ύψος του βλέμματος από τη στιγμή που μπαίνετε.',
-        features: [
-          'ΠΑΝΟΡΑΜΙΚΗ ΒΕΡΑΝΤΑ 40Μ',
-          'ΘΕΑ ΣΤΗ ΘΑΛΑΣΣΑ ΚΑΙ ΤΟ ΗΛΙΟΒΑΣΙΛΕΜΑ',
-          'ΙΔΙΩΤΙΚΟΤΗΤΑ ΟΛΟΚΛΗΡΟΥ ΟΡΟΦΟΥ',
-          'ΕΚΛΕΚΤΑ ΙΤΑΛΙΚΑ ΦΙΝΙΡΙΣΜΑΤΑ',
-          'ΥΠΑΙΘΡΙΟ ΤΖΑΚΙ',
-          'ΒΟΗΘΗΤΙΚΗ ΕΙΣΟΔΟΣ & ΧΩΡΟΣ ΥΠΗΡΕΣΙΑΣ',
-        ],
-        availableFrom: 'ΕΝΟΙΚΙΑΣΜΕΝΗ ΕΩΣ ΜΑΡΤΙΟ 2027',
-      },
-    },
-  },
-  {
-    id: 'residence-04',
-    number: '04',
-    area: '320 m²',
-    bedrooms: 4,
-    bathrooms: 4,
-    parking: 3,
-    rent: 11_000, // DEMO — per month
-    minimumTermMonths: 12,
-    status: 'AVAILABLE',
-    images: [
-      {
-        src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Four, view 01',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Four, view 02',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Four, view 03',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1600607687644-c7171b42498b?auto=format&fit=crop&w=1600&q=75',
-        alt: 'Placeholder photography — Residence Four, view 04',
-      },
-    ],
-    i18n: {
-      en: {
-        name: 'Residence Four',
-        subtitle: 'The Penthouse',
-        level: 'UPPER LEVEL',
-        orientation: 'PANORAMIC',
-        description:
-          'The upper residence occupies the crown of the building and opens on all four aspects. A private roof garden with pool sits above the living level, reached by an internal stair in board-marked concrete. The city lies to the north; the sea holds everything else.',
-        features: [
-          'PRIVATE ROOF GARDEN & POOL',
-          'FOUR-ASPECT PANORAMIC GLAZING',
-          'INTERNAL SCULPTURAL STAIR',
-          'WINE ROOM & CELLAR',
-          'SMART HOME & SECURITY SUITE',
-          'THREE SECURE PARKING BAYS',
-        ],
-        availableFrom: 'AVAILABLE FROM JANUARY 2027',
-      },
-      el: {
-        name: 'Κατοικία Τέσσερα',
-        subtitle: 'Το Ρετιρέ',
-        level: 'ΑΝΩ ΟΡΟΦΟΣ',
-        orientation: 'ΠΑΝΟΡΑΜΙΚΟΣ',
-        description:
-          'Η ανώτερη κατοικία καταλαμβάνει την κορυφή του κτιρίου και ανοίγει και προς τις τέσσερις όψεις. Ένας ιδιωτικός κήπος με πισίνα βρίσκεται πάνω από το επίπεδο διαβίωσης, με πρόσβαση από εσωτερική σκάλα από εμφανές σκυρόδεμα. Η πόλη απλώνεται στα βόρεια· όλα τα υπόλοιπα τα κρατά η θάλασσα.',
-        features: [
-          'ΙΔΙΩΤΙΚΟΣ ΚΗΠΟΣ ΔΩΜΑΤΟΣ & ΠΙΣΙΝΑ',
-          'ΠΑΝΟΡΑΜΙΚΑ ΥΑΛΟΣΤΑΣΙΑ ΣΕ ΤΕΣΣΕΡΙΣ ΟΨΕΙΣ',
-          'ΕΣΩΤΕΡΙΚΗ ΓΛΥΠΤΙΚΗ ΣΚΑΛΑ',
-          'ΧΩΡΟΣ ΚΑΒΑΣ ΚΡΑΣΙΩΝ',
-          'ΕΞΥΠΝΟΣ ΕΛΕΓΧΟΣ & ΣΥΣΤΗΜΑ ΑΣΦΑΛΕΙΑΣ',
-          'ΤΡΕΙΣ ΘΕΣΕΙΣ ΣΤΑΘΜΕΥΣΗΣ',
-        ],
-        availableFrom: 'ΔΙΑΘΕΣΙΜΗ ΑΠΟ ΙΑΝΟΥΑΡΙΟ 2027',
-      },
-    },
-  },
-];
-
-/**
- * Live rental inventory. The legacy demo array above is intentionally not
- * exported and can be removed after the second real listing is supplied.
- * Images remain clearly labelled placeholders for now.
- */
 const gsPhoto = (file: string, alt: string): ResidenceImage => ({
   src: `/images/apartments/gs-luxury-residence-plaka/${file}`,
   alt,
@@ -489,6 +228,11 @@ export const apartments: Apartment[] = [
         subtitle: 'Acropolis View Balcony',
         level: 'ENTIRE CONDO',
         orientation: 'ACROPOLIS VIEW',
+        neighbourhood: 'Plaka, Athens',
+        proximity: [
+          '2–8 minutes to Syntagma, Monastiraki, Metro, Acropolis Museum, Ermou and major historic sites',
+          '5 minutes to leading restaurants and cocktail bars',
+        ],
         description: 'A luxury, newly renovated Plaka apartment with an exceptional Acropolis view from its private balcony. Designed for two guests, it combines contemporary comfort with immediate access to Athens’ most celebrated landmarks, restaurants and cocktail bars.',
         features: [
           'TOP 1% OF HOMES',
@@ -569,9 +313,14 @@ export const apartments: Apartment[] = [
       },
       el: {
         name: 'GS Luxury Residence Plaka',
-        subtitle: 'Μπαλκόνι με θέα την Ακρόπολη',
+        subtitle: 'Μπαλκόνι με θέα στην Ακρόπολη',
         level: 'ΟΛΟΚΛΗΡΟ ΔΙΑΜΕΡΙΣΜΑ',
         orientation: 'ΘΕΑ ΑΚΡΟΠΟΛΗ',
+        neighbourhood: 'Πλάκα, Αθήνα',
+        proximity: [
+          '2–8 λεπτά από Σύνταγμα, Μοναστηράκι, Μετρό, Μουσείο Ακρόπολης, Ερμού και σημαντικά ιστορικά σημεία',
+          '5 λεπτά από κορυφαία εστιατόρια και cocktail bars',
+        ],
         description: 'Ένα πολυτελές, πρόσφατα ανακαινισμένο διαμέρισμα στην Πλάκα με εξαιρετική θέα στην Ακρόπολη από το ιδιωτικό μπαλκόνι. Σχεδιασμένο για δύο επισκέπτες, συνδυάζει σύγχρονη άνεση με άμεση πρόσβαση στα σημαντικότερα αξιοθέατα, εστιατόρια και cocktail bars της Αθήνας.',
         features: [
           'ΣΤΟ ΚΟΡΥΦΑΙΟ 1% ΤΩΝ ΚΑΤΑΛΥΜΑΤΩΝ',
@@ -589,18 +338,18 @@ export const apartments: Apartment[] = [
           'ΜΗΧΑΝΗ ΚΑΦΕ NESPRESSO',
           'ΛΕΥΚΑ ΕΙΔΗ & ΚΟΥΡΤΙΝΕΣ ΣΥΣΚΟΤΙΣΗΣ',
           'ΣΕΣΟΥΑΡ & ΕΙΔΗ ΜΠΑΝΙΟΥ',
-          'ΦΑΡΜΑΚΕΙΟ & ΠΥΡΟΣΒΕΣΤΗΡΑΣ',
+          'ΚΟΥΤΙ ΠΡΩΤΩΝ ΒΟΗΘΕΙΩΝ & ΠΥΡΟΣΒΕΣΤΗΡΑΣ',
         ],
         amenityGroups: [
           { title: 'Μπάνιο', items: ['Σεσουάρ', 'Σαμπουάν', 'Σαπούνι σώματος', 'Ζεστό νερό', 'Αφρόλουτρο'] },
-          { title: 'Υπνοδωμάτιο και πλύσιμο', items: ['Πλυντήριο', 'Βασικά είδη', 'Κρεμάστρες', 'Λευκά είδη', 'Επιπλέον μαξιλάρια και κουβέρτες', 'Κουρτίνες συσκότισης', 'Σίδερο', 'Απλώστρα', 'Ντουλάπα'] },
+          { title: 'Υπνοδωμάτιο και πλυντήριο', items: ['Πλυντήριο', 'Βασικά είδη', 'Κρεμάστρες', 'Λευκά είδη', 'Επιπλέον μαξιλάρια και κουβέρτες', 'Κουρτίνες συσκότισης', 'Σίδερο', 'Απλώστρα', 'Ντουλάπα'] },
           { title: 'Ψυχαγωγία', items: ['Τηλεόραση', 'Ηχοσύστημα', 'Βιβλία και αναγνωστικό υλικό'] },
           { title: 'Θέρμανση και ψύξη', items: ['Κλιματισμός', 'Θέρμανση'] },
           { title: 'Ασφάλεια κατοικίας', items: ['Πυροσβεστήρας', 'Κουτί πρώτων βοηθειών'] },
           { title: 'Internet και εργασία', items: ['Δωρεάν WiFi'] },
           { title: 'Κουζίνα και τραπεζαρία', items: ['Πλήρης κουζίνα', 'Ψυγείο', 'Βασικά είδη μαγειρικής', 'Κατσαρόλες και τηγάνια', 'Λάδι, αλάτι και πιπέρι', 'Πιάτα και μαχαιροπίρουνα', 'Καταψύκτης', 'Ηλεκτρική εστία', 'Βραστήρας', 'Μηχανή espresso Nespresso', 'Ποτήρια κρασιού', 'Ταψί', 'Τραπεζαρία'] },
           { title: 'Εξωτερικός χώρος', items: ['Ιδιωτικό αίθριο ή μπαλκόνι', 'Τραπέζι και δύο καρέκλες με θέα στην Ακρόπολη'] },
-          { title: 'Εγκαταστάσεις', items: ['Ανελκυστήρας'] },
+          { title: 'Στάθμευση και εγκαταστάσεις', items: ['Ανελκυστήρας'] },
           { title: 'Υπηρεσίες', items: ['Self check-in', 'Κλειδοθήκη', 'Καθαρισμός με επιπλέον χρέωση'] },
           { title: 'Τοποθεσία', items: ['2–8 λεπτά από Σύνταγμα, Μοναστηράκι, Μετρό, Μουσείο Ακρόπολης, Ερμού και σημαντικά ιστορικά σημεία', '5 λεπτά από κορυφαία εστιατόρια και cocktail bars'] },
         ],
@@ -697,6 +446,8 @@ export const apartments: Apartment[] = [
         subtitle: "9' Walk to Beach",
         level: 'ENTIRE CONDO',
         orientation: 'VOULA · BEACH ACCESS',
+        neighbourhood: 'Voula, Athens',
+        proximity: ['9-minute walk to the beach', 'Shared beach access'],
         description:
           'A private condo in Voula designed for two guests, with a balcony, full kitchen and shared beach access a short walk away. Self check-in and practical in-stay amenities make it equally comfortable for a short escape or a longer stay.',
         features: [
@@ -736,6 +487,8 @@ export const apartments: Apartment[] = [
         subtitle: '9 λεπτά με τα πόδια από την παραλία',
         level: 'ΟΛΟΚΛΗΡΟ ΔΙΑΜΕΡΙΣΜΑ',
         orientation: 'ΒΟΥΛΑ · ΠΡΟΣΒΑΣΗ ΣΤΗΝ ΠΑΡΑΛΙΑ',
+        neighbourhood: 'Βούλα, Αθήνα',
+        proximity: ['9 λεπτά με τα πόδια από την παραλία', 'Κοινόχρηστη πρόσβαση στην παραλία'],
         description:
           'Ένα ιδιωτικό διαμέρισμα στη Βούλα για δύο επισκέπτες, με μπαλκόνι, πλήρως εξοπλισμένη κουζίνα και κοινόχρηστη πρόσβαση στην παραλία σε μικρή απόσταση με τα πόδια. Το self check-in και οι πρακτικές παροχές το κάνουν ιδανικό τόσο για μια σύντομη απόδραση όσο και για μεγαλύτερη διαμονή.',
         features: [
@@ -746,13 +499,13 @@ export const apartments: Apartment[] = [
           'ΠΛΗΡΩΣ ΕΞΟΠΛΙΣΜΕΝΗ ΚΟΥΖΙΝΑ',
           'ΔΥΝΑΤΟΤΗΤΑ ΜΑΚΡΟΧΡΟΝΙΑΣ ΔΙΑΜΟΝΗΣ',
         ],
-        amenities: ['Πρόσβαση στην παραλία', 'Κουζίνα', 'WiFi', 'Τηλεόραση', 'Πλυντήριο', 'Κλιματισμός', 'Ιδιωτικό μπαλκόνι', 'Σεσουάρ'],
+        amenities: ['Κοινόχρηστη πρόσβαση στην παραλία', 'Κουζίνα', 'WiFi', 'Τηλεόραση', 'Πλυντήριο', 'Κλιματισμός', 'Ιδιωτικό μπαλκόνι', 'Σεσουάρ'],
         amenityGroups: [
           { title: 'Μπάνιο', items: ['Σεσουάρ', 'Προϊόντα καθαρισμού', 'Σαμπουάν', 'Σαπούνι σώματος', 'Ζεστό νερό'] },
           { title: 'Υπνοδωμάτιο και πλυντήριο', items: ['1 διπλό κρεβάτι queen', 'Πλυντήριο', 'Βασικά είδη', 'Πετσέτες, σεντόνια, σαπούνι και χαρτί υγείας', 'Σίδερο'] },
           { title: 'Ψυχαγωγία', items: ['Τηλεόραση'] },
           { title: 'Θέρμανση και ψύξη', items: ['Κλιματισμός', 'Φορητή θερμάστρα'] },
-          { title: 'Ασφάλεια', items: ['Πυροσβεστήρας', 'Κουτί πρώτων βοηθειών'] },
+          { title: 'Ασφάλεια κατοικίας', items: ['Πυροσβεστήρας', 'Κουτί πρώτων βοηθειών'] },
           { title: 'Internet και εργασία', items: ['WiFi'] },
           { title: 'Κουζίνα και τραπεζαρία', items: ['Πλήρης κουζίνα', 'Ψυγείο', 'Βασικά είδη μαγειρικής', 'Κατσαρόλες και τηγάνια', 'Λάδι, αλάτι και πιπέρι', 'Πιάτα και μαχαιροπίρουνα', 'Καφετιέρα Nespresso'] },
           { title: 'Χαρακτηριστικά τοποθεσίας', items: ['Κοινόχρηστη πρόσβαση στην παραλία'] },
