@@ -43,7 +43,7 @@ export default function RotationControls({ controls }: Props) {
   return (
     <div
       data-hero-controls
-      className="pointer-events-none flex w-full items-center gap-6 opacity-0 sm:gap-10"
+      className="pointer-events-none flex w-full items-center gap-6 sm:gap-10"
     >
       {/* Auto rotate */}
       <button

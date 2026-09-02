@@ -38,8 +38,8 @@ export default function Navbar({ ready }: { ready: boolean }) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         bar.current,
-        { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 1.2, ease: EASE.out, delay: 0.35 }
+        { y: -12 },
+        { y: 0, duration: 0.6, ease: EASE.out }
       );
     });
     return () => ctx.revert();
@@ -105,7 +105,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
     <>
       <header
         ref={bar}
-        className={`fixed inset-x-0 top-0 z-[60] opacity-0 transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-expo ${
+        className={`fixed inset-x-0 top-0 z-[60] transition-[background-color,backdrop-filter,border-color,padding] duration-300 ease-expo ${
           scrolled
             ? 'border-b border-ink/10 bg-ivory/90 py-4 backdrop-blur-md'
             : 'border-b border-transparent py-6'

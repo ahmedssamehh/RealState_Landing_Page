@@ -196,20 +196,20 @@ export default function Hero({
         )
         .fromTo(
           '[data-hero-scene]',
-          { opacity: 0 },
+          { opacity: 0.35 },
           { opacity: 1, duration: DURATION.cinematic },
           '-=0.55'
         )
         .fromTo(
           '[data-hero-fade]',
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: DURATION.base, stagger: 0.05 },
+          { y: 10 },
+          { y: 0, duration: DURATION.base, stagger: 0.05 },
           '-=0.7'
         )
         .fromTo(
           '[data-hero-controls]',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: DURATION.base },
+          { y: 6 },
+          { y: 0, duration: DURATION.base },
           '-=0.35'
         )
         ;
@@ -247,9 +247,6 @@ export default function Hero({
           */}
           <div className="lg:my-auto">
             <HeroLead copy={copy} />
-            <div className="hidden lg:block">
-              <HeroCta cta={cta} onNavigate={navigate} />
-            </div>
           </div>
         </div>
 
@@ -257,7 +254,7 @@ export default function Hero({
         <div
           ref={sceneBox}
           data-hero-scene
-          className="relative order-2 h-[38svh] w-full shrink-0 overflow-hidden opacity-0 sm:h-[44svh] lg:absolute lg:bottom-[5.5rem] lg:left-[36%] lg:right-0 lg:top-[4.5rem] lg:order-none lg:h-auto lg:w-auto"
+          className="relative order-2 h-[38svh] w-full shrink-0 overflow-hidden sm:h-[44svh] lg:absolute lg:bottom-[5.5rem] lg:left-[36%] lg:right-0 lg:top-[4.5rem] lg:order-none lg:h-auto lg:w-auto"
         >
           <HeroScene
             controls={controls}
@@ -282,8 +279,11 @@ export default function Hero({
       {/* ---------------------------------------------------------------- */}
       {/* 360 controls                                                     */}
       {/* ---------------------------------------------------------------- */}
-      <div className="edge relative z-10 mx-auto w-full max-w-edge pb-8 pt-4 lg:pb-10">
-        <div className="lg:ml-[36%] lg:w-[calc(64%-2rem)]">
+      <div className="edge relative z-10 mx-auto w-full max-w-edge pb-8 pt-4 lg:grid lg:grid-cols-[36%_64%] lg:items-center lg:pb-10">
+        <div data-hero-editorial className="hidden min-w-0 pr-8 lg:block">
+          <HeroCta cta={cta} onNavigate={navigate} compact />
+        </div>
+        <div className="min-w-0 lg:pl-2">
           <RotationControls controls={controls} />
         </div>
       </div>
