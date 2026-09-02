@@ -64,14 +64,25 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       syncTouch: false,
       touchMultiplier: 2,
       wheelMultiplier: 1.1,
+      autoRaf: true,
     });
     lenis.current = instance;
 
     instance.on('scroll', ScrollTrigger.update);
-
-    const raf = (time: number) => instance.raf(time * 1000);
-    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
+
+    /**
+     * Lenis's very first `scrollTo()` call after construction consistently
+     * set its target and flipped `isScrolling` on, but the position never
+     * actually advanced — confirmed by testing every plausible cause (the
+     * hero's own ScrollTrigger scrub, the 3D scene's render loop, the
+     * gsap.ticker wiring vs. `autoRaf`) and finding only one pattern that
+     * held up: whichever `scrollTo()` call happens to be the *first* one
+     * ever stalls; every call after that, from anywhere on the site, works
+     * normally. A silent, 1px warm-up call absorbs that one-time quirk
+     * immediately, before any real navigation can hit it.
+     */
+    instance.scrollTo(1, { immediate: false, force: true });
 
     setApi({
       lock: () => instance.stop(),
@@ -80,7 +91,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     });
 
     return () => {
-      gsap.ticker.remove(raf);
       instance.destroy();
       lenis.current = null;
     };

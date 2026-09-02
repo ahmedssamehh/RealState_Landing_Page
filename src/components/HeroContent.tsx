@@ -47,10 +47,19 @@ export function HeroLead({ copy }: { copy?: HeroCopy }) {
 }
 
 /** CTA + scroll cue. Separate so mobile can place the 3D above it. */
-export default function HeroCta({ cta }: { cta?: HeroCtaCopy }) {
+export default function HeroCta({
+  cta,
+  onNavigate,
+}: {
+  cta?: HeroCtaCopy;
+  /** Scrolls to an in-page anchor. Falls back to the plain smooth-scroll if the
+   *  hero hasn't wired in its render-loop-aware version (see Hero.tsx). */
+  onNavigate?: (target: string) => void;
+}) {
   const { t } = useLocale();
   const { scrollTo } = useSmoothScroll();
   const c = cta ?? t.cta;
+  const navigate = onNavigate ?? scrollTo;
 
   return (
     <div className="max-w-xl">
@@ -59,9 +68,9 @@ export default function HeroCta({ cta }: { cta?: HeroCtaCopy }) {
         href="#residences"
         onClick={(e) => {
           e.preventDefault();
-          scrollTo('#residences');
+          navigate('#residences');
         }}
-        className="group pointer-events-auto mt-10 inline-flex items-center gap-6 bg-burgundy px-9 py-5 opacity-0 transition-colors duration-200 hover:bg-burgundy-soft"
+        className="group pointer-events-auto mt-10 flex w-full items-center justify-between gap-6 bg-burgundy px-9 py-5 opacity-0 transition-colors duration-200 hover:bg-burgundy-soft"
       >
         <span className="label text-ivory">{c.hero}</span>
         <span
@@ -77,7 +86,7 @@ export default function HeroCta({ cta }: { cta?: HeroCtaCopy }) {
           href="#intro"
           onClick={(e) => {
             e.preventDefault();
-            scrollTo('#intro');
+            navigate('#intro');
           }}
           className="group pointer-events-auto inline-flex items-center gap-3"
           aria-label={c.scroll}

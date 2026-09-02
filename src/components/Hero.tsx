@@ -10,9 +10,10 @@
  */
 
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import HeroCta, { HeroLead, type HeroCopy, type HeroCtaCopy } from './HeroContent';
 import RotationControls from './RotationControls';
+import { useSmoothScroll } from './SmoothScroll';
 import type { HeroControls } from './HeroScene';
 import { useIsMobile, useReducedMotion } from '@/lib/useMediaQuery';
 import {
@@ -43,6 +44,7 @@ export default function Hero({
   const sceneBox = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const reduced = useReducedMotion();
+  const { scrollTo } = useSmoothScroll();
   /** Drives HeroScene's render loop — see the `active` prop there. */
   const [sceneVisible, setSceneVisible] = useState(true);
 /**
@@ -51,6 +53,22 @@ export default function Hero({
    * hero showing an empty canvas.
    */
   const [sceneRendered, setSceneRendered] = useState(false);
+
+  /**
+   * The hero's own in-page links (CTA button, scroll cue) sometimes failed to
+   * scroll at all — the 3D villa keeps its render loop running continuously
+   * while the hero is on screen, and that appears to starve the animation
+   * frames Lenis needs to ease the scroll, causing it to stall or barely
+   * move. Deactivating the scene's render loop synchronously, before the
+   * scroll even starts, removes that contention.
+   */
+  const navigate = useCallback(
+    (target: string) => {
+      setSceneVisible(false);
+      scrollTo(target);
+    },
+    [scrollTo]
+  );
 
   /** The only channel between the UI and the 3D scene. */
   const controls = useRef<HeroControls>({
@@ -230,7 +248,7 @@ export default function Hero({
           <div className="lg:my-auto">
             <HeroLead copy={copy} />
             <div className="hidden lg:block">
-              <HeroCta cta={cta} />
+              <HeroCta cta={cta} onNavigate={navigate} />
             </div>
           </div>
         </div>
@@ -258,7 +276,7 @@ export default function Hero({
           data-hero-editorial
           className="edge relative z-10 order-3 mx-auto w-full max-w-edge lg:hidden"
         >
-          <HeroCta cta={cta} />
+          <HeroCta cta={cta} onNavigate={navigate} />
         </div>
       </div>
       {/* ---------------------------------------------------------------- */}

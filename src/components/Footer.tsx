@@ -14,6 +14,9 @@ export default function Footer() {
   /** "Athens apartments to rent" is wrong on the sale page — swap it there. */
   const onSaleRoute = usePathname()?.startsWith(siteConfig.routes.sale);
   const tagline = onSaleRoute ? t.sale.tagline : t.brand.tagline;
+  /** Same swap as Navbar — the "residences" nav slot reads "RENTALS" by default. */
+  const navLabel = (key: (typeof siteConfig.nav)[number]['key']) =>
+    key === 'residences' && onSaleRoute ? t.nav.property : t.nav[key];
 
   return (
     <footer className="w-full border-t border-ivory/10 bg-ink py-[clamp(3rem,8vh,5rem)]">
@@ -36,7 +39,7 @@ export default function Footer() {
                     }}
                     className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
                   >
-                    {t.nav[item.key]}
+                    {navLabel(item.key)}
                   </a>
                 </li>
               ))}
