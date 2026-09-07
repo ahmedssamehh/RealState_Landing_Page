@@ -28,7 +28,7 @@ import { lerp } from '@/lib/animations';
 
 /* Palette — ivory, burgundy and black are the only colours on the site, and
    the scene's lights and materials are held to the same three. */
-const IVORY = '#EEEBDD';
+const IVORY = '#FFFFFF';
 const BURGUNDY = '#630000';
 
 /** One full turn every 26 seconds. */
@@ -147,7 +147,7 @@ function useVillaMaterials() {
     });
     /** Ground plane, faintly polished so the villa sits in a pool of light. */
     const ground = new THREE.MeshStandardMaterial({
-      color: '#EEEBDD',
+      color: '#FFFFFF',
       roughness: 0.8,
       metalness: 0.12,
     });
@@ -695,7 +695,7 @@ export default function HeroScene({
       onCreated={({ gl, scene }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.0;
-        scene.fog = new THREE.FogExp2('#EEEBDD', 0.009);
+        scene.fog = new THREE.FogExp2('#FFFFFF', 0.009);
       }}
       className="h-full w-full"
     >

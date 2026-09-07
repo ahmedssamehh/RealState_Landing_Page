@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
@@ -46,13 +47,22 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Phone and email are the only contact channels. */}
+          {/* Phone, WhatsApp and email are the contact channels. */}
           <div className="flex flex-col gap-3 md:items-end">
             <a
               href={siteConfig.contact.phoneHref}
               className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
             >
               {siteConfig.contact.phone}
+            </a>
+            <a
+              href={siteConfig.contact.whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="label inline-flex items-center gap-2 text-ivory/60 transition-colors duration-200 hover:text-ivory"
+            >
+              <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+              {siteConfig.contact.whatsapp}
             </a>
             <a
               href={`mailto:${siteConfig.contact.email}`}

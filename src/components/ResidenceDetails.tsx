@@ -568,13 +568,22 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               </span>
             </a>
 
-            {/* Phone and email are the only contact channels. */}
+            {/* Phone, WhatsApp and email are the contact channels. */}
             <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
               <a
                 href={siteConfig.contact.phoneHref}
                 className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
               >
                 {siteConfig.contact.phone}
+              </a>
+              <a
+                href={siteConfig.contact.whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
+              >
+                <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+                {siteConfig.contact.whatsapp}
               </a>
               <a
                 href={`mailto:${siteConfig.contact.email}`}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
 import Logo from './Logo';
@@ -198,10 +199,19 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <LocaleToggle variant="stacked" tone="dark" className="mb-8" />
 
           <div className="rule mb-6 text-ink/20" />
-          {/* Phone and email are the only contact channels. */}
+          {/* Phone, WhatsApp and email are the contact channels. */}
           <div className="flex flex-col gap-4">
             <a href={siteConfig.contact.phoneHref} className="label text-ink/70">
               {siteConfig.contact.phone}
+            </a>
+            <a
+              href={siteConfig.contact.whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="label inline-flex items-center gap-2 text-ink/70"
+            >
+              <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+              {siteConfig.contact.whatsapp}
             </a>
             <a href={`mailto:${siteConfig.contact.email}`} className="label text-ink/70">
               {siteConfig.contact.email}

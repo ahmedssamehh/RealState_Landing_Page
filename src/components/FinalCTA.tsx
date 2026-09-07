@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
@@ -7,9 +8,9 @@ import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
 /**
  * Closing section. A full-bleed burgundy panel — the largest statement of the
- * accent colour on the site — carrying the headline and the only two contact
- * channels there are. No button and no form: the phone number and the email
- * address are themselves the actions.
+ * accent colour on the site — carrying the headline and the three contact
+ * channels there are. No button and no form: the phone number, WhatsApp
+ * number and email address are themselves the actions.
  */
 export type FinalCtaCopy = { headline: string[]; note: string };
 
@@ -52,18 +53,47 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
           ))}
         </h2>
 
-        {/* The two channels, given equal editorial weight. */}
-        <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 gap-px border-t border-ivory/20 sm:grid-cols-2">
-          {/* Phone and email are the only contact channels. */}
+        {/* The three channels, given equal editorial weight. */}
+        <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 gap-px border-t border-ivory/20 sm:grid-cols-3">
           <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:pr-10">
             <dt className="label text-ivory/45">{t.ui.telephone}</dt>
             <dd className="mt-4">
               <a
                 href={siteConfig.contact.phoneHref}
-                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.6rem,4vw,3rem)] font-light leading-none text-ivory"
+                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.4rem,3vw,2.4rem)] font-light leading-none text-ivory"
               >
                 <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
                   {siteConfig.contact.phone}
+                </span>
+                <span
+                  aria-hidden
+                  className="text-lg transition-transform duration-300 ease-expo group-hover:translate-x-1.5"
+                >
+                  &rarr;
+                </span>
+              </a>
+            </dd>
+          </div>
+
+          <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:border-l sm:border-ivory/20 sm:px-10">
+            <dt className="label text-ivory/45">{t.ui.whatsapp}</dt>
+            <dd className="mt-4">
+              <a
+                href={siteConfig.contact.whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.4rem,3vw,2.4rem)] font-light leading-none text-ivory"
+              >
+                <Image
+                  src="/images/whatsapp_Logo.png"
+                  alt=""
+                  width={24}
+                  height={24}
+                  aria-hidden
+                  className="mb-1 self-center"
+                />
+                <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
+                  {siteConfig.contact.whatsapp}
                 </span>
                 <span
                   aria-hidden
@@ -80,7 +110,7 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
             <dd className="mt-4">
               <a
                 href={`mailto:${siteConfig.contact.email}`}
-                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.3rem,3vw,2.2rem)] font-light leading-none text-ivory"
+                className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.1rem,2.4vw,1.8rem)] font-light leading-none text-ivory"
               >
                 <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
                   {siteConfig.contact.email}

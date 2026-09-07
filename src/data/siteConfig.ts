@@ -46,6 +46,8 @@ export const siteConfig = {
     email: 'info@gsluxuryresidence.com',
     website: 'www.gsluxuryresidence.com',
     websiteHref: 'https://www.gsluxuryresidence.com',
+    whatsapp: '+30 694 962 3100',
+    whatsappHref: 'https://wa.me/306949623100',
   },
 
   /**
@@ -290,6 +292,7 @@ const en = {
     residence: 'RESIDENCE',
     photo: 'PHOTO',
     telephone: 'TELEPHONE',
+    whatsapp: 'WHATSAPP',
     email: 'EMAIL',
     aspect: 'ASPECT',
     description: 'DESCRIPTION',
@@ -480,6 +483,7 @@ const el: Content = {
     residence: 'ΚΑΤΑΛΥΜΑ',
     photo: 'ΦΩΤΟ',
     telephone: 'ΤΗΛΕΦΩΝΟ',
+    whatsapp: 'WHATSAPP',
     email: 'EMAIL',
     aspect: 'ΠΡΟΣΑΝΑΤΟΛΙΣΜΟΣ',
     description: 'ΠΕΡΙΓΡΑΦΗ',

@@ -19,6 +19,7 @@
  * ---------------------------------------------------------------------------
  */
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import Logo from '@/components/Logo';
@@ -255,7 +256,7 @@ export default function ChooserPage() {
         </div>
       </div>
 
-      {/* Phone and email are the only contact channels. */}
+      {/* Phone, WhatsApp and email are the contact channels. */}
       <footer className="edge mx-auto flex w-full max-w-edge flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-ink/10 py-6">
         <a
           data-choose-fade
@@ -263,6 +264,16 @@ export default function ChooserPage() {
           className="label text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
         >
           {siteConfig.contact.phone}
+        </a>
+        <a
+          data-choose-fade
+          href={siteConfig.contact.whatsappHref}
+          target="_blank"
+          rel="noreferrer"
+          className="label inline-flex items-center gap-2 text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
+        >
+          <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+          {siteConfig.contact.whatsapp}
         </a>
         <a
           data-choose-fade

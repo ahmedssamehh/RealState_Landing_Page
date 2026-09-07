@@ -11,7 +11,7 @@ const config: Config = {
           deep: '#3d0000',
           soft: '#7d1616',
         },
-        ivory: '#EEEBDD',
+        ivory: '#FFFFFF',
       },
       fontFamily: {
         serif: [
