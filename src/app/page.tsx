@@ -23,6 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import Logo from '@/components/Logo';
+import { MailIcon, PhoneIcon } from '@/components/ContactIcons';
 import LocaleToggle from '@/components/LocaleToggle';
 import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
@@ -261,8 +262,9 @@ export default function ChooserPage() {
         <a
           data-choose-fade
           href={siteConfig.contact.phoneHref}
-          className="label text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
+          className="label inline-flex items-center gap-2 text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
         >
+          <PhoneIcon />
           {siteConfig.contact.phone}
         </a>
         <a
@@ -272,14 +274,22 @@ export default function ChooserPage() {
           rel="noreferrer"
           className="label inline-flex items-center gap-2 text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
         >
-          <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+          <Image
+            src="/images/whatsapp_Logo.png"
+            alt=""
+            width={16}
+            height={16}
+            aria-hidden
+            className="opacity-55"
+          />
           {siteConfig.contact.whatsapp}
         </a>
         <a
           data-choose-fade
           href={`mailto:${siteConfig.contact.email}`}
-          className="label text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
+          className="label inline-flex items-center gap-2 text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
         >
+          <MailIcon />
           {siteConfig.contact.email}
         </a>
       </footer>

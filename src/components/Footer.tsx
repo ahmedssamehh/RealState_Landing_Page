@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
+import { MailIcon, PhoneIcon } from './ContactIcons';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
 import { useSmoothScroll } from './SmoothScroll';
@@ -51,8 +52,9 @@ export default function Footer() {
           <div className="flex flex-col gap-3 md:items-end">
             <a
               href={siteConfig.contact.phoneHref}
-              className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
+              className="label inline-flex items-center gap-2 text-ivory/60 transition-colors duration-200 hover:text-ivory"
             >
+              <PhoneIcon />
               {siteConfig.contact.phone}
             </a>
             <a
@@ -61,13 +63,22 @@ export default function Footer() {
               rel="noreferrer"
               className="label inline-flex items-center gap-2 text-ivory/60 transition-colors duration-200 hover:text-ivory"
             >
-              <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+              {/* Black line art, inverted to sit on the ink footer. */}
+              <Image
+                src="/images/whatsapp_Logo.png"
+                alt=""
+                width={16}
+                height={16}
+                aria-hidden
+                className="opacity-60 invert"
+              />
               {siteConfig.contact.whatsapp}
             </a>
             <a
               href={`mailto:${siteConfig.contact.email}`}
-              className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
+              className="label inline-flex items-center gap-2 text-ivory/60 transition-colors duration-200 hover:text-ivory"
             >
+              <MailIcon />
               {siteConfig.contact.email}
             </a>
           </div>
@@ -101,7 +112,7 @@ export default function Footer() {
             &copy; {year} {siteConfig.brand.name}. {t.ui.rights}
           </p>
           <p className="label text-ivory/25">
-            {t.location.city}, {t.location.country}
+            {t.location.address}
           </p>
         </div>
       </div>

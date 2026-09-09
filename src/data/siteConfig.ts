@@ -41,7 +41,7 @@ export const siteConfig = {
 
   /** Contact details. */
   contact: {
-    phone: '694 5938948',
+    phone: '+30 694 5938948',
     phoneHref: 'tel:+306945938948',
     email: 'info@gsluxuryresidence.com',
     website: 'www.gsluxuryresidence.com',
@@ -186,6 +186,8 @@ const en = {
       'Two neighbourhoods, two very different sides of Athens — steps from the Acropolis in Plaka, and a short walk from the sea in Voula.',
     city: 'Athens',
     country: 'Greece',
+    /** The registered address, shown in the footer's bottom line. */
+    address: 'Vouliagmeni, Attica',
   },
 
   /**
@@ -392,6 +394,7 @@ const el: Content = {
       'Δύο διαφορετικές γειτονιές της Αθήνας — λίγα βήματα από την Ακρόπολη στην Πλάκα, και κοντά στη θάλασσα στη Βούλα.',
     city: 'Αθήνα',
     country: 'Ελλάδα',
+    address: 'Βουλιαγμένη, Αττικής',
   },
 
   chooser: {

@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Apartment } from '@/data/apartments';
 import { siteConfig } from '@/data/siteConfig';
+import { MailIcon, PhoneIcon } from './ContactIcons';
 import { useLocale } from '@/lib/locale';
 import { EASE, gsap, prefersReducedMotion, registerGsap } from '@/lib/animations';
 import { useSmoothScroll } from './SmoothScroll';
@@ -572,8 +573,9 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
             <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
               <a
                 href={siteConfig.contact.phoneHref}
-                className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
+                className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
               >
+                <PhoneIcon />
                 {siteConfig.contact.phone}
               </a>
               <a
@@ -582,13 +584,21 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
                 rel="noreferrer"
                 className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
               >
-                <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+                <Image
+                  src="/images/whatsapp_Logo.png"
+                  alt=""
+                  width={16}
+                  height={16}
+                  aria-hidden
+                  className="opacity-70"
+                />
                 {siteConfig.contact.whatsapp}
               </a>
               <a
                 href={`mailto:${siteConfig.contact.email}`}
-                className="label border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
+                className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
               >
+                <MailIcon />
                 {siteConfig.contact.email}
               </a>
             </div>

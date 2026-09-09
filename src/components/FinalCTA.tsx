@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { siteConfig } from '@/data/siteConfig';
+import { MailIcon, PhoneIcon } from './ContactIcons';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
@@ -53,16 +54,26 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
           ))}
         </h2>
 
-        {/* The three channels, given equal editorial weight. */}
-        <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 gap-px border-t border-ivory/20 sm:grid-cols-3">
-          <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:pr-10">
+        {/*
+          The three channels. The two numbers are stacked as a pair in the left
+          column — they are the same kind of action and read as a set — with the
+          email held alongside them in a full-height second column. Cells are
+          placed explicitly rather than flowing, so the dl stays a flat list of
+          dt/dd pairs. Below md everything falls into one column in order.
+        */}
+        <dl className="mt-[clamp(3rem,10vh,6rem)] grid grid-cols-1 border-t border-ivory/20 md:grid-cols-2">
+          <div
+            data-cta-fade
+            className="border-b border-ivory/20 py-8 opacity-0 md:col-start-1 md:row-start-1 md:pr-10"
+          >
             <dt className="label text-ivory/45">{t.ui.telephone}</dt>
             <dd className="mt-4">
               <a
                 href={siteConfig.contact.phoneHref}
                 className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.4rem,3vw,2.4rem)] font-light leading-none text-ivory"
               >
-                <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
+                <PhoneIcon size={24} className="mb-1 self-center text-ivory/70" />
+                <span className="whitespace-nowrap border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
                   {siteConfig.contact.phone}
                 </span>
                 <span
@@ -75,7 +86,10 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
             </dd>
           </div>
 
-          <div data-cta-fade className="border-b border-ivory/20 py-8 opacity-0 sm:border-b-0 sm:border-l sm:border-ivory/20 sm:px-10">
+          <div
+            data-cta-fade
+            className="border-b border-ivory/20 py-8 opacity-0 md:col-start-1 md:row-start-2 md:border-b-0 md:pr-10"
+          >
             <dt className="label text-ivory/45">{t.ui.whatsapp}</dt>
             <dd className="mt-4">
               <a
@@ -90,9 +104,10 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
                   width={24}
                   height={24}
                   aria-hidden
-                  className="mb-1 self-center"
+                  /* The mark is black line art — inverted to white for the burgundy panel. */
+                  className="mb-1 self-center opacity-70 invert"
                 />
-                <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
+                <span className="whitespace-nowrap border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
                   {siteConfig.contact.whatsapp}
                 </span>
                 <span
@@ -105,13 +120,17 @@ export default function FinalCTA({ copy }: { copy?: FinalCtaCopy }) {
             </dd>
           </div>
 
-          <div data-cta-fade className="py-8 opacity-0 sm:border-l sm:border-ivory/20 sm:pl-10">
+          <div
+            data-cta-fade
+            className="py-8 opacity-0 md:col-start-2 md:row-start-1 md:row-span-2 md:flex md:flex-col md:justify-center md:border-l md:border-ivory/20 md:pl-10"
+          >
             <dt className="label text-ivory/45">{t.ui.email}</dt>
             <dd className="mt-4">
               <a
                 href={`mailto:${siteConfig.contact.email}`}
                 className="group inline-flex items-baseline gap-4 font-serif text-[clamp(1.1rem,2.4vw,1.8rem)] font-light leading-none text-ivory"
               >
+                <MailIcon size={22} className="mb-1 self-center text-ivory/70" />
                 <span className="border-b border-transparent pb-1 transition-colors duration-200 group-hover:border-ivory/60">
                   {siteConfig.contact.email}
                 </span>

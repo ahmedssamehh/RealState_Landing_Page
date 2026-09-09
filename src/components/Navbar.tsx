@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
+import { MailIcon, PhoneIcon } from './ContactIcons';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
 import LocaleToggle from './LocaleToggle';
@@ -201,7 +202,11 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <div className="rule mb-6 text-ink/20" />
           {/* Phone, WhatsApp and email are the contact channels. */}
           <div className="flex flex-col gap-4">
-            <a href={siteConfig.contact.phoneHref} className="label text-ink/70">
+            <a
+              href={siteConfig.contact.phoneHref}
+              className="label inline-flex items-center gap-2 text-ink/70"
+            >
+              <PhoneIcon />
               {siteConfig.contact.phone}
             </a>
             <a
@@ -210,10 +215,21 @@ export default function Navbar({ ready }: { ready: boolean }) {
               rel="noreferrer"
               className="label inline-flex items-center gap-2 text-ink/70"
             >
-              <Image src="/images/whatsapp_Logo.png" alt="" width={16} height={16} aria-hidden />
+              <Image
+                src="/images/whatsapp_Logo.png"
+                alt=""
+                width={16}
+                height={16}
+                aria-hidden
+                className="opacity-70"
+              />
               {siteConfig.contact.whatsapp}
             </a>
-            <a href={`mailto:${siteConfig.contact.email}`} className="label text-ink/70">
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              className="label inline-flex items-center gap-2 text-ink/70"
+            >
+              <MailIcon />
               {siteConfig.contact.email}
             </a>
           </div>
