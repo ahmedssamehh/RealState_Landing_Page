@@ -20,16 +20,17 @@ test.describe('Chooser ("/")', () => {
     await expect(page.getByText(/COMING SOON/i)).toHaveCount(0);
   });
 
-  test('phone and email links are correct', async ({ page }) => {
+  test('phone and WhatsApp links are correct, and there is no email', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('link', { name: '694 593 8948' })).toHaveAttribute(
       'href',
       'tel:+306945938948'
     );
-    await expect(page.getByRole('link', { name: 'info@gsluxuryresidence.com' })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: '694 962 3100' })).toHaveAttribute(
       'href',
-      'mailto:info@gsluxuryresidence.com'
+      'https://wa.me/306949623100'
     );
+    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   });
 
   test('RENT tile navigates to /rent, BUY tile navigates to /sale', async ({ page }) => {

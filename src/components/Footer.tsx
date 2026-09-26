@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
-import { MailIcon, PhoneIcon } from './ContactIcons';
+import { PhoneIcon } from './ContactIcons';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
 import { useSmoothScroll } from './SmoothScroll';
@@ -61,7 +61,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Phone, WhatsApp and email are the contact channels. */}
+          {/* Phone and WhatsApp are the contact channels. */}
           <div className="flex flex-col gap-3 md:items-end">
             <a
               href={siteConfig.contact.phoneHref}
@@ -86,13 +86,6 @@ export default function Footer() {
                 className="opacity-60 invert"
               />
               {siteConfig.contact.whatsapp}
-            </a>
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="label inline-flex items-center gap-2 text-ivory/60 transition-colors duration-200 hover:text-ivory"
-            >
-              <MailIcon />
-              {siteConfig.contact.email}
             </a>
           </div>
         </div>

@@ -23,7 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import Logo from '@/components/Logo';
-import { MailIcon, PhoneIcon } from '@/components/ContactIcons';
+import { PhoneIcon } from '@/components/ContactIcons';
 import LocaleToggle from '@/components/LocaleToggle';
 import { siteConfig } from '@/data/siteConfig';
 import { useLocale } from '@/lib/locale';
@@ -262,7 +262,7 @@ export default function ChooserPage() {
         </div>
       </div>
 
-      {/* Phone, WhatsApp and email are the contact channels. */}
+      {/* Phone and WhatsApp are the contact channels. */}
       <footer className="edge mx-auto flex w-full max-w-edge flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-ink/10 py-6">
         <a
           data-choose-fade
@@ -288,14 +288,6 @@ export default function ChooserPage() {
             className="opacity-55"
           />
           {siteConfig.contact.whatsapp}
-        </a>
-        <a
-          data-choose-fade
-          href={`mailto:${siteConfig.contact.email}`}
-          className="label inline-flex items-center gap-2 text-ink/55 opacity-0 transition-colors duration-200 hover:text-ink"
-        >
-          <MailIcon />
-          {siteConfig.contact.email}
         </a>
       </footer>
     </main>

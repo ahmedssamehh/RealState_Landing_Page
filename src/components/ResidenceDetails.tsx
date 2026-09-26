@@ -17,7 +17,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Apartment } from '@/data/apartments';
 import { siteConfig } from '@/data/siteConfig';
-import { MailIcon, PhoneIcon } from './ContactIcons';
+import { PhoneIcon } from './ContactIcons';
 import { useLocale } from '@/lib/locale';
 import { EASE, gsap, prefersReducedMotion, registerGsap } from '@/lib/animations';
 import { useSmoothScroll } from './SmoothScroll';
@@ -596,7 +596,7 @@ export default function ResidenceDetails({
               </span>
             </a>
 
-            {/* Phone, WhatsApp and email are the contact channels. As a page,
+            {/* Phone and WhatsApp are the contact channels. As a page,
                 this row is the in-page contact target. */}
             <div id={isPage ? 'contact' : undefined} className="flex flex-wrap items-center gap-x-8 gap-y-2">
               <a
@@ -621,13 +621,6 @@ export default function ResidenceDetails({
                   className="opacity-70"
                 />
                 {siteConfig.contact.whatsapp}
-              </a>
-              <a
-                href={`mailto:${siteConfig.contact.email}`}
-                className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"
-              >
-                <MailIcon />
-                {siteConfig.contact.email}
               </a>
             </div>
           </div>

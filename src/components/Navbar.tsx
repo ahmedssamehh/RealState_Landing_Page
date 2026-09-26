@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/data/siteConfig';
-import { MailIcon, PhoneIcon } from './ContactIcons';
+import { PhoneIcon } from './ContactIcons';
 import Logo from './Logo';
 import { useLocale } from '@/lib/locale';
 import LocaleToggle from './LocaleToggle';
@@ -200,7 +200,7 @@ export default function Navbar({ ready }: { ready: boolean }) {
           <LocaleToggle variant="stacked" tone="dark" className="mb-8" />
 
           <div className="rule mb-6 text-ink/20" />
-          {/* Phone, WhatsApp and email are the contact channels. */}
+          {/* Phone and WhatsApp are the contact channels. */}
           <div className="flex flex-col gap-4">
             <a
               href={siteConfig.contact.phoneHref}
@@ -224,13 +224,6 @@ export default function Navbar({ ready }: { ready: boolean }) {
                 className="opacity-70"
               />
               {siteConfig.contact.whatsapp}
-            </a>
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="label inline-flex items-center gap-2 text-ink/70"
-            >
-              <MailIcon />
-              {siteConfig.contact.email}
             </a>
           </div>
         </div>

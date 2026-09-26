@@ -62,11 +62,12 @@ test.describe('SEO — every public page', () => {
     expect(new Set(descriptions).size).toBe(PAGES.length);
   });
 
-  test('no old-domain, localhost or preview URLs in any page', async ({ request }) => {
+  test('no old domain, email, localhost or preview URLs in any page', async ({ request }) => {
     for (const path of PAGES) {
       const { html } = await load(request, path);
-      // The contact mailbox (info@…com) is a mailbox, not a URL — see siteConfig.
-      expect(html.match(/(?<!@)(?:www\.)?gsluxuryresidence\.com/g), path).toBeNull();
+      expect(html, path).not.toMatch(/gsluxuryresidence\.com/);
+      // The business has no email address; none may be published.
+      expect(html, path).not.toMatch(/mailto:|@gsluxuryresidence/);
       expect(html, path).not.toMatch(/https?:\/\/(localhost|127\.0\.0\.1)|vercel\.app|http:\/\/gsluxuryresidence/);
     }
   });

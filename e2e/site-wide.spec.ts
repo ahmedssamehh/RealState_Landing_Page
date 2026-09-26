@@ -43,7 +43,7 @@ test.describe('Site-wide assets and identity', () => {
     }
   });
 
-  test('brand name, phone and email are identical across chooser, rent and sale footers', async ({
+  test('brand name, phone and WhatsApp are identical across chooser, rent and sale footers', async ({
     page,
   }) => {
     for (const path of ['/rent', '/sale']) {
@@ -55,9 +55,9 @@ test.describe('Site-wide assets and identity', () => {
         'href',
         'tel:+306945938948'
       );
-      await expect(footer.getByRole('link', { name: 'info@gsluxuryresidence.com' })).toHaveAttribute(
+      await expect(footer.getByRole('link', { name: '694 962 3100' })).toHaveAttribute(
         'href',
-        'mailto:info@gsluxuryresidence.com'
+        'https://wa.me/306949623100'
       );
     }
   });
