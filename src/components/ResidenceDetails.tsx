@@ -5,6 +5,10 @@
  * (see `[data-page-shell]` in page.tsx); this panel scales up over it and owns
  * its own scroll. No route change, no full-page takeover.
  *
+ * `variant="page"` renders the same panel in normal document flow as the body
+ * of a listing's own page (`/rent/<id>`, `/sale/<id>`): no overlay, no close
+ * control, and the residence name becomes the page's H1.
+ *
  * The gallery is swipeable: flick on touch, drag or arrow keys on desktop,
  * one photograph per view with a counter and dots.
  */
@@ -23,9 +27,16 @@ type Props = {
   residence: Apartment | null;
   initialView?: 'details' | 'photos';
   onClose: () => void;
+  variant?: 'modal' | 'page';
 };
 
-export default function ResidenceDetails({ residence, initialView = 'details', onClose }: Props) {
+export default function ResidenceDetails({
+  residence,
+  initialView = 'details',
+  onClose,
+  variant = 'modal',
+}: Props) {
+  const isPage = variant === 'page';
   const root = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -42,7 +53,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
   /* Open                                                               */
   /* ------------------------------------------------------------------ */
   useEffect(() => {
-    if (!open) return;
+    if (!open || isPage) return;
     registerGsap();
     const el = root.current;
     if (!el) return;
@@ -91,7 +102,14 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
       ctx.revert();
       unlock();
     };
-  }, [open, lock, unlock, initialView]);
+  }, [open, isPage, lock, unlock, initialView]);
+
+  /* As a page, only the full-screen photo tour needs the page scroll held. */
+  useEffect(() => {
+    if (!isPage || !showPhotoTour) return;
+    lock();
+    return () => unlock();
+  }, [isPage, showPhotoTour, lock, unlock]);
 
   /**
    * Closing is synchronous on purpose. Gating the state change on a tween's
@@ -183,14 +201,14 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape' && !isPage) close();
       if (e.key === 'ArrowRight') goTo(active + 1);
       if (e.key === 'ArrowLeft') goTo(active - 1);
     };
     window.addEventListener('keydown', onKey);
-    root.current?.querySelector<HTMLButtonElement>('[data-detail-close]')?.focus();
+    if (!isPage) root.current?.querySelector<HTMLButtonElement>('[data-detail-close]')?.focus();
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, close, goTo, active]);
+  }, [open, isPage, close, goTo, active]);
 
   if (!residence) return null;
 
@@ -218,30 +236,39 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
   if (residence.bathrooms != null) spec.push({ k: t.ui.bathrooms, v: residence.bathrooms });
   if (residence.area) spec.push({ k: t.ui.area, v: residence.area });
 
+  const Title = isPage ? 'h1' : 'h2';
+  const shell = isPage
+    ? { className: 'relative w-full bg-ivory' }
+    : {
+        'data-lenis-prevent': true,
+        'data-lenis-prevent-wheel': true,
+        'data-lenis-prevent-touch': true,
+        role: 'dialog',
+        'aria-modal': true,
+        'aria-label': `${text.name} ${t.ui.detailAria}`,
+        className:
+          'fixed inset-0 z-[80] h-svh touch-pan-y overflow-y-scroll overscroll-contain bg-ink/45 p-0 [scrollbar-color:#630000_transparent] [scrollbar-width:thin] sm:px-6 sm:py-8 md:px-10',
+        style: { visibility: 'hidden', opacity: 0 } as const,
+      };
+
   return (
-    <div
-      ref={root}
-      data-lenis-prevent
-      data-lenis-prevent-wheel
-      data-lenis-prevent-touch
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${text.name} ${t.ui.detailAria}`}
-      className="fixed inset-0 z-[80] h-svh touch-pan-y overflow-y-scroll overscroll-contain bg-ink/45 p-0 [scrollbar-color:#630000_transparent] [scrollbar-width:thin] sm:px-6 sm:py-8 md:px-10"
-      style={{ visibility: 'hidden', opacity: 0 }}
-    >
+    <div ref={root} {...shell}>
       {/* Click-away. The blur itself lives on the page shell behind. */}
-      <button
-        type="button"
-        aria-label={t.ui.close}
-        tabIndex={-1}
-        onClick={close}
-        className="fixed inset-0 h-full w-full cursor-default bg-ink/45"
-      />
+      {!isPage && (
+        <button
+          type="button"
+          aria-label={t.ui.close}
+          tabIndex={-1}
+          onClick={close}
+          className="fixed inset-0 h-full w-full cursor-default bg-ink/45"
+        />
+      )}
 
       <div
         ref={panel}
-        className="relative z-[1] mx-auto min-h-full w-full max-w-7xl overflow-visible bg-ivory shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        className={`relative z-[1] mx-auto w-full max-w-7xl overflow-visible bg-ivory ${
+          isPage ? '' : 'min-h-full shadow-[0_40px_120px_rgba(0,0,0,0.45)]'
+        }`}
       >
         {/* ------------------------------------------------ Gallery */}
         <div className="relative h-[48svh] min-h-[320px] bg-ink/10 sm:h-[58svh] sm:min-h-[460px] lg:h-[64svh]">
@@ -312,7 +339,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
           </div>
 
           {/* Close */}
-          <button
+          {!isPage && <button
             data-detail-close
             type="button"
             onClick={close}
@@ -322,7 +349,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               &times;
             </span>
             <span className="label">{t.ui.close}</span>
-          </button>
+          </button>}
 
           {residence.photoSections && residence.photoSections.some((section) => section.images.length > 0) && (
             <button
@@ -350,7 +377,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               <p className="label mb-3 text-burgundy">
                 {residence.salePrice != null ? t.nav.property : t.ui.residence} {residence.number} &mdash; {text.subtitle}
               </p>
-              <h2 className="display text-[clamp(2.8rem,7vw,6.4rem)] leading-[0.9] text-ink">{text.name}</h2>
+              <Title className="display text-[clamp(2.8rem,7vw,6.4rem)] leading-[0.9] text-ink">{text.name}</Title>
               {/* Driven by the listing, never hardcoded — this popup renders
                   every residence in both collections. */}
               <p className="label mt-7 text-ink/45">
@@ -551,7 +578,7 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
                   ? undefined
                   : (e) => {
                       e.preventDefault();
-                      close();
+                      if (!isPage) close();
                       scrollTo('#contact');
                     }
               }
@@ -569,8 +596,9 @@ export default function ResidenceDetails({ residence, initialView = 'details', o
               </span>
             </a>
 
-            {/* Phone, WhatsApp and email are the contact channels. */}
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            {/* Phone, WhatsApp and email are the contact channels. As a page,
+                this row is the in-page contact target. */}
+            <div id={isPage ? 'contact' : undefined} className="flex flex-wrap items-center gap-x-8 gap-y-2">
               <a
                 href={siteConfig.contact.phoneHref}
                 className="label inline-flex items-center gap-2 border-b border-ink/25 pb-1 text-ink/70 transition-colors duration-200 hover:border-burgundy hover:text-ink"

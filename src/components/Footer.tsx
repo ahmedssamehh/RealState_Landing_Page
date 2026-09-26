@@ -13,8 +13,12 @@ export default function Footer() {
   const { scrollTo } = useSmoothScroll();
   const { t } = useLocale();
   const year = new Date().getFullYear();
+  const pathname = usePathname();
   /** "Athens apartments to rent" is wrong on the sale page — swap it there. */
-  const onSaleRoute = usePathname()?.startsWith(siteConfig.routes.sale);
+  const onSaleRoute = pathname?.startsWith(siteConfig.routes.sale);
+  /** On a listing page (`/rent/<id>`) the section anchors belong to the collection page. */
+  const collectionRoute = onSaleRoute ? siteConfig.routes.sale : siteConfig.routes.rent;
+  const onCollectionPage = pathname === collectionRoute;
   const tagline = onSaleRoute ? t.sale.tagline : t.brand.tagline;
   /** Same swap as Navbar — the "residences" nav slot reads "RENTALS" by default. */
   const navLabel = (key: (typeof siteConfig.nav)[number]['key']) =>
@@ -33,16 +37,25 @@ export default function Footer() {
             <ul className="flex flex-wrap gap-x-10 gap-y-4">
               {siteConfig.nav.map((item) => (
                 <li key={item.href}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollTo(item.href);
-                    }}
-                    className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
-                  >
-                    {navLabel(item.key)}
-                  </a>
+                  {onCollectionPage ? (
+                    <a
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollTo(item.href);
+                      }}
+                      className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
+                    >
+                      {navLabel(item.key)}
+                    </a>
+                  ) : (
+                    <Link
+                      href={`${collectionRoute}${item.href}`}
+                      className="label text-ivory/60 transition-colors duration-200 hover:text-ivory"
+                    >
+                      {navLabel(item.key)}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -90,9 +103,16 @@ export default function Footer() {
           collection is "current" depends on the route, not just the rentals.
         */}
         <div className="mt-[clamp(2rem,5vh,3rem)] flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-ivory/10 pt-8">
-          <span className="label text-ivory">
-            {onSaleRoute ? t.chooser.sale.title : t.chooser.rent.title}
-          </span>
+          {/* Plain text on the collection page itself; a link back up from a listing. */}
+          {onCollectionPage ? (
+            <span className="label text-ivory">
+              {onSaleRoute ? t.chooser.sale.title : t.chooser.rent.title}
+            </span>
+          ) : (
+            <Link href={collectionRoute} className="label text-ivory transition-colors duration-200 hover:text-ivory/70">
+              {onSaleRoute ? t.chooser.sale.title : t.chooser.rent.title}
+            </Link>
+          )}
           <Link
             href={onSaleRoute ? siteConfig.routes.rent : siteConfig.routes.sale}
             className="label text-ivory/45 transition-colors duration-200 hover:text-ivory"

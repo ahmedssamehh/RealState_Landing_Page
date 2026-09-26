@@ -10,6 +10,7 @@
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { apartments, type Apartment } from '@/data/apartments';
+import { listingPathFor } from '@/data/listings';
 import { useLocale } from '@/lib/locale';
 import { gsap, registerGsap, revealFade, revealLines } from '@/lib/animations';
 
@@ -81,12 +82,13 @@ export default function LocationSection({ items = apartments, sectionCopy }: Pro
           {items.map((residence) => {
             const text = copy(residence);
             const cover = residence.images[0];
+            const href = residence.listingUrl ?? listingPathFor(residence);
 
             return (
               <a
                 key={residence.id}
                 data-loc-fade
-                href={residence.listingUrl}
+                href={href}
                 target={residence.listingUrl ? '_blank' : undefined}
                 rel={residence.listingUrl ? 'noreferrer' : undefined}
                 className="group relative block aspect-[4/3] w-full overflow-hidden opacity-0 sm:aspect-[16/10]"
@@ -125,10 +127,10 @@ export default function LocationSection({ items = apartments, sectionCopy }: Pro
                     ))}
                   </ul>
 
-                  {residence.listingUrl && (
+                  {href && (
                     <span className="label mt-5 inline-flex w-fit items-center gap-2 border-b border-ivory/30 pb-1 text-ivory/85 transition-colors duration-200 group-hover:border-burgundy group-hover:text-ivory">
-                      {t.cta.viewOnAirbnb}
-                      <span aria-hidden>↗</span>
+                      {residence.listingUrl ? t.cta.viewOnAirbnb : t.ui.viewDetails}
+                      <span aria-hidden>{residence.listingUrl ? '↗' : '→'}</span>
                     </span>
                   )}
                 </div>

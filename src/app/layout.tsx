@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, EB_Garamond, Inter } from 'next/font/google';
 import { content, siteConfig } from '@/data/siteConfig';
 import { LocaleProvider } from '@/lib/locale';
+import JsonLd from '@/components/JsonLd';
 import { pageMetadata, structuredData } from '@/lib/seo';
 import './globals.css';
 
@@ -63,9 +64,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-/** JSON-LD, escaped so no string value can close the <script> element. */
-const jsonLd = JSON.stringify(structuredData()).replace(/</g, '\\u003c');
-
 export const viewport: Viewport = {
   themeColor: '#000000',
   width: 'device-width',
@@ -80,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       {/* Ivory is the page surface; ink is the type. */}
       <body className="bg-ivory text-ink antialiased">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+        <JsonLd data={structuredData()} />
         {/* Language and currency are shared by every route. */}
         <LocaleProvider>{children}</LocaleProvider>
       </body>

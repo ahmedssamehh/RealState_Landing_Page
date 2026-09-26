@@ -146,7 +146,12 @@ const en = {
     rent: {
       title: 'Luxury Apartments for Rent in Athens',
       description:
-        'Explore luxury short-stay apartments for rent in Athens, with verified details, complete photo tours and live Airbnb availability.',
+        'Explore luxury short-stay apartments for rent in Athens — in Plaka below the Acropolis and in Voula by the sea — with verified details, photo tours and live Airbnb availability.',
+    },
+    sale: {
+      title: 'Property for Sale in Piraeus',
+      description:
+        'Residences for sale from G.S Luxury Residence — currently a bright corner apartment in Kallipoli, Piraeus, with owner-verified details, photo tours and viewings arranged directly.',
     },
   },
 
@@ -338,6 +343,14 @@ const en = {
     nextImage: 'Next image',
     detailAria: 'details',
     viewAria: 'View',
+    /* Listing pages (`/rent/<id>`, `/sale/<id>`). */
+    home: 'HOME',
+    breadcrumb: 'Breadcrumb',
+    theLocation: 'THE LOCATION',
+    moreResidences: 'MORE RESIDENCES',
+    allRentals: 'ALL RENTALS',
+    allSales: 'ALL PROPERTIES FOR SALE',
+    viewDetails: 'VIEW DETAILS',
   },
 
   status: {
@@ -363,6 +376,11 @@ const el: Content = {
       title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα',
       description:
         'Ανακαλύψτε πολυτελή διαμερίσματα βραχυχρόνιας ενοικίασης στην Αθήνα, με επιβεβαιωμένες πληροφορίες, πλήρεις φωτογραφικές περιηγήσεις και ζωντανή διαθεσιμότητα στο Airbnb.',
+    },
+    sale: {
+      title: 'Ακίνητο προς Πώληση στον Πειραιά',
+      description:
+        'Ακίνητα προς πώληση από την G.S Luxury Residence — ένα φωτεινό γωνιακό διαμέρισμα στην Καλλίπολη Πειραιά, με επιβεβαιωμένα στοιχεία, φωτογραφίες και ραντεβού απευθείας μαζί μας.',
     },
   },
 
@@ -535,6 +553,13 @@ const el: Content = {
     nextImage: 'Επόμενη εικόνα',
     detailAria: 'λεπτομέρειες',
     viewAria: 'Δείτε',
+    home: 'ΑΡΧΙΚΗ',
+    breadcrumb: 'Διαδρομή',
+    theLocation: 'Η ΤΟΠΟΘΕΣΙΑ',
+    moreResidences: 'ΠΕΡΙΣΣΟΤΕΡΑ ΚΑΤΑΛΥΜΑΤΑ',
+    allRentals: 'ΟΛΕΣ ΟΙ ΕΝΟΙΚΙΑΣΕΙΣ',
+    allSales: 'ΟΛΑ ΤΑ ΑΚΙΝΗΤΑ ΠΡΟΣ ΠΩΛΗΣΗ',
+    viewDetails: 'ΔΕΙΤΕ ΛΕΠΤΟΜΕΡΕΙΕΣ',
   },
 
   status: {

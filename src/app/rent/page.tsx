@@ -9,8 +9,10 @@ import LocationSection from '@/components/LocationSection';
 import Navbar from '@/components/Navbar';
 import ResidenceDetails from '@/components/ResidenceDetails';
 import ResidencesSection from '@/components/ResidencesSection';
+import JsonLd from '@/components/JsonLd';
 import SmoothScroll from '@/components/SmoothScroll';
 import type { Apartment } from '@/data/apartments';
+import { collectionStructuredData } from '@/lib/seo';
 
 /**
  * The rental collection. One-page experience:
@@ -44,6 +46,7 @@ function Page() {
 
   return (
     <>
+      <JsonLd data={collectionStructuredData('rent')} />
       {/*
         Everything except the popup lives in this shell. When a residence is
         open the shell is blurred and pushed back, so the popup reads as a

@@ -1,17 +1,13 @@
 import type { Metadata } from 'next';
-import { siteConfig } from '@/data/siteConfig';
+import { content, siteConfig } from '@/data/siteConfig';
 import { pageMetadata } from '@/lib/seo';
 
 /**
  * Route-level SEO for the sales collection. The page itself is a client
- * component (it owns the popup state), so its metadata lives here.
- *
- * `title` is a plain string rather than the root's `default`, so the root
- * template appends the brand name automatically.
+ * component (it owns the popup state), so its metadata lives here. Each
+ * listing has its own page and metadata under `/sale/<id>`.
  */
-const title = 'Corner Apartment for Sale in Kallipoli, Piraeus';
-const description =
-  'A bright, corner and dual-aspect apartment for sale in Kallipoli, Piraeus, with owner-verified details, complete photo tours and viewings arranged directly with us.';
+const { title, description } = content[siteConfig.defaultLocale].meta.sale;
 
 export const metadata: Metadata = pageMetadata({
   title,

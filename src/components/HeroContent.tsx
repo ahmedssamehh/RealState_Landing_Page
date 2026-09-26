@@ -21,17 +21,19 @@ export function HeroLead({ copy }: { copy?: HeroCopy }) {
 
   return (
     <div className="max-w-xl">
-      <p data-hero-fade className="label mb-6 text-burgundy">
+      {/* The eyebrow says what the page is about, so it is the H1; the large
+          display line below is the tagline. Visual order and styling unchanged. */}
+      <h1 data-hero-fade className="label mb-6 text-burgundy">
         {eyebrow}
-      </p>
+      </h1>
 
-      <h1 className="display text-ink">
+      <h2 className="display text-ink">
         {headline.map((line) => (
           <span key={line} data-hero-line className="reveal-line">
             <span className="block text-[clamp(2.8rem,7vw,6.5rem)]">{line}</span>
           </span>
         ))}
-      </h1>
+      </h2>
 
       <div data-hero-fade className="my-8 h-px w-20 bg-burgundy" />
 

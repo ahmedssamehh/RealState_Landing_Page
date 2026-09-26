@@ -62,7 +62,14 @@ export interface ApartmentCopy {
   availableFrom: string;
 }
 
+/** Search-result copy for a listing's own page, in the default locale. */
+export interface ListingSeo {
+  title: string;
+  description: string;
+}
+
 export interface Apartment {
+  /** Also the URL slug of the listing's own page (`/rent/<id>`, `/sale/<id>`). */
   id: string;
   number: string;
   area?: string;
@@ -87,6 +94,9 @@ export interface Apartment {
   host?: string;
   hostBadge?: string;
   dataStatus?: 'complete' | 'pending';
+  /** Street name as stated by the owner (no number) — sale listings only. */
+  street?: string;
+  seo?: ListingSeo;
   images: ResidenceImage[];
   photoSections?: PhotoSection[];
   i18n: Record<Locale, ApartmentCopy>;
@@ -104,7 +114,7 @@ const voulaPhoto = (file: string, alt: string): ResidenceImage => ({
 
 const voulaPhotos = {
   livingRoom: [
-    voulaPhoto('main-01.avif', 'Living room and contemporary artwork at GS Luxury Residence Voula'),
+    voulaPhoto('main-01.avif', 'Living room with grey sofa and colourful artwork at GS Luxury Residence Voula'),
     voulaPhoto('main-02.jpeg', 'Living room television area with architectural lighting'),
     voulaPhoto('photo-02.avif', 'Living room seating and decorative details'),
   ],
@@ -124,36 +134,36 @@ const voulaPhotos = {
     voulaPhoto('photo-04.avif', 'Neighbourhood view from the private balcony'),
   ],
   additional: [
-    voulaPhoto('photo-05.avif', 'Apartment security keypad and entrance controls'),
+    voulaPhoto('photo-05.avif', 'Alarm keypad and light switches by the entrance'),
     voulaPhoto('photo-07.avif', 'Additional queen bedroom view'),
   ],
 };
 
 const gsPhotos = {
   livingRoom: [
-    gsPhoto('living-room-01.avif', 'Living room at GS Luxury Residence Plaka'),
-    gsPhoto('living-room-02.avif', 'Living room seating and interior details'),
+    gsPhoto('living-room-01.avif', 'Open-plan living room with sofa and parquet floor at GS Luxury Residence Plaka'),
+    gsPhoto('living-room-02.avif', 'Living area with pendant lamp, wood-slat wall and plants'),
   ],
   kitchen: [
-    gsPhoto('kitchen-main.avif', 'Full kitchen at GS Luxury Residence Plaka'),
-    gsPhoto('kitchen-01.avif', 'Kitchen hospitality and dining details'),
-    gsPhoto('kitchen-02.avif', 'Coffee service and kitchen details'),
+    gsPhoto('kitchen-main.avif', 'Full kitchen with breakfast bar and stools at GS Luxury Residence Plaka'),
+    gsPhoto('kitchen-01.avif', 'Bottle of wine and glasses on the dining table'),
+    gsPhoto('kitchen-02.avif', 'Coffee cups and a selection of teas on the table'),
   ],
   bedroom: [
-    gsPhoto('bedroom-01.avif', 'King bedroom at GS Luxury Residence Plaka'),
-    gsPhoto('bedroom-02.avif', 'Second view of the king bedroom'),
-    gsPhoto('bedroom-03.avif', 'Bedroom interior and storage'),
-    gsPhoto('bedroom-04.avif', 'Bedroom linens and television'),
+    gsPhoto('bedroom-01.avif', 'King bedroom with wall-mounted TV at GS Luxury Residence Plaka'),
+    gsPhoto('bedroom-02.avif', 'King bed with bedside lamps, wardrobe and rugs'),
+    gsPhoto('bedroom-03.avif', 'Bedroom seen from the doorway, with rug and artwork'),
+    gsPhoto('bedroom-04.avif', 'Made bed with fresh towels and wall-mounted TV'),
   ],
   bathroom: [
-    gsPhoto('bathroom-01.avif', 'Full black marble bathroom'),
+    gsPhoto('bathroom-01.avif', 'Black marble bathroom with washing machine'),
     gsPhoto('bathroom-02.webp', 'Walk-in shower and vanity in the full bathroom'),
-    gsPhoto('bathroom-03.avif', 'Bathroom amenities and interior details'),
+    gsPhoto('bathroom-03.avif', 'Bath toiletries on a marble counter'),
   ],
   additional: [
-    gsPhoto('additional-01.avif', 'Acropolis view from the apartment'),
-    gsPhoto('additional-02.avif', 'Additional Acropolis and neighbourhood view'),
-    gsPhoto('additional-03.avif', 'Private entrance and apartment details'),
+    gsPhoto('additional-01.avif', 'The Acropolis at sunset, seen from the apartment in Plaka'),
+    gsPhoto('additional-02.avif', 'The Acropolis lit at dusk above the rooftops of Plaka'),
+    gsPhoto('additional-03.avif', 'Apartment entrance door with keypad entry panel'),
   ],
 };
 
@@ -167,18 +177,23 @@ export const apartments: Apartment[] = [
     bathrooms: 1,
     status: 'AVAILABLE',
     dataStatus: 'complete',
-    listingUrl: 'https://www.airbnb.com/rooms/1679830319630435744?source_impression_id=p3_1788288699_P3FWmWBzRUMckq-A',
+    listingUrl: 'https://www.airbnb.com/rooms/1679830319630435744',
     registrationNumber: '00003634314',
+    seo: {
+      title: 'Plaka Apartment with Acropolis View',
+      description:
+        'Renovated Plaka apartment for two guests with a private Acropolis-view balcony, full kitchen and self check-in. See photos, amenities and live Airbnb dates.',
+    },
     rating: 5,
     reviewCount: 25,
     host: 'GS Luxury Residence',
     hostBadge: 'Superhost · 3 years hosting',
     /** Primary carousel supplied by the owner; the grouped tour contains all photos. */
     images: [
-      gsPhoto('main-01.avif', 'Main living-room view at GS Luxury Residence Plaka'),
-      gsPhoto('main-02.avif', 'Second main view of GS Luxury Residence Plaka'),
-      gsPhoto('main-03.avif', 'Third main view of GS Luxury Residence Plaka'),
-      gsPhoto('main-04.avif', 'Fourth main view of GS Luxury Residence Plaka'),
+      gsPhoto('main-01.avif', 'Open-plan living room with sofa and parquet floor at GS Luxury Residence Plaka'),
+      gsPhoto('main-02.avif', 'Living area with pendant lamp and plants at GS Luxury Residence Plaka'),
+      gsPhoto('main-03.avif', 'King bedroom with wardrobe and rugs at GS Luxury Residence Plaka'),
+      gsPhoto('main-04.avif', 'Kitchen with breakfast bar at GS Luxury Residence Plaka'),
     ],
     photoSections: [
       {
@@ -377,16 +392,21 @@ export const apartments: Apartment[] = [
     bathrooms: 1,
     status: 'AVAILABLE',
     dataStatus: 'complete',
-    listingUrl: 'https://www.airbnb.com/rooms/754237364375323704?source_impression_id=p3_1788288709_P3MqyMmZOEuTdRTF',
+    listingUrl: 'https://www.airbnb.com/rooms/754237364375323704',
     registrationNumber: '00002160592',
+    seo: {
+      title: 'Voula Apartment near the Beach, Athens',
+      description:
+        'Private apartment in Voula, Athens, for two guests — a 9-minute walk to the beach, with a balcony, full kitchen and self check-in. See photos, amenities and live Airbnb dates.',
+    },
     rating: 4.75,
     reviewCount: 32,
     host: 'GS Luxury Residence',
     hostBadge: 'Superhost · 3 years hosting',
     /** Owner-supplied main carousel, kept in the requested 1 → 4 order. */
     images: [
-      voulaPhoto('main-01.avif', 'Living room at GS Luxury Residence Voula'),
-      voulaPhoto('main-02.jpeg', 'Second living-room view at GS Luxury Residence Voula'),
+      voulaPhoto('main-01.avif', 'Living room with grey sofa and colourful artwork at GS Luxury Residence Voula'),
+      voulaPhoto('main-02.jpeg', 'Living room with TV unit and ceiling lighting at GS Luxury Residence Voula'),
       voulaPhoto('main-03.avif', 'Queen bedroom at GS Luxury Residence Voula'),
       voulaPhoto('main-04.avif', 'Private balcony at GS Luxury Residence Voula'),
     ],

@@ -64,3 +64,23 @@ test.describe('Rent collection ("/rent")', () => {
     );
   });
 });
+
+test.describe('Rental listing page ("/rent/<id>")', () => {
+  test('is reachable from the card and links back up and out to booking', async ({ page }) => {
+    await page.goto('/rent');
+    await page.getByRole('article').filter({ hasText: 'GS Luxury Residence Plaka' }).getByRole('link', { name: 'GS Luxury Residence Plaka', exact: true }).click();
+    await expect(page).toHaveURL(/\/rent\/gs-luxury-residence-plaka$/);
+
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('GS Luxury Residence Plaka');
+    const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb' });
+    await expect(breadcrumb.getByRole('link', { name: 'RENT' })).toHaveAttribute('href', '/rent');
+    await expect(page.getByRole('link', { name: /CHECK AVAILABILITY ON AIRBNB/i }).first()).toHaveAttribute(
+      'href',
+      /airbnb\.com\/rooms\/1679830319630435744/
+    );
+    await expect(page.getByRole('link', { name: /GS Luxury Residence Voula/i })).toHaveAttribute(
+      'href',
+      '/rent/gs-luxury-residence-voula'
+    );
+  });
+});

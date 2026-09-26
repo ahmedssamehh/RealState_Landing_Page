@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Apartment } from '@/data/apartments';
+import { listingPathFor } from '@/data/listings';
 import { useLocale } from '@/lib/locale';
 import { useSmoothScroll } from './SmoothScroll';
 import { gsap, registerGsap, revealFade, revealImage } from '@/lib/animations';
@@ -29,6 +31,7 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
   const photoCount = residence.images.length;
   const text = copy(residence);
   const figure = useRef<HTMLDivElement>(null);
+  const pagePath = listingPathFor(residence);
 
   const flipped = index % 2 === 1;
   const canExplore = residence.dataStatus !== 'pending';
@@ -208,7 +211,15 @@ export default function Residence({ residence, index, onOpen, onOpenPhotos }: Pr
             data-res-fade
             className="display mt-4 text-[clamp(2rem,4.2vw,3.4rem)] text-ink opacity-0"
           >
-            {text.name}
+            {/* The name is the link to the listing's own page; the buttons
+                below keep opening the in-page popup. */}
+            {pagePath && canExplore ? (
+              <Link href={pagePath} className="transition-colors duration-200 hover:text-burgundy">
+                {text.name}
+              </Link>
+            ) : (
+              text.name
+            )}
           </h3>
           <p data-res-fade className="label mt-4 text-burgundy opacity-0">
             {text.subtitle}

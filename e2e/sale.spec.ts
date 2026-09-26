@@ -6,7 +6,7 @@ test.describe('Sale collection ("/sale")', () => {
   });
 
   test('hero, nav (PROPERTY, not RENTALS) and the listing render', async ({ page }) => {
-    await expect(page).toHaveTitle(/Corner Apartment for Sale in Kallipoli, Piraeus/i);
+    await expect(page).toHaveTitle(/Property for Sale in Piraeus/i);
 
     const nav = page.getByRole('navigation', { name: 'Primary' });
     await expect(nav.getByRole('link', { name: 'PROPERTY' })).toBeVisible();

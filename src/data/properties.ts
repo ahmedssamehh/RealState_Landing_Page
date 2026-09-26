@@ -31,6 +31,12 @@ export const saleProperties: Apartment[] = [
     salePrice: 250000,
     status: 'AVAILABLE',
     dataStatus: 'complete',
+    street: 'Agias Paraskevis Street',
+    seo: {
+      title: 'Corner Apartment for Sale in Kallipoli, Piraeus',
+      description:
+        'Bright 100 m² corner apartment for sale in Kallipoli, Piraeus: three bedrooms, wrap-around balconies and central heating, built in 1972. Full specification, photos and viewings.',
+    },
     images: [
       photo('main-01.jpg', 'Living room of the corner apartment in Kallipoli, Piraeus'),
       photo('main-02.jpg', 'Bedroom of the corner apartment in Kallipoli, Piraeus'),
