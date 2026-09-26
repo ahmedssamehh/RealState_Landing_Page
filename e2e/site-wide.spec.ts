@@ -50,8 +50,8 @@ test.describe('Site-wide assets and identity', () => {
       await page.goto(path);
       const footer = page.locator('footer');
       await footer.scrollIntoViewIfNeeded();
-      await expect(footer.getByText(/GS LUXURY RESIDENCE/i)).toBeVisible();
-      await expect(footer.getByRole('link', { name: '694 5938948' })).toHaveAttribute(
+      await expect(footer.getByText(/G\.S LUXURY RESIDENCE/i)).toBeVisible();
+      await expect(footer.getByRole('link', { name: '694 593 8948' })).toHaveAttribute(
         'href',
         'tel:+306945938948'
       );

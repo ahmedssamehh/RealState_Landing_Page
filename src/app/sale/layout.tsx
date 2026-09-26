@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { siteConfig } from '@/data/siteConfig';
+import { pageMetadata } from '@/lib/seo';
 
 /**
  * Route-level SEO for the sales collection. The page itself is a client
@@ -11,12 +13,11 @@ const title = 'Corner Apartment for Sale in Kallipoli, Piraeus';
 const description =
   'A bright, corner and dual-aspect apartment for sale in Kallipoli, Piraeus, with owner-verified details, complete photo tours and viewings arranged directly with us.';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title,
   description,
-  openGraph: { title, description },
-  twitter: { title, description },
-};
+  path: siteConfig.routes.sale,
+});
 
 export default function SaleLayout({ children }: { children: React.ReactNode }) {
   return children;

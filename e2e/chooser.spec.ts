@@ -4,7 +4,8 @@ test.describe('Chooser ("/")', () => {
   test('loads with brand, headline and both tiles', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page).toHaveTitle(/GS Luxury Residence/i);
+    await expect(page).toHaveTitle(/G\.S Luxury Residence/i);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/G\.S Luxury Residence/i);
     await expect(page.getByRole('heading', { name: /HOW WOULD YOU\s*LIKE TO LIVE\?/i })).toBeVisible();
 
     const rentTile = page.getByRole('link', { name: /VIEW RENTALS/i });
@@ -21,7 +22,7 @@ test.describe('Chooser ("/")', () => {
 
   test('phone and email links are correct', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('link', { name: '694 5938948' })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: '694 593 8948' })).toHaveAttribute(
       'href',
       'tel:+306945938948'
     );

@@ -30,9 +30,12 @@ export const CURRENCIES: { code: CurrencyCode; label: string; symbol: string }[]
 ];
 
 export const siteConfig = {
-  /** Brand identity — GS Luxury Residence. */
+  /** Brand identity — G.S Luxury Residence. */
   brand: {
-    name: 'GS LUXURY RESIDENCE',
+    /** Official business name. Used in logo alt text, titles and structured data. */
+    name: 'G.S Luxury Residence',
+    /** Other spellings people search for; used only in structured data. */
+    alternateNames: ['GS Luxury Residence', 'GS Luxury Residency'],
     /** The wordmark is set on two lines in the logo. */
     nameLines: ['GS', 'LUXURY RESIDENCE'] as [string, string],
     shortName: 'GS',
@@ -41,11 +44,11 @@ export const siteConfig = {
 
   /** Contact details. */
   contact: {
-    phone: '+30 694 5938948',
+    phone: '+30 694 593 8948',
     phoneHref: 'tel:+306945938948',
     email: 'info@gsluxuryresidence.com',
-    website: 'www.gsluxuryresidence.com',
-    websiteHref: 'https://www.gsluxuryresidence.com',
+    website: 'gsluxuryresidence.gr',
+    websiteHref: 'https://gsluxuryresidence.gr/',
     whatsapp: '+30 694 962 3100',
     whatsappHref: 'https://wa.me/306949623100',
   },
@@ -110,9 +113,22 @@ export const siteConfig = {
   /** Default locale used for the first paint and for server-rendered metadata. */
   defaultLocale: 'en' as Locale,
 
+  /**
+   * SEO. `url` is the one canonical origin (https, no www) — every canonical
+   * tag, Open Graph URL, sitemap entry and JSON-LD id is built from it.
+   */
   seo: {
-    url: 'https://www.gsluxuryresidence.com',
+    url: 'https://gsluxuryresidence.gr',
     ogImage: '/og.jpg',
+    logo: '/images/logo/gs-full-mark.png',
+    /**
+     * Structured-data address. Mirrors the registered address shown in the
+     * footer (`content.*.location.address`) — locality only, no street, because
+     * no street address has been confirmed. Keep the two in sync.
+     */
+    address: { locality: 'Vouliagmeni', region: 'Attica', country: 'GR' },
+    /** City the business serves, for structured data. */
+    areaServed: 'Athens',
   },
 } as const;
 
@@ -122,10 +138,16 @@ export const siteConfig = {
 
 const en = {
   meta: {
-    title: 'Luxury Apartments for Rent in Athens | GS Luxury Residence',
+    /** Homepage (`/`). Other routes set their own title in their layout. */
+    title: 'G.S Luxury Residence | Luxury Apartments in Athens',
     description:
-      'Explore luxury short-stay apartments for rent in Athens, with verified details, complete photo tours and live Airbnb availability.',
+      'G.S Luxury Residence offers luxury apartments in Athens, Greece — short-stay rentals in Plaka and Voula, and a residence for sale in Piraeus. Explore our properties and photo tours.',
     ogLocale: 'en_GB',
+    rent: {
+      title: 'Luxury Apartments for Rent in Athens',
+      description:
+        'Explore luxury short-stay apartments for rent in Athens, with verified details, complete photo tours and live Airbnb availability.',
+    },
   },
 
   brand: { tagline: 'ATHENS APARTMENTS TO RENT' },
@@ -333,10 +355,15 @@ export type Content = typeof en;
 
 const el: Content = {
   meta: {
-    title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα | GS Luxury Residence',
+    title: 'G.S Luxury Residence | Πολυτελή Διαμερίσματα στην Αθήνα',
     description:
-      'Ανακαλύψτε πολυτελή διαμερίσματα βραχυχρόνιας ενοικίασης στην Αθήνα, με επιβεβαιωμένες πληροφορίες, πλήρεις φωτογραφικές περιηγήσεις και ζωντανή διαθεσιμότητα στο Airbnb.',
+      'Η G.S Luxury Residence προσφέρει πολυτελή διαμερίσματα στην Αθήνα — βραχυχρόνια ενοικίαση στην Πλάκα και τη Βούλα, και κατοικία προς πώληση στον Πειραιά.',
     ogLocale: 'el_GR',
+    rent: {
+      title: 'Πολυτελή Διαμερίσματα προς Ενοικίαση στην Αθήνα',
+      description:
+        'Ανακαλύψτε πολυτελή διαμερίσματα βραχυχρόνιας ενοικίασης στην Αθήνα, με επιβεβαιωμένες πληροφορίες, πλήρεις φωτογραφικές περιηγήσεις και ζωντανή διαθεσιμότητα στο Airbnb.',
+    },
   },
 
   brand: { tagline: 'ΔΙΑΜΕΡΙΣΜΑΤΑ ΠΡΟΣ ΕΝΟΙΚΙΑΣΗ ΣΤΗΝ ΑΘΗΝΑ' },

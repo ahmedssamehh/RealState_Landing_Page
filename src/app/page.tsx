@@ -191,13 +191,18 @@ export default function ChooserPage() {
           <Logo mark="emblem" size={52} />
         </span>
 
-        <h1 className="display text-ink">
+        {/* The page's H1 names the business; the question below is its tagline. */}
+        <h1 data-choose-fade className="label mb-5 text-ink/55 opacity-0">
+          {siteConfig.brand.name}
+        </h1>
+
+        <h2 className="display text-ink">
           {chooser.headline.map((line) => (
             <span key={line} data-choose-line className="reveal-line">
               <span className="block text-[clamp(1.9rem,5.2vw,4rem)]">{line}</span>
             </span>
           ))}
-        </h1>
+        </h2>
 
         <p data-choose-fade className="label mt-6 text-ink/40 opacity-0">
           {chooser.note}

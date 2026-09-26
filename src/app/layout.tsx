@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, EB_Garamond, Inter } from 'next/font/google';
 import { content, siteConfig } from '@/data/siteConfig';
 import { LocaleProvider } from '@/lib/locale';
+import { pageMetadata, structuredData } from '@/lib/seo';
 import './globals.css';
 
 /**
@@ -38,31 +39,32 @@ const body = Inter({
  * (/el) and generate metadata per segment.
  */
 const meta = content[siteConfig.defaultLocale].meta;
+const homeSeo = pageMetadata({
+  title: meta.title,
+  description: meta.description,
+  path: siteConfig.routes.chooser,
+  absoluteTitle: true,
+});
+
+/*
+ * Root defaults double as the homepage metadata (`/` is a client component).
+ * `/rent` and `/sale` override title, canonical, Open Graph and Twitter in
+ * their own layouts, so the homepage canonical is never inherited.
+ */
 export const metadata: Metadata = {
+  ...homeSeo,
   metadataBase: new URL(siteConfig.seo.url),
   title: {
     default: meta.title,
-    template: `%s — ${siteConfig.brand.name}`,
+    template: `%s | ${siteConfig.brand.name}`,
   },
-  description: meta.description,
+  applicationName: siteConfig.brand.name,
   keywords: ['private residences', 'luxury apartments', 'architecture', 'property'],
-  openGraph: {
-    type: 'website',
-    locale: meta.ogLocale,
-    url: siteConfig.seo.url,
-    title: meta.title,
-    description: meta.description,
-    siteName: siteConfig.brand.name,
-    images: [{ url: siteConfig.seo.ogImage, width: 1200, height: 630, alt: meta.title }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: meta.title,
-    description: meta.description,
-    images: [siteConfig.seo.ogImage],
-  },
   robots: { index: true, follow: true },
 };
+
+/** JSON-LD, escaped so no string value can close the <script> element. */
+const jsonLd = JSON.stringify(structuredData()).replace(/</g, '\\u003c');
 
 export const viewport: Viewport = {
   themeColor: '#000000',
@@ -78,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       {/* Ivory is the page surface; ink is the type. */}
       <body className="bg-ivory text-ink antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
         {/* Language and currency are shared by every route. */}
         <LocaleProvider>{children}</LocaleProvider>
       </body>

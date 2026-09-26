@@ -58,7 +58,7 @@ test.describe('Rent collection ("/rent")', () => {
     await expect(footer.getByText('ATHENS APARTMENTS TO RENT')).toBeVisible();
     await expect(footer.getByText('RENT', { exact: true })).toBeVisible();
     await expect(footer.getByRole('link', { name: 'BUY' })).toHaveAttribute('href', '/sale');
-    await expect(footer.getByRole('link', { name: '694 5938948' })).toHaveAttribute(
+    await expect(footer.getByRole('link', { name: '694 593 8948' })).toHaveAttribute(
       'href',
       'tel:+306945938948'
     );
